@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oyster's LAB — Гастрономический Гид</title>
+    <meta name="description" content="Гастрономический гид по устрицам Oyster's LAB.">
+    <style>
+        :root {
+            --bg:        #0a0f17;
+            --surface:   #111820;
+            --surface-2: #1a2332;
+            --gold:      #c9a84c;
+            --gold-dim:  rgba(201,168,76,0.10);
+            --gold-line: rgba(201,168,76,0.22);
+            --text:      #ffffff;
+            --muted:     #8a9fba;
+            --faint:     #1a2535;
+            --header-brand: #5b8e8b; 
+        }
+
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .shell { width: 100%; max-width: 480px; min-height: 100vh; position: relative; }
+
+        /* ─── HEADER & LANG SWITCHER ─── */
+        header {
+            padding: 24px 24px 20px;
+            border-bottom: 1px solid var(--faint);
+            text-align: center;
+        }
+        
+        .header-actions {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+
+        .lang-switch {
+            display: inline-flex;
+            gap: 4px;
+            background: var(--surface);
+            padding: 5px;
+            border-radius: 30px;
+            border: 1px solid var(--faint);
+        }
+
+        .lang-btn {
+            background: transparent;
+            border: 1px solid transparent;
+            color: rgba(138, 159, 186, 0.4); 
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            width: 44px;
+            height: 44px; 
+            border-radius: 22px; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .lang-btn:hover:not(.active) {
+            color: var(--muted);
+        }
+
+        .lang-btn.active {
+            background: var(--gold-dim);
+            color: var(--gold); 
+            border-color: var(--gold-line);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        header h1 { 
+            font-size: 1.4rem; 
+            font-weight: 700; 
+            letter-spacing: 4px; 
+            text-transform: uppercase; 
+            color: var(--text); 
+        }
+        header p  { 
+            font-size: 0.85rem; 
+            color: var(--header-brand); 
+            letter-spacing: 2px; 
+            margin-top: 6px; 
+            text-transform: uppercase; 
+        }
+
+        /* ─── TABS ─── */
+        .tabs-wrapper { position: relative; }
+        .tabs-wrapper::after {
+            content: ''; position: absolute;
+            right: 0; top: 0; bottom: 0; width: 44px;
+            background: linear-gradient(90deg, transparent, var(--bg));
+            pointer-events: none;
+        }
+        .tabs {
+            display: flex; overflow-x: auto;
+            padding: 16px 20px; gap: 10px;
+            scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
+        }
+        .tabs::-webkit-scrollbar { display: none; }
+        .tab {
+            background: var(--surface); color: var(--muted);
+            border: 1px solid var(--faint);
+            padding: 9px 18px; border-radius: 20px;
+            white-space: nowrap; font-size: 0.95rem; font-weight: 600;
+            cursor: pointer; transition: all 0.22s ease;
+            flex-shrink: 0; -webkit-tap-highlight-color: transparent; user-select: none;
+        }
+        .tab:hover { border-color: var(--gold-line); color: var(--text); }
+        .tab.active { background: var(--gold-dim); color: var(--gold); border-color: var(--gold-line); }
+
+        /* ─── CARDS ─── */
+        .card { display: none; padding: 0 20px 56px; animation: slideUp 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
+        .card.active { display: block; }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(14px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* hero */
+        .hero { text-align: center; padding: 12px 0 26px; }
+        .badge {
+            display: inline-block;
+            background: var(--gold-dim); color: var(--gold);
+            border: 1px solid var(--gold-line);
+            padding: 4px 13px; border-radius: 14px;
+            font-size: 0.75rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+        }
+        .oyster-name { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 14px; }
+
+        .price-tag { display: inline-flex; align-items: baseline; gap: 5px; margin-bottom: 12px; }
+        .price-amount { font-size: 1.8rem; font-weight: 700; color: var(--gold); }
+        .price-unit   { font-size: 0.9rem; color: var(--muted); }
+        .terroir {
+            font-size: 0.95rem; color: var(--muted);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .terroir-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); opacity: 0.6; flex-shrink: 0; }
+
+        /* block общий */
+        .info-block {
+            background: var(--surface); border: 1px solid var(--faint);
+            border-radius: 16px; padding: 20px; margin-bottom: 16px;
+        }
+        .block-label {
+            font-size: 0.75rem; font-weight: 700;
+            letter-spacing: 0.11em; text-transform: uppercase;
+            color: var(--muted); margin-bottom: 16px;
+        }
+
+        /* taste bars */
+        .taste-row { margin-bottom: 16px; }
+        .taste-meta { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px; }
+        .taste-label { font-weight: 600; color: var(--text); }
+        .taste-score { color: var(--gold); font-weight: 700; font-variant-numeric: tabular-nums; }
+        .bar-track { height: 6px; background: var(--faint); border-radius: 3px; overflow: hidden; }
+        .bar-fill {
+            height: 100%; background: linear-gradient(90deg, #9a6e20, var(--gold));
+            border-radius: 3px; width: 0%;
+            transition: width 0.65s cubic-bezier(0.22,1,0.36,1);
+        }
+        .scale-hint {
+            display: flex; justify-content: space-between;
+            font-size: 0.65rem; font-weight: 600; color: #a9bed1; /* Высокий контраст */
+            text-transform: uppercase; letter-spacing: 0.05em;
+            margin-top: 6px; padding: 0 1px;
+        }
+
+        /* description */
+        .desc { font-size: 1rem; line-height: 1.65; color: #a9bed1; margin-bottom: 16px; }
+        .desc strong { color: var(--text); font-weight: 600; }
+
+        /* ─── ORIGIN ─── */
+        .origin-map-line {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+        }
+        .origin-flag { font-size: 26px; flex-shrink: 0; }
+        .origin-place { font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+        .origin-region { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
+        .origin-text {
+            font-size: 0.95rem; line-height: 1.6; color: #a9bed1;
+        }
+        .origin-text strong { color: var(--text); font-weight: 600; }
+
+        /* ─── FACTS ─── */
+        .facts-list { display: flex; flex-direction: column; gap: 12px; }
+        .fact-item {
+            display: flex; gap: 12px; align-items: flex-start;
+            background: var(--surface-2); border: 1px solid var(--faint);
+            border-radius: 12px; padding: 14px;
+        }
+        .fact-num {
+            width: 26px; height: 26px; border-radius: 50%;
+            background: var(--gold-dim); border: 1px solid var(--gold-line);
+            color: var(--gold); font-size: 0.8rem; font-weight: 800;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; margin-top: 1px;
+        }
+        .fact-text { font-size: 0.95rem; line-height: 1.55; color: #a9bed1; }
+        .fact-text strong { color: var(--text); font-weight: 600; }
+
+        /* ─── PAIRING ─── */
+        .pairing-intro { font-size: 0.95rem; color: var(--muted); line-height: 1.5; margin-bottom: 16px; }
+        .drink-list { display: flex; flex-direction: column; gap: 10px; }
+        .drink-card {
+            display: flex; align-items: flex-start; gap: 12px;
+            background: var(--surface-2); border: 1px solid var(--faint);
+            border-radius: 12px; padding: 14px;
+        }
+        .drink-icon {
+            width: 38px; height: 38px; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; flex-shrink: 0; margin-top: 1px;
+        }
+        .drink-icon.white   { background: rgba(255,235,160,0.09); }
+        .drink-icon.bubb    { background: rgba(210,190,255,0.09); }
+        .drink-icon.rose    { background: rgba(255,160,160,0.09); }
+        .drink-icon.sake    { background: rgba(160,230,200,0.09); }
+        .drink-icon.mineral { background: rgba(140,200,255,0.09); }
+        .drink-name   { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
+        .drink-why    { font-size: 0.85rem; color: var(--muted); line-height: 1.45; }
+        .drink-tag {
+            display: inline-block;
+            background: var(--gold-dim); color: var(--gold);
+            border: 1px solid var(--gold-line);
+            padding: 3px 10px; border-radius: 8px;
+            font-size: 0.7rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            margin-top: 6px; white-space: nowrap;
+        }
+    </style>
+</head>
+<body>
+<div class="shell">
+
+    <header>
+        <div class="header-actions">
+            <div class="lang-switch" id="langSwitch">
+                <button class="lang-btn active" data-lang="ru">RU</button>
+                <button class="lang-btn" data-lang="ro">RO</button>
+                <button class="lang-btn" data-lang="en">EN</button>
+            </div>
+        </div>
+        <h1>Oyster's LAB</h1>
+        <p>from the seabed</p>
+    </header>
+
+    <div class="tabs-wrapper">
+        <div class="tabs" id="tabs">
+            <button class="tab active" data-target="josephine">Josephine</button>
+            <button class="tab" data-target="gillardeau">Gillardeau</button>
+            <button class="tab" data-target="tiamara">Tia Mara</button>
+            <button class="tab" data-target="gold">Gold</button>
+            <button class="tab" data-target="royale">Royale</button>
+            <button class="tab" data-target="speciale">Speciale</button>
+            <button class="tab" data-target="boudeuse">Boudeuse</button>
+            <button class="tab" data-target="finedeclaire">Fine de Claire</button>
+            <button class="tab" data-target="sentenelles">Sentenelles</button>
+            <button class="tab" data-target="ostraregal">Ostrea Regal</button>
+            <button class="tab" data-target="amulet">Amulet</button>
+            <button class="tab" data-target="eleonora">Eléonore</button>
+        </div>
+    </div>
+
+    <div id="cards-container"></div>
+
+</div>
+<script>
+// --- TRANSLATIONS DICTIONARY ---
+const UI = {
+    ru: {
+        taste: 'Вкусовой профиль', origin: 'Происхождение', pairing: 'Идеальные напитки',
+        facts: 'Интересные факты', low: '− слабо', high: 'интенсивно +', unit: '/ шт.',
+        sal: 'Солёность', iod: 'Йодистость', sw: 'Сладость', meat: 'Мясистость'
+    },
+    ro: {
+        taste: 'Profil Gustativ', origin: 'Origine', pairing: 'Băuturi Ideale',
+        facts: 'Fapte Interesante', low: '− slab', high: 'intens +', unit: '/ buc.',
+        sal: 'Salinitate', iod: 'Iod', sw: 'Dulceață', meat: 'Cărnozitate'
+    },
+    en: {
+        taste: 'Taste Profile', origin: 'Origin', pairing: 'Perfect Pairings',
+        facts: 'Interesting Facts', low: '− mild', high: 'intense +', unit: '/ pc.',
+        sal: 'Salinity', iod: 'Iodine', sw: 'Sweetness', meat: 'Meatiness'
+    }
+};
+
+const OYSTERS = [
+    {
+        id: 'josephine', name: 'Joséphine', badge: 'Premium Choice', price: '80',
+        sal: 3, iod: 4, sw: 7, meat: 7,
+        terroir: { ru: 'Маренн-Олерон, Франция', ro: 'Marennes-Oléron, Franța', en: 'Marennes-Oléron, France' },
+        desc: {
+            ru: 'Изысканный, мягкий и невероятно деликатный моллюск. Первый контакт дарит <strong>лёгкую солёность</strong>, которая моментально растворяется в шелковистой сладости. В финале раскрываются благородные <strong>ореховые ноты</strong> и долгое сливочное послевкусие.',
+            ro: 'O moluscă rafinată, moale și incredibil de delicată. Primul contact oferă o <strong>salinitate ușoară</strong>, care se dizolvă instantaneu într-o dulceață mătăsoasă. În final se dezvăluie note nobile de <strong>nuci</strong> și un postgust lung și cremos.',
+            en: 'Refined, soft, and incredibly delicate mollusk. The first contact offers a <strong>light salinity</strong> that instantly dissolves into a silky sweetness. The finale reveals noble <strong>nutty notes</strong> and a long creamy aftertaste.'
+        },
+        origin: {
+            flag: '🇫🇷',
+            place: { ru: 'Маренн-Олерон', ro: 'Marennes-Oléron', en: 'Marennes-Oléron' },
+            region: { ru: 'Шарант-Маритим, Западная Франция', ro: 'Charente-Maritime, Vestul Franței', en: 'Charente-Maritime, Western France' },
+            text: {
+                ru: 'Маренн-Олерон — <strong>старейший устричный регион мира</strong>. Joséphine дозревает в особых глиняных бассейнах — <strong>клерах</strong>, где микроводоросль придаёт раковине характерный зеленоватый оттенок и неповторимый вкус.',
+                ro: 'Marennes-Oléron este <strong>cea mai veche regiune stridieră din lume</strong>. Joséphine se maturează în bazine speciale de lut — <strong>claires</strong>, unde o microalgă îi conferă o nuanță verzuie caracteristică și un gust inconfundabil.',
+                en: 'Marennes-Oléron is the <strong>oldest oyster region in the world</strong>. Joséphine matures in special clay basins — <strong>claires</strong>, where a microalgae gives the shell a characteristic greenish tint and a unique taste.'
+            }
+        },
+        facts: {
+            ru: ['Названа в честь императрицы Жозефины Богарне.', 'Цвет мяса имеет лёгкий зеленоватый оттенок — это результат питания микроводорослью Navicula ostrearia.', 'Индекс мясистости официально сертифицирован и должен составлять не менее 9.'],
+            ro: ['Numită în onoarea împărătesei Joséphine de Beauharnais.', 'Culoarea cărnii are o ușoară nuanță verzuie — rezultat al hrănirii cu microalga Navicula ostrearia.', 'Indicele de cărnozitate este certificat oficial și trebuie să fie de cel puțin 9.'],
+            en: ['Named in honor of Empress Joséphine de Beauharnais.', 'The meat has a slight greenish tint — a result of feeding on the microalgae Navicula ostrearia.', 'The meatiness index is officially certified and must be at least 9.']
+        },
+        pairingIntro: {
+            ru: 'Деликатная сладость и сливочность раскрываются рядом с винами с мягкой кислотностью.',
+            ro: 'Dulceața delicată și cremozitatea se dezvăluie alături de vinuri cu aciditate moale.',
+            en: 'Delicate sweetness and creaminess unfold alongside wines with soft acidity.'
+        },
+        drinks: [
+            { type: 'white', icon: '🍷', name: 'Chardonnay Château Vartely', why: { ru: 'Мягкая бочковая выдержка зеркалит сливочное послевкусие.', ro: 'Maturarea moale în butoi oglindește postgustul cremos.', en: 'Soft barrel aging mirrors the creamy aftertaste.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
+            { type: 'white', icon: '🍾', name: 'Chablis 1er Cru', why: { ru: 'Кремниевая минеральность усиливает ореховые ноты.', ro: 'Mineralitatea de cremene amplifică notele de nuci.', en: 'Flinty minerality enhances the nutty notes.' }, tag: { ru: 'Классика', ro: 'Clasic', en: 'Classic' } },
+            { type: 'bubb', icon: '✨', name: 'Cricova Brut Prestige', why: { ru: 'Пузырьки очищают нёбо и готовят к следующему глотку.', ro: 'Bulele curăță palatul și pregătesc pentru următoarea înghițitură.', en: 'Bubbles cleanse the palate and prepare for the next sip.' }, tag: { ru: 'Игристое', ro: 'Spumant', en: 'Sparkling' } }
+        ]
+    },
+    {
+        id: 'gillardeau', name: 'Gillardeau', badge: 'Grand Cru', price: '135',
+        sal: 5, iod: 5, sw: 8, meat: 10,
+        terroir: { ru: 'Маренн-Олерон / Нормандия', ro: 'Marennes-Oléron / Normandia', en: 'Marennes-Oléron / Normandy' },
+        desc: {
+            ru: 'Икона высокой кухни и абсолютный эталон. <strong>Плотная, мясистая</strong> устрица с мощным концентрированным вкусом. Лёгкая сладость топлёного масла и глубокий <strong>ореховый оттенок</strong> обжаренного фундука в финале.',
+            ro: 'Icoana haute cuisine și un etalon absolut. O stridie <strong>densă, cărnoasă</strong>, cu un gust puternic concentrat. O dulceață ușoară de unt topit și o notă profundă de <strong>alune prăjite</strong> la final.',
+            en: 'The icon of haute cuisine and an absolute standard. A <strong>dense, meaty</strong> oyster with a powerful concentrated flavor. Light sweetness of melted butter and a deep <strong>roasted hazelnut</strong> note in the finish.'
+        },
+        origin: {
+            flag: '🇫🇷',
+            place: { ru: 'Маренн-Олерон + Нормандия', ro: 'Marennes-Oléron + Normandia', en: 'Marennes-Oléron + Normandy' },
+            region: { ru: 'Западная Франция', ro: 'Vestul Franței', en: 'Western France' },
+            text: {
+                ru: 'Семья Gillardeau выращивает устриц уже 5 поколений. Каждая устрица дозревает в Нормандии — этот метод называется <strong>«аффинаж»</strong> и занимает до 4 лет.',
+                ro: 'Familia Gillardeau crește stridii de 5 generații. Fiecare stridie se maturează în Normandia — metodă numită <strong>„afinaj”</strong>, ce durează până la 4 ani.',
+                en: 'The Gillardeau family has been farming oysters for 5 generations. Each oyster matures in Normandy — a method called <strong>"affinage"</strong> that takes up to 4 years.'
+            }
+        },
+        facts: {
+            ru: ['Каждая устрица Gillardeau вручную маркируется буквой «G» на раковине.', 'Цикл производства занимает от 3 до 5 лет.', 'Её называют «Rolls-Royce среди устриц».'],
+            ro: ['Fiecare stridie Gillardeau este marcată manual cu litera „G” pe cochilie.', 'Ciclul de producție durează între 3 și 5 ani.', 'Este supranumită „Rolls-Royce-ul stridiilor”.'],
+            en: ['Each Gillardeau oyster is laser-engraved with a "G" on the shell.', 'The production cycle takes 3 to 5 years.', 'It is called the "Rolls-Royce of oysters".']
+        },
+        pairingIntro: {
+            ru: 'Максимальная мясистость и насыщенность требуют вина с весом и структурой.',
+            ro: 'Cărnozitatea maximă și saturația necesită un vin cu greutate și structură.',
+            en: 'Maximum meatiness and richness require a wine with weight and structure.'
+        },
+        drinks: [
+            { type: 'white', icon: '🍷', name: 'Purcari Chardonnay Barrique', why: { ru: 'Выдержка в дубе гармонирует с ореховостью.', ro: 'Maturarea în stejar se armonizează cu notele de nuci.', en: 'Oak aging harmonizes with the nuttiness.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
+            { type: 'bubb', icon: '✨', name: 'Champagne Deutz Brut Classic', why: { ru: 'Дрожжевые ноты ведут диалог на равных.', ro: 'Notele de drojdie poartă un dialog de la egal la egal.', en: 'Yeast notes lead a dialogue on equal terms.' }, tag: { ru: 'Премиум', ro: 'Premium', en: 'Premium' } },
+            { type: 'white', icon: '🍾', name: 'Pouilly-Fumé', why: { ru: 'Дымные минеральные тона создают баланс.', ro: 'Tonurile minerale afumate creează echilibru.', en: 'Smoky mineral tones create balance.' }, tag: { ru: 'Контраст', ro: 'Contrast', en: 'Contrast' } }
+        ]
+    },
+    {
+        id: 'tiamara', name: 'Tia Mara', badge: 'Wild Atlantic', price: '90',
+        sal: 7, iod: 6, sw: 6, meat: 8,
+        terroir: { ru: 'Залив Донегал, Ирландия', ro: 'Golful Donegal, Irlanda', en: 'Donegal Bay, Ireland' },
+        desc: {
+            ru: 'Бескомпромиссная, мощная и невероятно <strong>свежая</strong> устрица. Обрушивается на рецепторы <strong>яркой морской солёностью</strong>. Атлетичная хрустящая текстура сменяется лёгкой сладостью и <strong>цитрусовыми нотками</strong> на финише.',
+            ro: 'O stridie fără compromisuri, puternică și incredibil de <strong>proaspătă</strong>. Lovește receptorii cu o <strong>salinitate marină vibrantă</strong>. Textura crocantă și atletică lasă loc unei dulceți ușoare și <strong>notelor de citrice</strong>.',
+            en: 'Uncompromising, powerful, and incredibly <strong>fresh</strong> oyster. It hits the receptors with <strong>vibrant marine salinity</strong>. The athletic crispy texture gives way to light sweetness and <strong>citrus notes</strong>.'
+        },
+        origin: {
+            flag: '🇮🇪',
+            place: { ru: 'Залив Донегал', ro: 'Golful Donegal', en: 'Donegal Bay' },
+            region: { ru: 'Северо-западная Ирландия', ro: 'Nord-vestul Irlandei', en: 'North-West Ireland' },
+            text: {
+                ru: 'Залив Донегал — один из самых чистых участков океана. Устрицы здесь растут <strong>дикими</strong>. Холодная вода делает текстуру плотной и хрустящей.',
+                ro: 'Golful Donegal este una dintre cele mai curate zone oceanice. Stridiile cresc aici <strong>sălbatice</strong>. Apa rece face textura densă și crocantă.',
+                en: 'Donegal Bay is one of the cleanest ocean areas. Oysters grow here <strong>wild</strong>. Cold water makes the texture dense and crisp.'
+            }
+        },
+        facts: {
+            ru: ['Tia Mara в переводе с гэльского означает «морская богиня».', 'Ирландия ежегодно проводит старейший в мире фестиваль устриц.', 'В холодных водах устрица растёт в 2 раза медленнее.'],
+            ro: ['Tia Mara înseamnă „zeița mării” în limba gaelică.', 'Irlanda găzduiește anual cel mai vechi festival de stridii din lume.', 'În apele reci, stridia crește de 2 ori mai încet.'],
+            en: ['Tia Mara translates from Gaelic as "sea goddess".', 'Ireland annually hosts the oldest oyster festival in the world.', 'In cold waters, the oyster grows 2 times slower.']
+        },
+        pairingIntro: {
+            ru: 'Высокая солёность просит яркой кислоты и зелёного характера.',
+            ro: 'Salinitatea ridicată cere o aciditate vibrantă și un caracter verde.',
+            en: 'High salinity calls for vibrant acidity and a green character.'
+        },
+        drinks: [
+            { type: 'white', icon: '🍷', name: 'Sauvignon Blanc Purcari', why: { ru: 'Цитрусовая кислотность рифмуется с морским характером.', ro: 'Aciditatea citrică rimează cu caracterul marin.', en: 'Citrus acidity rhymes with the marine character.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
+            { type: 'white', icon: '🍾', name: 'Muscadet Sèvre et Maine', why: { ru: 'Минеральность не перебивает океанский вкус.', ro: 'Mineralitatea nu acoperă gustul oceanic.', en: 'Minerality does not overpower the ocean taste.' }, tag: { ru: 'Классика', ro: 'Clasic', en: 'Classic' } },
+            { type: 'mineral', icon: '🍺', name: 'Guinness Draught', why: { ru: 'Кремовая горечь стаута усиливает солёность.', ro: 'Amărăciunea cremoasă a stout-ului intensifică salinitatea.', en: 'The creamy bitterness of the stout enhances salinity.' }, tag: { ru: 'Аутентично', ro: 'Autentic', en: 'Authentic' } }
+        ]
+    },
+    {
+        id: 'gold', name: 'Gold', badge: 'Luxury Edition', price: '145',
+        sal: 4, iod: 5, sw: 8, meat: 9,
+        terroir: { ru: 'Ирландия / Бретань', ro: 'Irlanda / Bretania', en: 'Ireland / Brittany' },
+        desc: {
+            ru: '<strong>Утончённая</strong> и роскошная устрица с напылением из 24-каратного золота. Внутри — фантастически плотное тело с <strong>лёгкой йодистостью, ореховым вкусом</strong> и долгим сливочным послевкусием.',
+            ro: 'O stridie <strong>rafinată</strong> și luxoasă, acoperită cu aur de 24 de carate. În interior — un corp dens, cu <strong>o ușoară notă de iod, gust de nuci</strong> și un postgust cremos lung.',
+            en: 'A <strong>refined</strong> and luxurious oyster coated in 24-karat gold. Inside — a fantastically dense body with <strong>light iodine, nutty flavor</strong>, and a long creamy aftertaste.'
+        },
+        origin: {
+            flag: '🇫🇷',
+            place: { ru: 'Бретань / Ирландия', ro: 'Bretania / Irlanda', en: 'Brittany / Ireland' },
+            region: { ru: 'Атлантическое побережье', ro: 'Coasta Atlantică', en: 'Atlantic Coast' },
+            text: {
+                ru: 'Gold — продукт <strong>двойного терруара</strong>. Золотое напыление наносится вручную уже <strong>после раскрытия раковины</strong> — золото пищевое.',
+                ro: 'Gold este produsul unui <strong>terroir dublu</strong>. Pulberea de aur este aplicată manual <strong>după deschiderea cochiliei</strong> — aur alimentar.',
+                en: 'Gold is a product of a <strong>double terroir</strong>. Gold leaf is applied by hand <strong>after the shell is opened</strong> — edible gold.'
+            }
+        },
+        facts: {
+            ru: ['Пищевое золото E175 абсолютно нейтрально на вкус и запах.', 'Традиция есть устриц с золотом восходит к пирам эпохи Возрождения.', 'Входит в топ-3 самых фотографируемых блюд в ресторанах.'],
+            ro: ['Aurul alimentar E175 este absolut neutru la gust și miros.', 'Tradiția stridiilor cu aur datează din timpul ospețelor renascentiste.', 'Este în top 3 cele mai fotografiate preparate din restaurante.'],
+            en: ['Edible gold E175 is absolutely neutral in taste and smell.', 'The tradition of eating oysters with gold dates back to Renaissance feasts.', 'Included in the top 3 most photographed restaurant dishes.']
+        },
+        pairingIntro: {
+            ru: 'Роскошная устрица требует напитка на своём уровне.',
+            ro: 'O stridie de lux necesită o băutură pe măsură.',
+            en: 'A luxurious oyster requires a drink on its level.'
+        },
+        drinks: [
+            { type: 'bubb', icon: '✨', name: 'Champagne Moët & Chandon Brut', why: { ru: 'Создаёт совершенный диалог с золотой устрицей.', ro: 'Creează un dialog perfect cu stridia de aur.', en: 'Creates a perfect dialogue with the golden oyster.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
+            { type: 'white', icon: '🍷', name: 'Chablis Grand Cru', why: { ru: 'Встреча двух гранд-крю.', ro: 'Întâlnirea a două grand cru-uri.', en: 'The meeting of two grand crus.' }, tag: { ru: 'Уровень', ro: 'Nivel', en: 'Level' } },
+            { type: 'bubb', icon: '🥂', name: 'Cricova Prestige Cuvée', why: { ru: 'Достойная молдавская альтернатива.', ro: 'O alternativă moldovenească demnă.', en: 'A worthy Moldovan alternative.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } }
+        ]
+    },
+    {
+        id: 'royale', name: 'Royale', badge: 'Royal Choice', price: '100',
+        sal: 3, iod: 4, sw: 7, meat: 7,
+        terroir: { ru: 'Атлантика, Франция', ro: 'Atlantic, Franța', en: 'Atlantic, France' },
+        desc: {
+            ru: 'Невероятно <strong>мягкая, с нежной текстурой</strong>, которая буквально тает на языке. Деликатный <strong>сладковатый вкус</strong> с лёгкими минеральными нотами в финале.',
+            ro: 'Incredibil de <strong>moale, cu o textură delicată</strong>, care pur și simplu se topește. Un <strong>gust ușor dulceag</strong>, cu note minerale fine la final.',
+            en: 'Incredibly <strong>soft, with a delicate texture</strong> that literally melts. A delicate <strong>sweetish taste</strong> with light mineral notes in the finale.'
+        },
+        origin: {
+            flag: '🇫🇷',
+            place: { ru: 'Атлантическое побережье', ro: 'Coasta Atlantică', en: 'Atlantic Coast' },
+            region: { ru: 'Западная Франция', ro: 'Vestul Franței', en: 'Western France' },
+            text: {
+                ru: 'Royale — собирательное название категории устриц <strong>высшего класса</strong>. Дозревает в условиях контролируемой плотности посадки.',
+                ro: 'Royale este denumirea categoriei de stridii de <strong>clasa superioară</strong>. Se maturează în condiții de densitate controlată.',
+                en: 'Royale is a collective name for the <strong>premium class</strong> oyster category. Matures under controlled density conditions.'
+            }
+        },
+        facts: {
+            ru: ['Категория «Royale» означает индекс мясистости от 10,5.', 'Проходят финальную очистку в проточной морской воде не менее 3 суток.', 'Французы употребляют около 2 миллиардов устриц в год.'],
+            ro: ['Categoria „Royale” înseamnă un indice de cărnozitate de minim 10,5.', 'Trec printr-o purificare finală în apă de mare curgătoare timp de 3 zile.', 'Francezii consumă aproximativ 2 miliarde de stridii anual.'],
+            en: ['The "Royale" category means a meatiness index of at least 10.5.', 'They undergo final purification in running seawater for 3 days.', 'The French consume about 2 billion oysters a year.']
+        },
+        pairingIntro: {
+            ru: 'Мягкость этой устрицы хорошо работает с разными стилями вин.',
+            ro: 'Moliciunea acestei stridii se potrivește cu diverse stiluri de vin.',
+            en: 'The softness of this oyster works well with different wine styles.'
+        },
+        drinks: [
+            { type: 'rose', icon: '🌸', name: 'Rosé Purcari Pinot Noir', why: { ru: 'Деликатное розе мягко обнимает сладость устрицы.', ro: 'Un rosé delicat îmbrățișează fin dulceața stridiei.', en: 'Delicate rosé softly embraces the sweetness of the oyster.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'white', icon: '🍷', name: 'Pinot Gris', why: { ru: 'Тона белого персика идут рука об руку с минеральным финишем.', ro: 'Tonurile de piersică albă merg mână în mână cu finalul mineral.', en: 'White peach tones go hand in hand with the mineral finish.' }, tag: { ru: 'Гармония', ro: 'Armonie', en: 'Harmony' } },
+            { type: 'bubb', icon: '✨', name: 'Prosecco DOC Brut', why: { ru: 'Лёгкие пузырьки подчёркивают нежность.', ro: 'Bulele lejere subliniază delicatețea.', en: 'Light bubbles emphasize tenderness.' }, tag: { ru: 'Лёгкость', ro: 'Lejeritate', en: 'Lightness' } }
+        ]
+    },
+    {
+        id: 'speciale', name: 'Spéciale', badge: 'High Index', price: '110',
+        sal: 5, iod: 5, sw: 8, meat: 10,
+        terroir: { ru: 'Французские клеры', ro: 'Claire franceze', en: 'French claires' },
+        desc: {
+            ru: 'Очень <strong>плотная</strong> устрица с феноменальным индексом мясистости. Вкус раскрывается <strong>морской солёностью</strong>, которая перерастает в <strong>ореховый оттенок</strong>.',
+            ro: 'O stridie foarte <strong>densă</strong> cu un indice de cărnozitate fenomenal. Gustul se deschide cu o <strong>salinitate marină</strong>, care se transformă într-o <strong>nuanță de nuci</strong>.',
+            en: 'A very <strong>dense</strong> oyster with a phenomenal meatiness index. The taste opens with <strong>marine salinity</strong>, which develops into a <strong>nutty hue</strong>.'
+        },
+        origin: {
+            flag: '🇫🇷',
+            place: { ru: 'Клеры Маренн-Олерон', ro: 'Claire Marennes-Oléron', en: 'Claires Marennes-Oléron' },
+            region: { ru: 'Шарант-Маритим', ro: 'Charente-Maritime', en: 'Charente-Maritime' },
+            text: {
+                ru: 'Высшая ступень в системе клеров. Устрица проводит в бассейнах <strong>минимум 4 недели</strong> при низкой плотности.',
+                ro: 'Cea mai înaltă treaptă în sistemul claires. Stridia petrece <strong>minim 4 săptămâni</strong> în bazine cu densitate redusă.',
+                en: 'The highest tier in the claire system. The oyster spends <strong>at least 4 weeks</strong> in low-density basins.'
+            }
+        },
+        facts: {
+            ru: ['Стандарт требует индекса мясистости не ниже 10,5.', 'Одна Spéciale покрывает суточную норму цинка.', 'Spéciale de Claire часто выигрывает Чемпионат Франции.'],
+            ro: ['Standardul impune un indice de cărnozitate de minim 10,5.', 'O singură Spéciale acoperă doza zilnică de zinc.', 'Spéciale de Claire câștigă adesea Campionatul Franței.'],
+            en: ['The standard requires a meatiness index of at least 10.5.', 'One Spéciale covers the daily requirement of zinc.', 'Spéciale de Claire often wins the French Championship.']
+        },
+        pairingIntro: {
+            ru: 'Плотная структура — нужно вино с телом и кислотностью.',
+            ro: 'Structură densă — e nevoie de un vin cu corp și aciditate.',
+            en: 'Dense structure — needs a wine with body and acidity.'
+        },
+        drinks: [
+            { type: 'white', icon: '🍷', name: 'Viognier Château Vartely', why: { ru: 'Viognier выдерживает мощность устрицы.', ro: 'Viognier face față puterii stridiei.', en: 'Viognier withstands the power of the oyster.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'white', icon: '🍾', name: 'Burgundy Blanc', why: { ru: 'Объёмный Бургунь балансирует вкус маслянистой структурой.', ro: 'Burgundia voluminoasă echilibrează gustul.', en: 'Voluminous Burgundy balances the taste.' }, tag: { ru: 'Классика', ro: 'Clasic', en: 'Classic' } },
+            { type: 'bubb', icon: '✨', name: 'Milestii Mici Spumant Brut', why: { ru: 'Хорошая кислотность подчёркивает свежесть.', ro: 'Aciditatea bună subliniază prospețimea.', en: 'Good acidity emphasizes freshness.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } }
+        ]
+    },
+    {
+        id: 'boudeuse', name: 'Boudeuse', badge: 'Masterpiece', price: '90',
+        sal: 5, iod: 6, sw: 6, meat: 6,
+        terroir: { ru: 'Маренн-Олерон', ro: 'Marennes-Oléron', en: 'Marennes-Oléron' },
+        desc: {
+            ru: 'Хит для ценителей. Эта маленькая устрица упрямо росла вглубь раковины. <strong>Сбалансированная</strong>, с <strong>йодистым оттенком</strong> и нежной текстурой.',
+            ro: 'Un hit pentru cunoscători. Această stridie mică a crescut încăpățânat în adâncimea cochiliei. <strong>Echilibrată</strong>, cu <strong>nuanțe de iod</strong> și o textură fină.',
+            en: 'A hit for connoisseurs. This small oyster stubbornly grew deep into the shell. <strong>Balanced</strong>, with <strong>iodine notes</strong> and a delicate texture.'
+        },
+        origin: {
+            flag: '🇫🇷',
+            place: { ru: 'Маренн-Олерон', ro: 'Marennes-Oléron', en: 'Marennes-Oléron' },
+            region: { ru: 'Ферма Давида Эрве', ro: 'Ferma lui David Hervé', en: 'David Hervé Farm' },
+            text: {
+                ru: 'Boudeuse — авторская устрица <strong>David Hervé</strong>. Название получила за форму: устрица «надулась» и росла <strong>в глубину</strong>.',
+                ro: 'Boudeuse este o stridie de autor de la <strong>David Hervé</strong>. Numele provine de la forma sa: a crescut <strong>în adâncime</strong>.',
+                en: 'Boudeuse is an author oyster by <strong>David Hervé</strong>. Named for its shape: it grew <strong>deep</strong> into the shell.'
+            }
+        },
+        facts: {
+            ru: ['«Boudeuse» означает «надутая, капризная».', 'В ней накапливается больше собственного натурального сока.', 'David Hervé — пятикратный чемпион Франции.'],
+            ro: ['„Boudeuse” înseamnă „supărată, capricioasă”.', 'Acumulează mai mult din propriul suc natural.', 'David Hervé este de cinci ori campion al Franței.'],
+            en: ['"Boudeuse" means "sulky, capricious".', 'It accumulates more of its own natural liquor.', 'David Hervé is a five-time champion of France.']
+        },
+        pairingIntro: {
+            ru: 'Йодистый характер раскрывается рядом с минеральными винами.',
+            ro: 'Caracterul de iod se deschide alături de vinuri minerale.',
+            en: 'The iodine character opens up next to mineral wines.'
+        },
+        drinks: [
+            { type: 'white', icon: '🍷', name: 'Sancerre Blanc', why: { ru: 'Кремниевая минеральность Sancerre — прямое попадание.', ro: 'Mineralitatea Sancerre este o potrivire perfectă.', en: 'Sancerre minerality is a perfect match.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'white', icon: '🍾', name: 'Sauvignon Blanc Purcari', why: { ru: 'Травяные тона поддерживают деликатный характер.', ro: 'Notele erbacee susțin caracterul delicat.', en: 'Herbal tones support the delicate character.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } },
+            { type: 'sake', icon: '🍶', name: 'Sake Junmai Daiginjo', why: { ru: 'Умами саке создаёт элегантный диалог с йодистостью.', ro: 'Umami din sake creează un dialog elegant cu iodul.', en: 'Sake umami creates an elegant dialogue with iodine.' }, tag: { ru: 'Неожиданно', ro: 'Neașteptat', en: 'Unexpected' } }
+        ]
+    },
+    {
+        id: 'finedeclaire', name: 'Fine de Claire', badge: 'Classic', price: '65',
+        sal: 6, iod: 5, sw: 5, meat: 5,
+        terroir: { ru: 'Маренн-Олерон', ro: 'Marennes-Oléron', en: 'Marennes-Oléron' },
+        desc: {
+            ru: 'Самая известная устрица на планете. Приятно <strong>хрустящая</strong> текстура покоряет <strong>освежающей солёностью</strong> и уходит в <strong>минеральное послевкусие</strong>.',
+            ro: 'Cea mai cunoscută stridie. Textura plăcut <strong>crocantă</strong> cucerește cu o <strong>salinitate revigorantă</strong> și trece într-un <strong>postgust mineral</strong>.',
+            en: 'The most famous oyster. A pleasantly <strong>crisp</strong> texture captivates with <strong>refreshing salinity</strong> and fades into a <strong>mineral aftertaste</strong>.'
+        },
+        origin: {
+            flag: '🇫🇷',
+            place: { ru: 'Клеры Маренн-Олерон', ro: 'Claire Marennes-Oléron', en: 'Claires Marennes-Oléron' },
+            region: { ru: 'Шарант-Маритим', ro: 'Charente-Maritime', en: 'Charente-Maritime' },
+            text: {
+                ru: '«Клер» — это бывшие соляные болота. Именно здесь родилась концепция <strong>аффинажа устриц</strong>.',
+                ro: '„Claire” sunt foste mlaștini sărate. Aici a luat naștere conceptul de <strong>afinaj al stridiilor</strong>.',
+                en: '"Claire" are former salt marshes. This is where the concept of <strong>oyster affinage</strong> was born.'
+            }
+        },
+        facts: {
+            ru: ['Fine de Claire — самая продаваемая устрица в мире.', '«Fine» — официальный стандарт мясистости.', 'Эрнест Хемингуэй любил их с холодным Шабли.'],
+            ro: ['Fine de Claire — cea mai vândută stridie din lume.', '„Fine” este un standard oficial de cărnozitate.', 'Ernest Hemingway le adora cu un Chablis rece.'],
+            en: ['Fine de Claire is the best-selling oyster in the world.', '"Fine" is an official meatiness standard.', 'Ernest Hemingway loved them with cold Chablis.']
+        },
+        pairingIntro: {
+            ru: 'Классическая устрица — классические пэйринги.',
+            ro: 'O stridie clasică — asocieri clasice.',
+            en: 'A classic oyster — classic pairings.'
+        },
+        drinks: [
+            { type: 'white', icon: '🍷', name: 'Muscadet Sèvre et Maine', why: { ru: 'Минеральность не перебивает морской характер.', ro: 'Mineralitatea nu acoperă caracterul marin.', en: 'Minerality does not overpower the marine character.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'bubb', icon: '✨', name: 'Cricova Chardonnay Brut', why: { ru: 'Игристая альтернатива с яблочными тонами.', ro: 'O alternativă spumantă cu note de măr.', en: 'Sparkling alternative with apple tones.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } },
+            { type: 'white', icon: '🍾', name: 'Aligoté Purcari', why: { ru: 'Сорт с острой кислотностью, рождённый для устриц.', ro: 'Un soi cu aciditate tăioasă, născut pentru stridii.', en: 'A grape with sharp acidity, born for oysters.' }, tag: { ru: 'Открытие', ro: 'Descoperire', en: 'Discovery' } }
+        ]
+    },
+    {
+        id: 'sentenelles', name: 'Sentenelles', badge: 'Selected', price: '85',
+        sal: 4, iod: 5, sw: 7, meat: 8,
+        terroir: { ru: 'Глубоководная Атлантика', ro: 'Atlanticul de mare adâncime', en: 'Deep-water Atlantic' },
+        desc: {
+            ru: 'Удивительно гармоничный и <strong>нежный</strong> сорт. Встречает лёгкой солёностью и демонстрирует переплетение глубоких <strong>ореховых нот</strong>.',
+            ro: 'Un soi uimitor de armonios și <strong>delicat</strong>. Întâmpină cu o salinitate ușoară și demonstrează <strong>note profunde de nuci</strong>.',
+            en: 'An amazingly harmonious and <strong>delicate</strong> variety. Welcomes with light salinity and shows deep <strong>nutty notes</strong>.'
+        },
+        origin: {
+            flag: '🇫🇷',
+            place: { ru: 'Глубоководная Атлантика', ro: 'Atlanticul de mare adâncime', en: 'Deep-water Atlantic' },
+            region: { ru: 'Западное побережье', ro: 'Coasta de Vest', en: 'West Coast' },
+            text: {
+                ru: 'Выращиваются на <strong>лантернах</strong>, подвешенных в толще воды. Устрица питается планктоном срединных вод.',
+                ro: 'Crescute în <strong>lanterne</strong> suspendate în apă. Stridia se hrănește cu plancton din apele de mijloc.',
+                en: 'Grown on <strong>lanterns</strong> suspended in the water column. The oyster feeds on mid-water plankton.'
+            }
+        },
+        facts: {
+            ru: ['Метод лантерн заимствован у японских устричников.', 'Устрицы постоянно покачиваются на волнах.', 'Название от слова «sentinelle» (часовой).'],
+            ro: ['Metoda lanternelor e preluată de la japonezi.', 'Stridiile se leagănă constant pe valuri.', 'Numele provine de la „sentinelle” (santinela).'],
+            en: ['The lantern method was borrowed from the Japanese.', 'Oysters constantly sway on the waves.', 'Named after "sentinelle" (sentinel).']
+        },
+        pairingIntro: {
+            ru: 'Нежность и ореховость ищут вино с мягкой кислотностью.',
+            ro: 'Delicatețea caută un vin cu aciditate moale.',
+            en: 'Tenderness looks for a wine with soft acidity.'
+        },
+        drinks: [
+            { type: 'white', icon: '🍷', name: 'Chardonnay Château Vartely', why: { ru: 'Спелое яблоко — идеальное зеркало для ореха.', ro: 'Mărul copt este oglinda perfectă pentru nuci.', en: 'Ripe apple is the perfect mirror for nuttiness.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'rose', icon: '🌸', name: 'Cricova Roze Sec', why: { ru: 'Добавляет игривость без излишней сладости.', ro: 'Adaugă un aer jucăuș fără prea multă dulceață.', en: 'Adds playfulness without excess sweetness.' }, tag: { ru: 'Игривость', ro: 'Jucăuș', en: 'Playful' } },
+            { type: 'white', icon: '🍾', name: 'Pinot Blanc', why: { ru: 'Мягкая округлость — спокойный компаньон.', ro: 'Rotunjimea moale e un companion liniștit.', en: 'Soft roundness is a calm companion.' }, tag: { ru: 'Гармония', ro: 'Armonie', en: 'Harmony' } }
+        ]
+    },
+    {
+        id: 'ostraregal', name: 'Ostrea Regal', badge: 'Boutrais', price: '120',
+        sal: 3, iod: 4, sw: 9, meat: 9,
+        terroir: { ru: 'Северная Ирландия', ro: 'Irlanda de Nord', en: 'Northern Ireland' },
+        desc: {
+            ru: 'Плотная, невероятно <strong>мясистая</strong> устрица с фантастическим профилем <strong>выраженной сладости</strong> и морским послевкусием.',
+            ro: 'O stridie densă, incredibil de <strong>cărnoasă</strong>, cu un profil de <strong>dulceață pronunțată</strong> și postgust marin.',
+            en: 'Dense, incredibly <strong>meaty</strong> oyster with a fantastic profile of <strong>pronounced sweetness</strong> and marine aftertaste.'
+        },
+        origin: {
+            flag: '🇮🇪',
+            place: { ru: 'Северное побережье Ирландии', ro: 'Coasta de Nord a Irlandei', en: 'Northern Coast of Ireland' },
+            region: { ru: 'Фермы семьи Бутрэ', ro: 'Fermele familiei Boutrais', en: 'Boutrais Family Farms' },
+            text: {
+                ru: 'Семья Boutrais сочетает <strong>французскую технику</strong> с уникальным ирландским терруаром.',
+                ro: 'Familia Boutrais combină <strong>tehnica franceză</strong> cu un terroir irlandez unic.',
+                en: 'The Boutrais family combines <strong>French technique</strong> with a unique Irish terroir.'
+            }
+        },
+        facts: {
+            ru: ['Ostrea — научное название плоской устрицы.', 'Сладость объясняется высоким содержанием гликогена.', 'В Древнем Риме устрицы были валютой.'],
+            ro: ['Ostrea este denumirea științifică a stridiei plate.', 'Dulceața se datorează conținutului ridicat de glicogen.', 'În Roma Antică, stridiile erau monedă de schimb.'],
+            en: ['Ostrea is the scientific name for the flat oyster.', 'The sweetness is due to high glycogen content.', 'In Ancient Rome, oysters were currency.']
+        },
+        pairingIntro: {
+            ru: 'Сладкая устрица — уместно и розе, и насыщенный белый.',
+            ro: 'O stridie dulce — se potrivește și rosé, și alb corpolent.',
+            en: 'Sweet oyster — fits both rosé and rich white.'
+        },
+        drinks: [
+            { type: 'white', icon: '🍷', name: 'Viognier / Marsanne', why: { ru: 'Тропические тона создают великолепный контраст.', ro: 'Tonurile tropicale creează un contrast excelent.', en: 'Tropical tones create a great contrast.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'rose', icon: '🌸', name: 'Purcari Rosamour', why: { ru: 'Ягодная свежесть уравновешивает богатство устрицы.', ro: 'Prospețimea fructelor de pădure echilibrează bogăția stridiei.', en: 'Berry freshness balances the richness.' }, tag: { ru: 'Баланс', ro: 'Echilibru', en: 'Balance' } },
+            { type: 'bubb', icon: '✨', name: 'Brut Rosé Champagne', why: { ru: 'Усиливает сладкие ноты и добавляет праздничности.', ro: 'Amplifică notele dulci și adaugă aer de sărbătoare.', en: 'Enhances sweet notes and adds festivity.' }, tag: { ru: 'Праздник', ro: 'Sărbătoare', en: 'Celebration' } }
+        ]
+    },
+    {
+        id: 'amulet', name: 'Amulet', badge: 'Gourmet', price: '105',
+        sal: 4, iod: 5, sw: 7, meat: 8,
+        terroir: { ru: 'Открытая Атлантика', ro: 'Atlanticul Deschis', en: 'Open Atlantic' },
+        desc: {
+            ru: 'Изысканная, <strong>утончённая</strong> устрица. Раскрывается <strong>нежная сладость</strong> и роскошные <strong>ореховые ноты</strong>.',
+            ro: 'O stridie <strong>rafinată</strong> și subtilă. Se dezvăluie o <strong>dulceață delicată</strong> și <strong>note de nuci</strong> luxoase.',
+            en: 'An exquisite, <strong>subtle</strong> oyster. Unveils <strong>delicate sweetness</strong> and luxurious <strong>nutty notes</strong>.'
+        },
+        origin: {
+            flag: '🌊',
+            place: { ru: 'Глубоководные плантации', ro: 'Plantații de adâncime', en: 'Deep-water plantations' },
+            region: { ru: 'Западная Европа', ro: 'Europa de Vest', en: 'Western Europe' },
+            text: {
+                ru: 'Выращивается вдали от берега, что обеспечивает <strong>равномерную солёность</strong> круглый год.',
+                ro: 'Crescută departe de țărm, asigurând o <strong>salinitate uniformă</strong> tot anul.',
+                en: 'Grown far from the shore, providing <strong>uniform salinity</strong> year-round.'
+            }
+        },
+        facts: {
+            ru: ['Симметричная раковина — результат метода «тамблинга».', 'Устрица пережила динозавров.', 'Содержит суточную норму цинка.'],
+            ro: ['Cochilia simetrică este rezultatul metodei „tumbling”.', 'Stridia a supraviețuit dinozaurilor.', 'Conține doza zilnică de zinc.'],
+            en: ['Symmetrical shell is the result of the "tumbling" method.', 'The oyster survived the dinosaurs.', 'Contains the daily norm of zinc.']
+        },
+        pairingIntro: {
+            ru: 'Многогранный профиль ищет кислотность с характером.',
+            ro: 'Profilul complex caută o aciditate cu caracter.',
+            en: 'Multifaceted profile seeks acidity with character.'
+        },
+        drinks: [
+            { type: 'white', icon: '🍷', name: 'Riesling Sec', why: { ru: 'Минеральный Рислинг — идеальный контрапункт.', ro: 'Rieslingul mineral este un contrapunct ideal.', en: 'Mineral Riesling is a perfect counterpoint.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'white', icon: '🍾', name: 'Sauvignon Blanc Fumé', why: { ru: 'Дымные зелёные тона обрамляют йодистость.', ro: 'Notele verzi fumurii încadrează iodul.', en: 'Smoky green tones frame the iodine.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } },
+            { type: 'bubb', icon: '✨', name: 'Milestii Mici Blanc de Blancs', why: { ru: 'Минеральная точность и долгий финиш.', ro: 'Precizie minerală și un final lung.', en: 'Mineral precision and a long finish.' }, tag: { ru: 'Гордость', ro: 'Mândrie', en: 'Pride' } }
+        ]
+    },
+    {
+        id: 'eleonora', name: 'Eléonore', badge: 'Reserve', price: '160',
+        sal: 4, iod: 6, sw: 7, meat: 9,
+        terroir: { ru: 'Жиронда, Аркашон', ro: 'Gironde, Arcachon', en: 'Gironde, Arcachon' },
+        desc: {
+            ru: 'Редкая, <strong>эксклюзивная</strong> устрица. Тонкая <strong>йодистая нотка</strong> переходит в <strong>сладость</strong> и долгий финиш с намёком на лесной орех.',
+            ro: 'O stridie <strong>exclusivistă</strong> rară. O <strong>notă fină de iod</strong> trece în <strong>dulceață</strong> și un postgust de alune de pădure.',
+            en: 'A rare, <strong>exclusive</strong> oyster. A fine <strong>iodine note</strong> transitions into <strong>sweetness</strong> and a hazelnut finish.'
+        },
+        origin: {
+            flag: '🇫🇷',
+            place: { ru: 'Бассейн Аркашон', ro: 'Bazinul Arcachon', en: 'Arcachon Basin' },
+            region: { ru: 'Аквитания, Франция', ro: 'Aquitania, Franța', en: 'Aquitaine, France' },
+            text: {
+                ru: 'Аркашон — <strong>закрытый залив</strong> и историческая родина современного устрицеводства.',
+                ro: 'Arcachon — <strong>un golf închis</strong> și patria istorică a stridiculturii moderne.',
+                en: 'Arcachon is a <strong>closed bay</strong> and the historic birthplace of modern oyster farming.'
+            }
+        },
+        facts: {
+            ru: ['Названа в честь Элеоноры Аквитанской.', 'Выращиваются на деревянных кольях (пике) с 1860-х годов.', 'Аркашон даёт треть устриц Франции.'],
+            ro: ['Numită în onoarea Eleonorei de Aquitania.', 'Crescute pe țăruși de lemn din anii 1860.', 'Arcachon dă o treime din stridiile Franței.'],
+            en: ['Named after Eleanor of Aquitaine.', 'Grown on wooden stakes since the 1860s.', 'Arcachon produces a third of France’s oysters.']
+        },
+        pairingIntro: {
+            ru: 'Сорт из Аквитании просит вин Бордо.',
+            ro: 'Un soi din Aquitania cere vinuri de Bordeaux.',
+            en: 'A variety from Aquitaine asks for Bordeaux wines.'
+        },
+        drinks: [
+            { type: 'white', icon: '🍷', name: 'Pessac-Léognan Blanc', why: { ru: 'Исторически идеальный пэйринг для Аркашона.', ro: 'Asocierea istorică ideală pentru Arcachon.', en: 'Historically ideal pairing for Arcachon.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'bubb', icon: '✨', name: 'Champagne Blanc de Blancs', why: { ru: 'Меловая минеральность подчёркивает деликатность.', ro: 'Mineralitatea de cretă subliniază delicatețea.', en: 'Chalky minerality emphasizes delicacy.' }, tag: { ru: 'Гран Крю', ro: 'Grand Cru', en: 'Grand Cru' } },
+            { type: 'white', icon: '🍾', name: 'Purcari Chardonnay', why: { ru: 'Точное попадание в кремовую текстуру.', ro: 'Potrivire perfectă pe textura cremoasă.', en: 'Perfect match for the creamy texture.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } }
+        ]
+    }
+];
+
+let currentLang = localStorage.getItem('oyster_lang') || 'ru';
+
+function renderCards() {
+    const t = UI[currentLang];
+    const TASTE_LABELS = [
+        { key: 'sal',  name: t.sal },
+        { key: 'iod',  name: t.iod },
+        { key: 'sw',   name: t.sw },
+        { key: 'meat', name: t.meat }
+    ];
+
+    const container = document.getElementById('cards-container');
+    container.innerHTML = OYSTERS.map((o, i) => `
+        <div id="card-${o.id}" class="card">
+            <div class="hero">
+                <span class="badge">${o.badge}</span>
+                <h2 class="oyster-name">${o.name}</h2>
+                <div class="price-tag">
+                    <span class="price-amount">${o.price} MDL</span>
+                    <span class="price-unit">${t.unit}</span>
+                </div>
+                <p class="terroir">
+                    <span class="terroir-dot"></span>
+                    ${o.terroir[currentLang]}
+                </p>
+            </div>
+
+            <div class="info-block">
+                <div class="block-label">${t.taste}</div>
+                ${TASTE_LABELS.map(lb => `
+                    <div class="taste-row">
+                        <div class="taste-meta">
+                            <span class="taste-label">${lb.name}</span>
+                            <span class="taste-score">${o[lb.key]}/10</span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill" data-val="${o[lb.key] * 10}"></div>
+                        </div>
+                    </div>
+                `).join('')}
+                <div class="scale-hint"><span>${t.low}</span><span>${t.high}</span></div>
+            </div>
+
+            <p class="desc">${o.desc[currentLang]}</p>
+
+            <div class="info-block">
+                <div class="block-label">${t.origin}</div>
+                <div class="origin-map-line">
+                    <span class="origin-flag">${o.origin.flag}</span>
+                    <div>
+                        <div class="origin-place">${o.origin.place[currentLang]}</div>
+                        <div class="origin-region">${o.origin.region[currentLang]}</div>
+                    </div>
+                </div>
+                <p class="origin-text">${o.origin.text[currentLang]}</p>
+            </div>
+
+            <div class="info-block">
+                <div class="block-label">${t.pairing}</div>
+                <p class="pairing-intro">${o.pairingIntro[currentLang]}</p>
+                <div class="drink-list">
+                    ${o.drinks.map(d => `
+                        <div class="drink-card">
+                            <div class="drink-icon ${d.type}">${d.icon}</div>
+                            <div>
+                                <div class="drink-name">${d.name}</div>
+                                <div class="drink-why">${d.why[currentLang]}</div>
+                                <span class="drink-tag">${d.tag[currentLang]}</span>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            <div class="info-block">
+                <div class="block-label">${t.facts}</div>
+                <div class="facts-list">
+                    ${o.facts[currentLang].map((f, fi) => `
+                        <div class="fact-item">
+                            <div class="fact-num">${fi + 1}</div>
+                            <p class="fact-text">${f}</p>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        </div>
+    `).join('');
+}
+
+function activateBars(cardEl) {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            cardEl.querySelectorAll('.bar-fill').forEach(b => {
+                b.style.width = b.getAttribute('data-val') + '%';
+            });
+        });
+    });
+}
+
+function showOyster(id) {
+    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    const card = document.getElementById('card-' + id);
+    const tab  = document.querySelector(`.tab[data-target="${id}"]`);
+    if (!card || !tab) return;
+    card.classList.add('active');
+    tab.classList.add('active');
+    tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    activateBars(card);
+}
+
+function handleHash() {
+    const hash = window.location.hash.replace('#', '').toLowerCase();
+    const valid = OYSTERS.find(o => o.id === hash);
+    showOyster(valid ? hash : 'josephine');
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('oyster_lang', lang);
+    
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.lang === lang);
+    });
+
+    renderCards();
+    
+    const activeTabId = document.querySelector('.tab.active')?.dataset.target || 'josephine';
+    showOyster(activeTabId);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => setLanguage(e.target.dataset.lang));
+    });
+    
+    setLanguage(currentLang);
+
+    document.getElementById('tabs').addEventListener('click', e => {
+        const btn = e.target.closest('.tab');
+        if (btn) showOyster(btn.dataset.target);
+    });
+    
+    handleHash();
+});
+
+window.addEventListener('hashchange', handleHash);
+</script>
+</body>
+</html>
