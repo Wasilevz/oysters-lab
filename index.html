@@ -6,30 +6,28 @@
     <title>Oyster's LAB — Гастрономический Гид</title>
     <meta name="description" content="Гастрономический гид по устрицам и винам Oyster's LAB.">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
 
         :root {
-            --bg:        #0a0f17;
+            --bg:        #060a10;
+            --bg-card:   #0c1118;
             --surface:   #111820;
-            --surface-2: #1a2332;
+            --surface-2: #171f2a;
             --surface-3: #1f2b3a;
-            --gold:      #c9a84c;
-            --gold-dim:  rgba(201,168,76,0.10);
-            --gold-line: rgba(201,168,76,0.22);
-            --gold-glow: rgba(201,168,76,0.06);
-            --text:      #ffffff;
-            --muted:     #8a9fba;
-            --faint:     #1a2535;
-            --header-brand: #5b8e8b;
-            --rose:      #e07a7a;
-            --rose-dim:  rgba(224,122,122,0.10);
-            --green:     #6bcf8e;
-            --green-dim: rgba(107,207,142,0.10);
-            --blue:      #6bb3f0;
-            --blue-dim:  rgba(107,179,240,0.10);
-            --radius:    16px;
-            --radius-sm: 12px;
-            --radius-xs: 8px;
+            --gold:      #d4b062;
+            --gold-light:#e8cc8a;
+            --gold-dim:  rgba(212,176,98,0.08);
+            --gold-line: rgba(212,176,98,0.18);
+            --gold-glow: rgba(212,176,98,0.04);
+            --text:      #f0ece4;
+            --text-sec:  #c8c0b4;
+            --muted:     #7a8fa3;
+            --faint:     #1a222e;
+            --header-brand: #6ba39f;
+            --body-text: #b8c4d0;
+            --radius:    20px;
+            --radius-sm: 14px;
+            --radius-xs: 10px;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,20 +41,33 @@
             justify-content: center;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            line-height: 1.5;
         }
 
         .shell { width: 100%; max-width: 480px; min-height: 100vh; position: relative; overflow-x: hidden; }
 
+        .shell::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: 480px; height: 100vh;
+            background: radial-gradient(ellipse at 50% 0%, rgba(212,176,98,0.03) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
         /* ─── HEADER ─── */
         header {
-            padding: 20px 20px 16px;
+            padding: 22px 20px 16px;
             border-bottom: 1px solid var(--faint);
             position: sticky;
             top: 0;
             z-index: 100;
-            background: var(--bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(6,10,16,0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
         }
 
         .header-top {
@@ -68,17 +79,17 @@
 
         .brand { display: flex; flex-direction: column; }
         .brand h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: 3px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.6rem;
+            font-weight: 600;
+            letter-spacing: 4px;
             text-transform: uppercase;
             color: var(--text);
         }
         .brand p {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--header-brand);
-            letter-spacing: 2px;
+            letter-spacing: 2.5px;
             text-transform: uppercase;
             margin-top: 2px;
         }
@@ -120,7 +131,7 @@
         /* ─── NAV TABS ─── */
         .main-nav {
             display: flex;
-            gap: 6px;
+            gap: 8px;
         }
 
         .nav-btn {
@@ -128,22 +139,23 @@
             background: var(--surface);
             border: 1px solid var(--faint);
             color: var(--muted);
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             font-weight: 600;
-            padding: 10px 8px;
+            padding: 11px 8px;
             border-radius: var(--radius-sm);
             cursor: pointer;
-            transition: all 0.22s ease;
+            transition: all 0.25s ease;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
+            letter-spacing: 0.02em;
         }
 
         .nav-btn:hover { border-color: var(--gold-line); color: var(--text); }
         .nav-btn.active {
             background: var(--gold-dim);
-            color: var(--gold);
+            color: var(--gold-light);
             border-color: var(--gold-line);
         }
 
@@ -151,12 +163,12 @@
 
         /* ─── FILTERS ─── */
         .filters-section {
-            padding: 12px 20px 0;
+            padding: 14px 20px 0;
         }
 
         .filter-row {
             display: flex;
-            gap: 6px;
+            gap: 8px;
             flex-wrap: wrap;
         }
 
@@ -166,17 +178,18 @@
             color: var(--muted);
             font-size: 0.72rem;
             font-weight: 600;
-            padding: 7px 14px;
+            padding: 8px 16px;
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.22s ease;
+            transition: all 0.25s ease;
             white-space: nowrap;
+            letter-spacing: 0.02em;
         }
 
         .filter-chip:hover { border-color: var(--gold-line); color: var(--text); }
         .filter-chip.active {
             background: var(--gold-dim);
-            color: var(--gold);
+            color: var(--gold-light);
             border-color: var(--gold-line);
         }
 
@@ -197,13 +210,14 @@
         .tab {
             background: var(--surface); color: var(--muted);
             border: 1px solid var(--faint);
-            padding: 8px 16px; border-radius: 18px;
+            padding: 9px 18px; border-radius: 20px;
             white-space: nowrap; font-size: 0.85rem; font-weight: 600;
-            cursor: pointer; transition: all 0.22s ease;
+            cursor: pointer; transition: all 0.25s ease;
             flex-shrink: 0; user-select: none;
+            letter-spacing: 0.02em;
         }
         .tab:hover { border-color: var(--gold-line); color: var(--text); }
-        .tab.active { background: var(--gold-dim); color: var(--gold); border-color: var(--gold-line); }
+        .tab.active { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
 
         /* ─── CARDS ─── */
         .card {
@@ -212,6 +226,7 @@
             animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
         }
         .card.active { display: block; }
+        .card .info-block { position: relative; z-index: 1; }
 
         @keyframes slideUp {
             from { opacity: 0; transform: translateY(20px); }
@@ -219,147 +234,195 @@
         }
 
         /* hero */
-        .hero { text-align: center; padding: 20px 0 24px; }
+        .hero { text-align: center; padding: 28px 0 20px; position: relative; z-index: 1; }
         .badge {
             display: inline-block;
-            background: var(--gold-dim); color: var(--gold);
-            border: 1px solid var(--gold-line);
-            padding: 4px 12px; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(212,176,98,0.12), rgba(212,176,98,0.06));
+            color: var(--gold-light);
+            border: 1px solid rgba(212,176,98,0.25);
+            padding: 6px 16px; border-radius: 20px;
             font-size: 0.65rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;
+            text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 14px;
         }
         .oyster-name {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem; font-weight: 700;
-            letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 12px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.6rem; font-weight: 600;
+            letter-spacing: 1px; line-height: 1.1; margin-bottom: 14px;
+            color: var(--text);
         }
 
-        .price-tag { display: inline-flex; align-items: baseline; gap: 5px; margin-bottom: 10px; }
-        .price-amount { font-size: 1.6rem; font-weight: 700; color: var(--gold); }
-        .price-unit   { font-size: 0.8rem; color: var(--muted); }
-        .terroir {
-            font-size: 0.85rem; color: var(--muted);
-            display: flex; align-items: center; justify-content: center; gap: 8px;
+        .price-tag {
+            display: inline-flex; align-items: baseline; gap: 6px;
+            margin-bottom: 12px;
+            background: var(--gold-dim);
+            padding: 8px 20px;
+            border-radius: 24px;
+            border: 1px solid var(--gold-line);
         }
-        .terroir-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.6; }
+        .price-amount { font-size: 1.5rem; font-weight: 800; color: var(--gold-light); }
+        .price-unit   { font-size: 0.78rem; color: var(--muted); font-weight: 500; }
+        .terroir {
+            font-size: 0.82rem; color: var(--muted);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            letter-spacing: 0.02em;
+        }
+        .terroir-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.5; }
 
         /* block */
         .info-block {
-            background: var(--surface); border: 1px solid var(--faint);
-            border-radius: var(--radius); padding: 18px;
-            margin-bottom: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--faint);
+            border-radius: var(--radius); padding: 20px;
+            margin-bottom: 14px;
         }
         .block-label {
-            font-size: 0.7rem; font-weight: 700;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            color: var(--muted); margin-bottom: 14px;
+            font-size: 0.68rem; font-weight: 700;
+            letter-spacing: 0.14em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 16px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .block-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, var(--gold-line), transparent);
         }
 
         /* taste bars */
-        .taste-row { margin-bottom: 14px; }
-        .taste-meta { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; }
-        .taste-label { font-weight: 600; color: var(--text); }
-        .taste-score { color: var(--gold); font-weight: 700; font-variant-numeric: tabular-nums; }
-        .bar-track { height: 5px; background: var(--faint); border-radius: 3px; overflow: hidden; }
+        .taste-row { margin-bottom: 16px; }
+        .taste-meta { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 6px; }
+        .taste-label { font-weight: 600; color: var(--text-sec); }
+        .taste-score { color: var(--gold-light); font-weight: 700; font-variant-numeric: tabular-nums; }
+        .bar-track { height: 6px; background: rgba(255,255,255,0.04); border-radius: 4px; overflow: hidden; }
         .bar-fill {
-            height: 100%; background: linear-gradient(90deg, #9a6e20, var(--gold));
-            border-radius: 3px; width: 0%;
-            transition: width 0.7s cubic-bezier(0.22,1,0.36,1);
+            height: 100%;
+            background: linear-gradient(90deg, rgba(212,176,98,0.4), var(--gold));
+            border-radius: 4px; width: 0%;
+            transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
         }
         .scale-hint {
             display: flex; justify-content: space-between;
-            font-size: 0.6rem; font-weight: 600; color: #a9bed1;
-            text-transform: uppercase; letter-spacing: 0.05em;
-            margin-top: 5px;
+            font-size: 0.6rem; font-weight: 600; color: var(--muted);
+            text-transform: uppercase; letter-spacing: 0.06em;
+            margin-top: 6px;
         }
 
         /* description */
         .desc {
-            font-size: 0.95rem; line-height: 1.65; color: #a9bed1;
-            margin-bottom: 12px;
-            font-family: 'Playfair Display', serif;
-            font-style: italic;
+            font-size: 1.02rem;
+            line-height: 1.75;
+            color: var(--body-text);
+            margin-bottom: 14px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            padding: 4px 0;
         }
-        .desc strong { color: var(--text); font-weight: 600; font-style: normal; }
+        .desc strong {
+            color: var(--text);
+            font-weight: 600;
+        }
 
         /* origin */
         .origin-map-line {
-            display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+            display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--faint);
         }
-        .origin-flag { font-size: 24px; flex-shrink: 0; }
-        .origin-place { font-size: 0.95rem; font-weight: 700; color: var(--text); line-height: 1.3; }
-        .origin-region { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
-        .origin-text { font-size: 0.9rem; line-height: 1.6; color: #a9bed1; }
+        .origin-flag {
+            font-size: 28px; flex-shrink: 0;
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--surface-2);
+            border-radius: 12px;
+        }
+        .origin-place { font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+        .origin-region { font-size: 0.78rem; color: var(--muted); margin-top: 3px; letter-spacing: 0.02em; }
+        .origin-text {
+            font-size: 0.95rem; line-height: 1.7; color: var(--body-text);
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
+        }
         .origin-text strong { color: var(--text); font-weight: 600; }
 
         /* facts */
         .facts-list { display: flex; flex-direction: column; gap: 10px; }
         .fact-item {
-            display: flex; gap: 10px; align-items: flex-start;
-            background: var(--surface-2); border: 1px solid var(--faint);
-            border-radius: var(--radius-xs); padding: 12px;
+            display: flex; gap: 12px; align-items: flex-start;
+            background: var(--surface-2); border: 1px solid rgba(255,255,255,0.03);
+            border-radius: var(--radius-xs); padding: 14px 16px;
         }
         .fact-num {
-            width: 24px; height: 24px; border-radius: 50%;
+            width: 26px; height: 26px; border-radius: 50%;
             background: var(--gold-dim); border: 1px solid var(--gold-line);
-            color: var(--gold); font-size: 0.7rem; font-weight: 800;
+            color: var(--gold-light); font-size: 0.7rem; font-weight: 800;
             display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; margin-top: 1px;
+            flex-shrink: 0; margin-top: 2px;
         }
-        .fact-text { font-size: 0.88rem; line-height: 1.5; color: #a9bed1; }
+        .fact-text {
+            font-size: 0.9rem; line-height: 1.6; color: var(--body-text);
+        }
         .fact-text strong { color: var(--text); font-weight: 600; }
 
         /* pairing */
-        .pairing-intro { font-size: 0.9rem; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
-        .drink-list { display: flex; flex-direction: column; gap: 8px; }
+        .pairing-intro {
+            font-size: 0.88rem; color: var(--muted); line-height: 1.6;
+            margin-bottom: 16px;
+            font-style: italic;
+        }
+        .drink-list { display: flex; flex-direction: column; gap: 10px; }
         .drink-card {
-            display: flex; align-items: flex-start; gap: 12px;
-            background: var(--surface-2); border: 1px solid var(--faint);
-            border-radius: var(--radius-xs); padding: 14px;
-            transition: border-color 0.2s ease;
+            display: flex; align-items: flex-start; gap: 14px;
+            background: var(--surface-2); border: 1px solid rgba(255,255,255,0.03);
+            border-radius: var(--radius-sm); padding: 16px;
+            transition: all 0.25s ease;
         }
-        .drink-card:hover { border-color: var(--gold-line); }
+        .drink-card:hover {
+            border-color: var(--gold-line);
+            background: rgba(212,176,98,0.04);
+        }
         .drink-icon {
-            width: 36px; height: 36px; border-radius: 10px;
+            width: 40px; height: 40px; border-radius: 12px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 18px; flex-shrink: 0; margin-top: 1px;
+            font-size: 20px; flex-shrink: 0;
         }
-        .drink-icon.white   { background: rgba(255,235,160,0.09); }
-        .drink-icon.bubb    { background: rgba(210,190,255,0.09); }
-        .drink-icon.rose    { background: rgba(255,160,160,0.09); }
-        .drink-icon.sake    { background: rgba(160,230,200,0.09); }
-        .drink-icon.mineral { background: rgba(140,200,255,0.09); }
-        .drink-name   { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 3px; line-height: 1.3; }
-        .drink-why    { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
+        .drink-icon.white   { background: rgba(255,235,160,0.08); }
+        .drink-icon.bubb    { background: rgba(210,190,255,0.08); }
+        .drink-icon.rose    { background: rgba(255,160,160,0.08); }
+        .drink-icon.sake    { background: rgba(160,230,200,0.08); }
+        .drink-icon.mineral { background: rgba(140,200,255,0.08); }
+        .drink-name   { font-size: 0.92rem; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.35; }
+        .drink-why    { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
         .drink-tag {
             display: inline-block;
-            background: var(--gold-dim); color: var(--gold);
+            background: var(--gold-dim); color: var(--gold-light);
             border: 1px solid var(--gold-line);
-            padding: 2px 8px; border-radius: 6px;
-            font-size: 0.65rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.05em;
-            margin-top: 5px; white-space: nowrap;
+            padding: 3px 10px; border-radius: 8px;
+            font-size: 0.62rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            margin-top: 6px; white-space: nowrap;
         }
 
         /* ─── WINE SECTION ─── */
         .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.3rem; font-weight: 700;
-            padding: 20px 20px 12px;
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 1.4rem; font-weight: 600;
+            padding: 24px 20px 12px;
             color: var(--text);
+            letter-spacing: 0.5px;
         }
 
         .wine-grid {
             padding: 0 20px 80px;
-            display: flex; flex-direction: column; gap: 10px;
+            display: flex; flex-direction: column; gap: 12px;
         }
 
         .wine-card {
-            background: var(--surface);
+            background: var(--bg-card);
             border: 1px solid var(--faint);
             border-radius: var(--radius);
-            padding: 16px;
-            transition: all 0.22s ease;
+            padding: 18px;
+            transition: all 0.25s ease;
         }
         .wine-card:hover { border-color: var(--gold-line); }
 
@@ -370,37 +433,43 @@
 
         .wine-name {
             font-size: 0.95rem; font-weight: 700; color: var(--text);
-            line-height: 1.3;
+            line-height: 1.35;
         }
 
         .wine-type-badge {
-            font-size: 0.6rem; font-weight: 700;
-            padding: 3px 8px; border-radius: 6px;
-            text-transform: uppercase; letter-spacing: 0.05em;
+            font-size: 0.58rem; font-weight: 700;
+            padding: 4px 10px; border-radius: 8px;
+            text-transform: uppercase; letter-spacing: 0.06em;
             flex-shrink: 0; margin-left: 8px;
         }
-        .wine-type-badge.white   { background: rgba(255,235,160,0.12); color: #ffeaa0; }
-        .wine-type-badge.red     { background: rgba(224,122,122,0.12); color: #e07a7a; }
-        .wine-type-badge.rose    { background: rgba(255,160,160,0.12); color: #ffa0a0; }
-        .wine-type-badge.spark   { background: rgba(210,190,255,0.12); color: #d2beff; }
-        .wine-type-badge.dessert { background: rgba(255,200,120,0.12); color: #ffc878; }
+        .wine-type-badge.white   { background: rgba(255,235,160,0.10); color: var(--gold-light); }
+        .wine-type-badge.red     { background: rgba(224,122,122,0.10); color: #e07a7a; }
+        .wine-type-badge.rose    { background: rgba(255,160,160,0.10); color: #ffa0a0; }
+        .wine-type-badge.spark   { background: rgba(210,190,255,0.10); color: #d2beff; }
+        .wine-type-badge.dessert { background: rgba(255,200,120,0.10); color: #ffc878; }
 
         .wine-region {
-            font-size: 0.78rem; color: var(--muted); margin-bottom: 6px;
+            font-size: 0.76rem; color: var(--muted); margin-bottom: 8px;
+            letter-spacing: 0.02em;
         }
 
         .wine-desc {
-            font-size: 0.82rem; color: #a9bed1; line-height: 1.5; margin-bottom: 10px;
+            font-size: 0.88rem; color: var(--body-text); line-height: 1.6;
+            margin-bottom: 12px;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 400;
         }
 
         .wine-oysters {
-            display: flex; flex-wrap: wrap; gap: 5px;
+            display: flex; flex-wrap: wrap; gap: 6px;
+            padding-top: 10px;
+            border-top: 1px solid var(--faint);
         }
 
         .wine-oyster-tag {
-            font-size: 0.65rem; font-weight: 600;
-            padding: 3px 8px; border-radius: 6px;
-            background: var(--gold-dim); color: var(--gold);
+            font-size: 0.68rem; font-weight: 600;
+            padding: 4px 10px; border-radius: 8px;
+            background: var(--gold-dim); color: var(--gold-light);
             border: 1px solid var(--gold-line);
             cursor: pointer;
             transition: all 0.2s ease;
@@ -412,23 +481,25 @@
 
         /* ─── COMBO SECTION ─── */
         .combo-card {
-            background: var(--surface);
+            background: var(--bg-card);
             border: 1px solid var(--gold-line);
             border-radius: var(--radius);
-            padding: 18px;
-            margin: 0 20px 12px;
+            padding: 20px;
+            margin: 0 20px 14px;
         }
 
         .combo-header {
-            display: flex; align-items: center; gap: 10px;
-            margin-bottom: 12px;
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--faint);
         }
 
         .combo-icon {
-            width: 40px; height: 40px; border-radius: 10px;
+            width: 44px; height: 44px; border-radius: 12px;
             background: var(--gold-dim);
             display: flex; align-items: center; justify-content: center;
-            font-size: 20px;
+            font-size: 22px;
         }
 
         .combo-title {
@@ -440,71 +511,66 @@
         }
 
         .combo-pair {
-            display: flex; gap: 8px; align-items: stretch;
+            display: flex; gap: 10px; align-items: stretch;
         }
 
         .combo-item {
             flex: 1;
             background: var(--surface-2);
-            border: 1px solid var(--faint);
-            border-radius: var(--radius-xs);
-            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: var(--radius-sm);
+            padding: 14px;
         }
 
         .combo-item-label {
             font-size: 0.6rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.1em;
-            color: var(--muted); margin-bottom: 6px;
+            text-transform: uppercase; letter-spacing: 0.12em;
+            color: var(--gold); margin-bottom: 8px;
         }
 
         .combo-item-name {
-            font-size: 0.85rem; font-weight: 700; color: var(--text);
-            line-height: 1.3; margin-bottom: 4px;
+            font-size: 0.88rem; font-weight: 700; color: var(--text);
+            line-height: 1.35; margin-bottom: 4px;
         }
 
         .combo-item-detail {
-            font-size: 0.72rem; color: #a9bed1; line-height: 1.4;
+            font-size: 0.74rem; color: var(--muted); line-height: 1.4;
         }
-
-        .combo-reason {
-            margin-top: 10px;
-            padding: 10px;
-            background: var(--surface-2);
-            border-radius: var(--radius-xs);
-            font-size: 0.8rem; color: #a9bed1; line-height: 1.5;
-            font-style: italic;
-        }
-
-        .combo-reason strong { color: var(--gold); font-weight: 600; font-style: normal; }
 
         /* ─── EMPTY STATE ─── */
         .empty-state {
             text-align: center;
-            padding: 40px 20px;
+            padding: 48px 20px;
             color: var(--muted);
         }
 
         .empty-icon {
             font-size: 2.5rem;
-            margin-bottom: 12px;
-            opacity: 0.4;
+            margin-bottom: 14px;
+            opacity: 0.3;
         }
 
         .empty-text {
             font-size: 0.9rem;
-            line-height: 1.5;
+            line-height: 1.6;
+            font-family: 'Cormorant Garamond', serif;
+            font-weight: 500;
         }
 
         /* ─── RESPONSIVE ─── */
         @media (min-width: 481px) {
             body { padding: 20px 0; }
             .shell {
-                border-radius: 24px;
+                border-radius: 28px;
                 border: 1px solid var(--faint);
                 overflow: hidden;
+                box-shadow: 0 20px 80px rgba(0,0,0,0.4);
             }
-            header { border-radius: 24px 24px 0 0; }
+            header { border-radius: 28px 28px 0 0; }
         }
+
+        /* ─── SCROLLBAR ─── */
+        ::-webkit-scrollbar { width: 0; height: 0; }
     </style>
 </head>
 <body>
