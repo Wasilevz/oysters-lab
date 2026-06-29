@@ -2,21 +2,34 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Oyster's LAB — Гастрономический Гид</title>
-    <meta name="description" content="Гастрономический гид по устрицам Oyster's LAB.">
+    <meta name="description" content="Гастрономический гид по устрицам и винам Oyster's LAB.">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,700;1,500&display=swap');
+
         :root {
             --bg:        #0a0f17;
             --surface:   #111820;
             --surface-2: #1a2332;
+            --surface-3: #1f2b3a;
             --gold:      #c9a84c;
             --gold-dim:  rgba(201,168,76,0.10);
             --gold-line: rgba(201,168,76,0.22);
+            --gold-glow: rgba(201,168,76,0.06);
             --text:      #ffffff;
             --muted:     #8a9fba;
             --faint:     #1a2535;
-            --header-brand: #5b8e8b; 
+            --header-brand: #5b8e8b;
+            --rose:      #e07a7a;
+            --rose-dim:  rgba(224,122,122,0.10);
+            --green:     #6bcf8e;
+            --green-dim: rgba(107,207,142,0.10);
+            --blue:      #6bb3f0;
+            --blue-dim:  rgba(107,179,240,0.10);
+            --radius:    16px;
+            --radius-sm: 12px;
+            --radius-xs: 8px;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -25,81 +38,149 @@
         body {
             background: var(--bg);
             color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             display: flex;
             justify-content: center;
             min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
         }
 
-        .shell { width: 100%; max-width: 480px; min-height: 100vh; position: relative; }
+        .shell { width: 100%; max-width: 480px; min-height: 100vh; position: relative; overflow-x: hidden; }
 
-        /* ─── HEADER & LANG SWITCHER ─── */
+        /* ─── HEADER ─── */
         header {
-            padding: 24px 24px 20px;
+            padding: 20px 20px 16px;
             border-bottom: 1px solid var(--faint);
-            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: var(--bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
-        
-        .header-actions {
+
+        .header-top {
             display: flex;
-            justify-content: center;
-            margin-bottom: 18px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .brand { display: flex; flex-direction: column; }
+        .brand h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text);
+        }
+        .brand p {
+            font-size: 0.7rem;
+            color: var(--header-brand);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-top: 2px;
         }
 
         .lang-switch {
             display: inline-flex;
-            gap: 4px;
+            gap: 3px;
             background: var(--surface);
-            padding: 5px;
-            border-radius: 30px;
+            padding: 4px;
+            border-radius: 24px;
             border: 1px solid var(--faint);
         }
 
         .lang-btn {
             background: transparent;
             border: 1px solid transparent;
-            color: rgba(138, 159, 186, 0.4); 
-            font-size: 0.8rem;
+            color: rgba(138, 159, 186, 0.4);
+            font-size: 0.7rem;
             font-weight: 700;
             cursor: pointer;
-            width: 44px;
-            height: 44px; 
-            border-radius: 22px; 
+            width: 36px;
+            height: 36px;
+            border-radius: 18px;
             display: flex;
             align-items: center;
             justify-content: center;
             text-transform: uppercase;
             transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
-            -webkit-tap-highlight-color: transparent;
         }
 
-        .lang-btn:hover:not(.active) {
-            color: var(--muted);
-        }
+        .lang-btn:hover:not(.active) { color: var(--muted); }
 
         .lang-btn.active {
             background: var(--gold-dim);
-            color: var(--gold); 
+            color: var(--gold);
             border-color: var(--gold-line);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        header h1 { 
-            font-size: 1.4rem; 
-            font-weight: 700; 
-            letter-spacing: 4px; 
-            text-transform: uppercase; 
-            color: var(--text); 
-        }
-        header p  { 
-            font-size: 0.85rem; 
-            color: var(--header-brand); 
-            letter-spacing: 2px; 
-            margin-top: 6px; 
-            text-transform: uppercase; 
+        /* ─── NAV TABS ─── */
+        .main-nav {
+            display: flex;
+            gap: 6px;
         }
 
-        /* ─── TABS ─── */
+        .nav-btn {
+            flex: 1;
+            background: var(--surface);
+            border: 1px solid var(--faint);
+            color: var(--muted);
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 10px 8px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.22s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .nav-btn:hover { border-color: var(--gold-line); color: var(--text); }
+        .nav-btn.active {
+            background: var(--gold-dim);
+            color: var(--gold);
+            border-color: var(--gold-line);
+        }
+
+        .nav-icon { font-size: 1rem; }
+
+        /* ─── FILTERS ─── */
+        .filters-section {
+            padding: 12px 20px 0;
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .filter-chip {
+            background: var(--surface);
+            border: 1px solid var(--faint);
+            color: var(--muted);
+            font-size: 0.72rem;
+            font-weight: 600;
+            padding: 7px 14px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.22s ease;
+            white-space: nowrap;
+        }
+
+        .filter-chip:hover { border-color: var(--gold-line); color: var(--text); }
+        .filter-chip.active {
+            background: var(--gold-dim);
+            color: var(--gold);
+            border-color: var(--gold-line);
+        }
+
+        /* ─── OYSTER TABS ─── */
         .tabs-wrapper { position: relative; }
         .tabs-wrapper::after {
             content: ''; position: absolute;
@@ -109,140 +190,320 @@
         }
         .tabs {
             display: flex; overflow-x: auto;
-            padding: 16px 20px; gap: 10px;
+            padding: 12px 20px; gap: 8px;
             scroll-behavior: smooth; -webkit-overflow-scrolling: touch;
         }
         .tabs::-webkit-scrollbar { display: none; }
         .tab {
             background: var(--surface); color: var(--muted);
             border: 1px solid var(--faint);
-            padding: 9px 18px; border-radius: 20px;
-            white-space: nowrap; font-size: 0.95rem; font-weight: 600;
+            padding: 8px 16px; border-radius: 18px;
+            white-space: nowrap; font-size: 0.85rem; font-weight: 600;
             cursor: pointer; transition: all 0.22s ease;
-            flex-shrink: 0; -webkit-tap-highlight-color: transparent; user-select: none;
+            flex-shrink: 0; user-select: none;
         }
         .tab:hover { border-color: var(--gold-line); color: var(--text); }
         .tab.active { background: var(--gold-dim); color: var(--gold); border-color: var(--gold-line); }
 
         /* ─── CARDS ─── */
-        .card { display: none; padding: 0 20px 56px; animation: slideUp 0.35s cubic-bezier(0.22,1,0.36,1) forwards; }
+        .card {
+            display: none;
+            padding: 0 20px 80px;
+            animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
         .card.active { display: block; }
+
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(14px); }
+            from { opacity: 0; transform: translateY(20px); }
             to   { opacity: 1; transform: translateY(0); }
         }
 
         /* hero */
-        .hero { text-align: center; padding: 12px 0 26px; }
+        .hero { text-align: center; padding: 20px 0 24px; }
         .badge {
             display: inline-block;
             background: var(--gold-dim); color: var(--gold);
             border: 1px solid var(--gold-line);
-            padding: 4px 13px; border-radius: 14px;
-            font-size: 0.75rem; font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 12px;
+            padding: 4px 12px; border-radius: 12px;
+            font-size: 0.65rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px;
         }
-        .oyster-name { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 14px; }
+        .oyster-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.2rem; font-weight: 700;
+            letter-spacing: -0.5px; line-height: 1.1; margin-bottom: 12px;
+        }
 
-        .price-tag { display: inline-flex; align-items: baseline; gap: 5px; margin-bottom: 12px; }
-        .price-amount { font-size: 1.8rem; font-weight: 700; color: var(--gold); }
-        .price-unit   { font-size: 0.9rem; color: var(--muted); }
+        .price-tag { display: inline-flex; align-items: baseline; gap: 5px; margin-bottom: 10px; }
+        .price-amount { font-size: 1.6rem; font-weight: 700; color: var(--gold); }
+        .price-unit   { font-size: 0.8rem; color: var(--muted); }
         .terroir {
-            font-size: 0.95rem; color: var(--muted);
+            font-size: 0.85rem; color: var(--muted);
             display: flex; align-items: center; justify-content: center; gap: 8px;
         }
-        .terroir-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); opacity: 0.6; flex-shrink: 0; }
+        .terroir-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.6; }
 
-        /* block общий */
+        /* block */
         .info-block {
             background: var(--surface); border: 1px solid var(--faint);
-            border-radius: 16px; padding: 20px; margin-bottom: 16px;
+            border-radius: var(--radius); padding: 18px;
+            margin-bottom: 12px;
         }
         .block-label {
-            font-size: 0.75rem; font-weight: 700;
-            letter-spacing: 0.11em; text-transform: uppercase;
-            color: var(--muted); margin-bottom: 16px;
+            font-size: 0.7rem; font-weight: 700;
+            letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--muted); margin-bottom: 14px;
         }
 
         /* taste bars */
-        .taste-row { margin-bottom: 16px; }
-        .taste-meta { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px; }
+        .taste-row { margin-bottom: 14px; }
+        .taste-meta { display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 5px; }
         .taste-label { font-weight: 600; color: var(--text); }
         .taste-score { color: var(--gold); font-weight: 700; font-variant-numeric: tabular-nums; }
-        .bar-track { height: 6px; background: var(--faint); border-radius: 3px; overflow: hidden; }
+        .bar-track { height: 5px; background: var(--faint); border-radius: 3px; overflow: hidden; }
         .bar-fill {
             height: 100%; background: linear-gradient(90deg, #9a6e20, var(--gold));
             border-radius: 3px; width: 0%;
-            transition: width 0.65s cubic-bezier(0.22,1,0.36,1);
+            transition: width 0.7s cubic-bezier(0.22,1,0.36,1);
         }
         .scale-hint {
             display: flex; justify-content: space-between;
-            font-size: 0.65rem; font-weight: 600; color: #a9bed1; /* Высокий контраст */
+            font-size: 0.6rem; font-weight: 600; color: #a9bed1;
             text-transform: uppercase; letter-spacing: 0.05em;
-            margin-top: 6px; padding: 0 1px;
+            margin-top: 5px;
         }
 
         /* description */
-        .desc { font-size: 1rem; line-height: 1.65; color: #a9bed1; margin-bottom: 16px; }
-        .desc strong { color: var(--text); font-weight: 600; }
+        .desc {
+            font-size: 0.95rem; line-height: 1.65; color: #a9bed1;
+            margin-bottom: 12px;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+        }
+        .desc strong { color: var(--text); font-weight: 600; font-style: normal; }
 
-        /* ─── ORIGIN ─── */
+        /* origin */
         .origin-map-line {
-            display: flex; align-items: center; gap: 12px; margin-bottom: 14px;
+            display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
         }
-        .origin-flag { font-size: 26px; flex-shrink: 0; }
-        .origin-place { font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.3; }
-        .origin-region { font-size: 0.85rem; color: var(--muted); margin-top: 2px; }
-        .origin-text {
-            font-size: 0.95rem; line-height: 1.6; color: #a9bed1;
-        }
+        .origin-flag { font-size: 24px; flex-shrink: 0; }
+        .origin-place { font-size: 0.95rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+        .origin-region { font-size: 0.8rem; color: var(--muted); margin-top: 2px; }
+        .origin-text { font-size: 0.9rem; line-height: 1.6; color: #a9bed1; }
         .origin-text strong { color: var(--text); font-weight: 600; }
 
-        /* ─── FACTS ─── */
-        .facts-list { display: flex; flex-direction: column; gap: 12px; }
+        /* facts */
+        .facts-list { display: flex; flex-direction: column; gap: 10px; }
         .fact-item {
-            display: flex; gap: 12px; align-items: flex-start;
+            display: flex; gap: 10px; align-items: flex-start;
             background: var(--surface-2); border: 1px solid var(--faint);
-            border-radius: 12px; padding: 14px;
+            border-radius: var(--radius-xs); padding: 12px;
         }
         .fact-num {
-            width: 26px; height: 26px; border-radius: 50%;
+            width: 24px; height: 24px; border-radius: 50%;
             background: var(--gold-dim); border: 1px solid var(--gold-line);
-            color: var(--gold); font-size: 0.8rem; font-weight: 800;
+            color: var(--gold); font-size: 0.7rem; font-weight: 800;
             display: flex; align-items: center; justify-content: center;
             flex-shrink: 0; margin-top: 1px;
         }
-        .fact-text { font-size: 0.95rem; line-height: 1.55; color: #a9bed1; }
+        .fact-text { font-size: 0.88rem; line-height: 1.5; color: #a9bed1; }
         .fact-text strong { color: var(--text); font-weight: 600; }
 
-        /* ─── PAIRING ─── */
-        .pairing-intro { font-size: 0.95rem; color: var(--muted); line-height: 1.5; margin-bottom: 16px; }
-        .drink-list { display: flex; flex-direction: column; gap: 10px; }
+        /* pairing */
+        .pairing-intro { font-size: 0.9rem; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
+        .drink-list { display: flex; flex-direction: column; gap: 8px; }
         .drink-card {
             display: flex; align-items: flex-start; gap: 12px;
             background: var(--surface-2); border: 1px solid var(--faint);
-            border-radius: 12px; padding: 14px;
+            border-radius: var(--radius-xs); padding: 14px;
+            transition: border-color 0.2s ease;
         }
+        .drink-card:hover { border-color: var(--gold-line); }
         .drink-icon {
-            width: 38px; height: 38px; border-radius: 10px;
+            width: 36px; height: 36px; border-radius: 10px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 20px; flex-shrink: 0; margin-top: 1px;
+            font-size: 18px; flex-shrink: 0; margin-top: 1px;
         }
         .drink-icon.white   { background: rgba(255,235,160,0.09); }
         .drink-icon.bubb    { background: rgba(210,190,255,0.09); }
         .drink-icon.rose    { background: rgba(255,160,160,0.09); }
         .drink-icon.sake    { background: rgba(160,230,200,0.09); }
         .drink-icon.mineral { background: rgba(140,200,255,0.09); }
-        .drink-name   { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.3; }
-        .drink-why    { font-size: 0.85rem; color: var(--muted); line-height: 1.45; }
+        .drink-name   { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 3px; line-height: 1.3; }
+        .drink-why    { font-size: 0.8rem; color: var(--muted); line-height: 1.4; }
         .drink-tag {
             display: inline-block;
             background: var(--gold-dim); color: var(--gold);
             border: 1px solid var(--gold-line);
-            padding: 3px 10px; border-radius: 8px;
-            font-size: 0.7rem; font-weight: 700;
+            padding: 2px 8px; border-radius: 6px;
+            font-size: 0.65rem; font-weight: 700;
             text-transform: uppercase; letter-spacing: 0.05em;
-            margin-top: 6px; white-space: nowrap;
+            margin-top: 5px; white-space: nowrap;
+        }
+
+        /* ─── WINE SECTION ─── */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem; font-weight: 700;
+            padding: 20px 20px 12px;
+            color: var(--text);
+        }
+
+        .wine-grid {
+            padding: 0 20px 80px;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+
+        .wine-card {
+            background: var(--surface);
+            border: 1px solid var(--faint);
+            border-radius: var(--radius);
+            padding: 16px;
+            transition: all 0.22s ease;
+        }
+        .wine-card:hover { border-color: var(--gold-line); }
+
+        .wine-top {
+            display: flex; justify-content: space-between; align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .wine-name {
+            font-size: 0.95rem; font-weight: 700; color: var(--text);
+            line-height: 1.3;
+        }
+
+        .wine-type-badge {
+            font-size: 0.6rem; font-weight: 700;
+            padding: 3px 8px; border-radius: 6px;
+            text-transform: uppercase; letter-spacing: 0.05em;
+            flex-shrink: 0; margin-left: 8px;
+        }
+        .wine-type-badge.white   { background: rgba(255,235,160,0.12); color: #ffeaa0; }
+        .wine-type-badge.red     { background: rgba(224,122,122,0.12); color: #e07a7a; }
+        .wine-type-badge.rose    { background: rgba(255,160,160,0.12); color: #ffa0a0; }
+        .wine-type-badge.spark   { background: rgba(210,190,255,0.12); color: #d2beff; }
+        .wine-type-badge.dessert { background: rgba(255,200,120,0.12); color: #ffc878; }
+
+        .wine-region {
+            font-size: 0.78rem; color: var(--muted); margin-bottom: 6px;
+        }
+
+        .wine-desc {
+            font-size: 0.82rem; color: #a9bed1; line-height: 1.5; margin-bottom: 10px;
+        }
+
+        .wine-oysters {
+            display: flex; flex-wrap: wrap; gap: 5px;
+        }
+
+        .wine-oyster-tag {
+            font-size: 0.65rem; font-weight: 600;
+            padding: 3px 8px; border-radius: 6px;
+            background: var(--gold-dim); color: var(--gold);
+            border: 1px solid var(--gold-line);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .wine-oyster-tag:hover {
+            background: var(--gold-line);
+            color: var(--text);
+        }
+
+        /* ─── COMBO SECTION ─── */
+        .combo-card {
+            background: var(--surface);
+            border: 1px solid var(--gold-line);
+            border-radius: var(--radius);
+            padding: 18px;
+            margin: 0 20px 12px;
+        }
+
+        .combo-header {
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .combo-icon {
+            width: 40px; height: 40px; border-radius: 10px;
+            background: var(--gold-dim);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px;
+        }
+
+        .combo-title {
+            font-size: 0.95rem; font-weight: 700; color: var(--text);
+        }
+
+        .combo-subtitle {
+            font-size: 0.75rem; color: var(--muted); margin-top: 2px;
+        }
+
+        .combo-pair {
+            display: flex; gap: 8px; align-items: stretch;
+        }
+
+        .combo-item {
+            flex: 1;
+            background: var(--surface-2);
+            border: 1px solid var(--faint);
+            border-radius: var(--radius-xs);
+            padding: 12px;
+        }
+
+        .combo-item-label {
+            font-size: 0.6rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.1em;
+            color: var(--muted); margin-bottom: 6px;
+        }
+
+        .combo-item-name {
+            font-size: 0.85rem; font-weight: 700; color: var(--text);
+            line-height: 1.3; margin-bottom: 4px;
+        }
+
+        .combo-item-detail {
+            font-size: 0.72rem; color: #a9bed1; line-height: 1.4;
+        }
+
+        .combo-reason {
+            margin-top: 10px;
+            padding: 10px;
+            background: var(--surface-2);
+            border-radius: var(--radius-xs);
+            font-size: 0.8rem; color: #a9bed1; line-height: 1.5;
+            font-style: italic;
+        }
+
+        .combo-reason strong { color: var(--gold); font-weight: 600; font-style: normal; }
+
+        /* ─── EMPTY STATE ─── */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--muted);
+        }
+
+        .empty-icon {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            opacity: 0.4;
+        }
+
+        .empty-text {
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* ─── RESPONSIVE ─── */
+        @media (min-width: 481px) {
+            body { padding: 20px 0; }
+            .shell {
+                border-radius: 24px;
+                border: 1px solid var(--faint);
+                overflow: hidden;
+            }
+            header { border-radius: 24px 24px 0 0; }
         }
     </style>
 </head>
@@ -250,54 +511,75 @@
 <div class="shell">
 
     <header>
-        <div class="header-actions">
+        <div class="header-top">
+            <div class="brand">
+                <h1>Oyster's LAB</h1>
+                <p>from the seabed</p>
+            </div>
             <div class="lang-switch" id="langSwitch">
                 <button class="lang-btn active" data-lang="ru">RU</button>
                 <button class="lang-btn" data-lang="ro">RO</button>
                 <button class="lang-btn" data-lang="en">EN</button>
             </div>
         </div>
-        <h1>Oyster's LAB</h1>
-        <p>from the seabed</p>
+        <div class="main-nav">
+            <button class="nav-btn active" data-section="oysters"><span class="nav-icon">🦪</span> <span data-t="nav_oysters">Устрицы</span></button>
+            <button class="nav-btn" data-section="wines"><span class="nav-icon">🍷</span> <span data-t="nav_wines">Вина</span></button>
+            <button class="nav-btn" data-section="combos"><span class="nav-icon">✨</span> <span data-t="nav_combos">Пэйринги</span></button>
+        </div>
     </header>
 
-    <div class="tabs-wrapper">
-        <div class="tabs" id="tabs">
-            <button class="tab active" data-target="josephine">Josephine</button>
-            <button class="tab" data-target="gillardeau">Gillardeau</button>
-            <button class="tab" data-target="tiamara">Tia Mara</button>
-            <button class="tab" data-target="gold">Gold</button>
-            <button class="tab" data-target="royale">Royale</button>
-            <button class="tab" data-target="speciale">Speciale</button>
-            <button class="tab" data-target="boudeuse">Boudeuse</button>
-            <button class="tab" data-target="finedeclaire">Fine de Claire</button>
-            <button class="tab" data-target="sentenelles">Sentenelles</button>
-            <button class="tab" data-target="ostraregal">Ostrea Regal</button>
-            <button class="tab" data-target="amulet">Amulet</button>
-            <button class="tab" data-target="eleonora">Eléonore</button>
+    <!-- OYSTERS SECTION -->
+    <div id="section-oysters">
+        <div class="tabs-wrapper">
+            <div class="tabs" id="tabs"></div>
         </div>
+        <div id="cards-container"></div>
     </div>
 
-    <div id="cards-container"></div>
+    <!-- WINES SECTION -->
+    <div id="section-wines" style="display:none;">
+        <div class="filters-section">
+            <div class="filter-row" id="wine-filters"></div>
+        </div>
+        <div class="wine-grid" id="wine-grid"></div>
+    </div>
+
+    <!-- COMBOS SECTION -->
+    <div id="section-combos" style="display:none;">
+        <div id="combos-container"></div>
+    </div>
 
 </div>
+
 <script>
-// --- TRANSLATIONS DICTIONARY ---
 const UI = {
     ru: {
         taste: 'Вкусовой профиль', origin: 'Происхождение', pairing: 'Идеальные напитки',
         facts: 'Интересные факты', low: '− слабо', high: 'интенсивно +', unit: '/ шт.',
-        sal: 'Солёность', iod: 'Йодистость', sw: 'Сладость', meat: 'Мясистость'
+        sal: 'Солёность', iod: 'Йодистость', sw: 'Сладость', meat: 'Мясистость',
+        nav_oysters: 'Устрицы', nav_wines: 'Вина', nav_combos: 'Пэйринги',
+        wine_region: 'Регион', wine_with: 'Подходит к', perfect: 'Идеальный пэйринг',
+        all: 'Все', white: 'Белые', red: 'Красные', rose: 'Розовые', sparkling: 'Игристые',
+        combo_oyster: 'Устрица', combo_wine: 'Вино', combo_why: 'Почему этот пэйринг'
     },
     ro: {
         taste: 'Profil Gustativ', origin: 'Origine', pairing: 'Băuturi Ideale',
         facts: 'Fapte Interesante', low: '− slab', high: 'intens +', unit: '/ buc.',
-        sal: 'Salinitate', iod: 'Iod', sw: 'Dulceață', meat: 'Cărnozitate'
+        sal: 'Salinitate', iod: 'Iod', sw: 'Dulceață', meat: 'Cărnozitate',
+        nav_oysters: 'Stridii', nav_wines: 'Vinuri', nav_combos: 'Asocieri',
+        wine_region: 'Regiune', wine_with: 'Se potrivește cu', perfect: 'Asociere ideală',
+        all: 'Toate', white: 'Albe', red: 'Roșii', rose: 'Rosé', sparkling: 'Spumant',
+        combo_oyster: 'Stridie', combo_wine: 'Vin', combo_why: 'De ce această asociere'
     },
     en: {
         taste: 'Taste Profile', origin: 'Origin', pairing: 'Perfect Pairings',
         facts: 'Interesting Facts', low: '− mild', high: 'intense +', unit: '/ pc.',
-        sal: 'Salinity', iod: 'Iodine', sw: 'Sweetness', meat: 'Meatiness'
+        sal: 'Salinity', iod: 'Iodine', sw: 'Sweetness', meat: 'Meatiness',
+        nav_oysters: 'Oysters', nav_wines: 'Wines', nav_combos: 'Pairings',
+        wine_region: 'Region', wine_with: 'Pairs with', perfect: 'Perfect Pairing',
+        all: 'All', white: 'White', red: 'Red', rose: 'Rosé', sparkling: 'Sparkling',
+        combo_oyster: 'Oyster', combo_wine: 'Wine', combo_why: 'Why this pairing'
     }
 };
 
@@ -709,7 +991,7 @@ const OYSTERS = [
         facts: {
             ru: ['Названа в честь Элеоноры Аквитанской.', 'Выращиваются на деревянных кольях (пике) с 1860-х годов.', 'Аркашон даёт треть устриц Франции.'],
             ro: ['Numită în onoarea Eleonorei de Aquitania.', 'Crescute pe țăruși de lemn din anii 1860.', 'Arcachon dă o treime din stridiile Franței.'],
-            en: ['Named after Eleanor of Aquitaine.', 'Grown on wooden stakes since the 1860s.', 'Arcachon produces a third of France’s oysters.']
+            en: ['Named after Eleanor of Aquitaine.', 'Grown on wooden stakes since the 1860s.', 'Arcachon produces a third of France\'s oysters.']
         },
         pairingIntro: {
             ru: 'Сорт из Аквитании просит вин Бордо.',
@@ -724,7 +1006,212 @@ const OYSTERS = [
     }
 ];
 
+const WINES = [
+    {
+        name: 'Chardonnay Château Vartely',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Бочковая выдержка, спелые яблоки, сливочность.', ro: 'Maturare în butoi, mere coapte, cremozitate.', en: 'Barrel aged, ripe apples, creaminess.' },
+        pairs: ['josephine', 'sentenelles', 'eleonora']
+    },
+    {
+        name: 'Chablis 1er Cru',
+        type: 'white', region: 'Бургундия, Франция',
+        desc: { ru: 'Кремниевая минеральность, чистота, элегантность.', ro: 'Mineralitate de cremene, puritate, eleganță.', en: 'Flinty minerality, purity, elegance.' },
+        pairs: ['josephine']
+    },
+    {
+        name: 'Cricova Brut Prestige',
+        type: 'spark', region: 'Молдова',
+        desc: { ru: 'Игристое, мелкие пузырьки, свежесть.', ro: 'Spumant, bule fine, prospețime.', en: 'Sparkling, fine bubbles, freshness.' },
+        pairs: ['josephine']
+    },
+    {
+        name: 'Purcari Chardonnay Barrique',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Дубовая выдержка, ваниль, орех.', ro: 'Maturare în stejar, vanilie, nuci.', en: 'Oak aged, vanilla, nut.' },
+        pairs: ['gillardeau']
+    },
+    {
+        name: 'Champagne Deutz Brut Classic',
+        type: 'spark', region: 'Шампань, Франция',
+        desc: { ru: 'Дрожжевые ноты, бrioшь, минеральность.', ro: 'Note de drojdie, brioșă, mineralitate.', en: 'Yeast notes, brioche, minerality.' },
+        pairs: ['gillardeau']
+    },
+    {
+        name: 'Pouilly-Fumé',
+        type: 'white', region: 'Луара, Франция',
+        desc: { ru: 'Дымные минералы, крапива, цитрус.', ro: 'Minerale fumurii, urzică, citrice.', en: 'Smoky minerals, nettle, citrus.' },
+        pairs: ['gillardeau']
+    },
+    {
+        name: 'Sauvignon Blanc Purcari',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Травяной, цитрусовый, яркий.', ro: 'Erbaceu, citric, vibrant.', en: 'Herbal, citrus, vibrant.' },
+        pairs: ['tiamara', 'boudeuse']
+    },
+    {
+        name: 'Muscadet Sèvre et Maine',
+        type: 'white', region: 'Луара, Франция',
+        desc: { ru: 'Минеральный, морской, освежающий.', ro: 'Mineral, marin, răcoritor.', en: 'Mineral, marine, refreshing.' },
+        pairs: ['tiamara', 'finedeclaire']
+    },
+    {
+        name: 'Guinness Draught',
+        type: 'white', region: 'Дублин, Ирландия',
+        desc: { ru: 'Кремовый стаут, кофе, шоколад.', ro: 'Stout cremos, cafea, ciocolată.', en: 'Creamy stout, coffee, chocolate.' },
+        pairs: ['tiamara']
+    },
+    {
+        name: 'Champagne Moët & Chandon Brut',
+        type: 'spark', region: 'Шампань, Франция',
+        desc: { ru: 'Баланс, зрелые фрукты, праздничность.', ro: 'Echilibru, fructe coapte, sărbătoare.', en: 'Balance, ripe fruits, festivity.' },
+        pairs: ['gold']
+    },
+    {
+        name: 'Chablis Grand Cru',
+        type: 'white', region: 'Бургундия, Франция',
+        desc: { ru: 'Встреча двух гранд-крю.', ro: 'Întâlnirea a două grand cru-uri.', en: 'The meeting of two grand crus.' },
+        pairs: ['gold']
+    },
+    {
+        name: 'Cricova Prestige Cuvée',
+        type: 'spark', region: 'Молдова',
+        desc: { ru: 'Достойная молдавская альтернатива шампанскому.', ro: 'O alternativă moldovenească demnă de șampanie.', en: 'A worthy Moldovan alternative to champagne.' },
+        pairs: ['gold']
+    },
+    {
+        name: 'Rosé Purcari Pinot Noir',
+        type: 'rose', region: 'Молдова',
+        desc: { ru: 'Деликатное, ягодное, нежное.', ro: 'Delicat, fructat, fin.', en: 'Delicate, fruity, tender.' },
+        pairs: ['royale', 'ostraregal']
+    },
+    {
+        name: 'Pinot Gris',
+        type: 'white', region: 'Эльзас, Франция',
+        desc: { ru: 'Белый персик, мед, округлость.', ro: 'Piersică albă, miere, rotunjime.', en: 'White peach, honey, roundness.' },
+        pairs: ['royale']
+    },
+    {
+        name: 'Prosecco DOC Brut',
+        type: 'spark', region: 'Венеция, Италия',
+        desc: { ru: 'Лёгкие пузырьки, яблоко, груша.', ro: 'Bule ușoare, măr, pară.', en: 'Light bubbles, apple, pear.' },
+        pairs: ['royale']
+    },
+    {
+        name: 'Viognier Château Vartely',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Абрикос, цветы, кремовая текстура.', ro: 'Caise, flori, textură cremoasă.', en: 'Apricot, flowers, creamy texture.' },
+        pairs: ['speciale', 'ostraregal']
+    },
+    {
+        name: 'Burgundy Blanc',
+        type: 'white', region: 'Бургундия, Франция',
+        desc: { ru: 'Маслянистая текстура, спелые фрукты.', ro: 'Textură untuită, fructe coapte.', en: 'Buttery texture, ripe fruits.' },
+        pairs: ['speciale']
+    },
+    {
+        name: 'Milestii Mici Spumant Brut',
+        type: 'spark', region: 'Молдова',
+        desc: { ru: 'Молдавское игристое, свежесть и кислотность.', ro: 'Spumant moldovenesc, prospețime și aciditate.', en: 'Moldovan sparkling, freshness and acidity.' },
+        pairs: ['speciale']
+    },
+    {
+        name: 'Sancerre Blanc',
+        type: 'white', region: 'Луара, Франция',
+        desc: { ru: 'Кремниевая минеральность, чистота.', ro: 'Mineralitate de cremene, puritate.', en: 'Flinty minerality, purity.' },
+        pairs: ['boudeuse']
+    },
+    {
+        name: 'Sake Junmai Daiginjo',
+        type: 'white', region: 'Япония',
+        desc: { ru: 'Умами, цветочность, элегантность.', ro: 'Umami, floralitate, eleganță.', en: 'Umami, floral, elegance.' },
+        pairs: ['boudeuse']
+    },
+    {
+        name: 'Cricova Chardonnay Brut',
+        type: 'spark', region: 'Молдова',
+        desc: { ru: 'Яблочные тона, лёгкость, свежесть.', ro: 'Note de măr, ușurință, prospețime.', en: 'Apple tones, lightness, freshness.' },
+        pairs: ['finedeclaire']
+    },
+    {
+        name: 'Aligoté Purcari',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Острая кислотность, минеральность.', ro: 'Aciditate ascuțită, mineralitate.', en: 'Sharp acidity, minerality.' },
+        pairs: ['finedeclaire']
+    },
+    {
+        name: 'Cricova Roze Sec',
+        type: 'rose', region: 'Молдова',
+        desc: { ru: 'Игривое, ягодное, освежающее.', ro: 'Jucăuș, fructat, răcoritor.', en: 'Playful, fruity, refreshing.' },
+        pairs: ['sentenelles']
+    },
+    {
+        name: 'Pinot Blanc',
+        type: 'white', region: 'Эльзас, Франция',
+        desc: { ru: 'Мягкая округлость, нежность.', ro: 'Rotunjime moale, delicatețe.', en: 'Soft roundness, tenderness.' },
+        pairs: ['sentenelles']
+    },
+    {
+        name: 'Viognier / Marsanne',
+        type: 'white', region: 'Рона, Франция',
+        desc: { ru: 'Тропические тона, цветы, тело.', ro: 'Tonuri tropicale, flori, corp.', en: 'Tropical tones, flowers, body.' },
+        pairs: ['ostraregal']
+    },
+    {
+        name: 'Brut Rosé Champagne',
+        type: 'spark', region: 'Шампань, Франция',
+        desc: { ru: 'Ягодные ноты, игристость, праздник.', ro: 'Note de fructe de pădure, spumant, sărbătoare.', en: 'Berry notes, sparkling, celebration.' },
+        pairs: ['ostraregal']
+    },
+    {
+        name: 'Riesling Sec',
+        type: 'white', region: 'Альзас, Франция',
+        desc: { ru: 'Минеральный, цитрус, точность.', ro: 'Mineral, citric, precizie.', en: 'Mineral, citrus, precision.' },
+        pairs: ['amulet']
+    },
+    {
+        name: 'Sauvignon Blanc Fumé',
+        type: 'white', region: 'Луара, Франция',
+        desc: { ru: 'Дымные зелёные тона, свежесть.', ro: 'Note verzi fumurii, prospețime.', en: 'Smoky green tones, freshness.' },
+        pairs: ['amulet']
+    },
+    {
+        name: 'Milestii Mici Blanc de Blancs',
+        type: 'spark', region: 'Молдова',
+        desc: { ru: 'Минеральная точность, долгий финиш.', ro: 'Precizie minerală, final lung.', en: 'Mineral precision, long finish.' },
+        pairs: ['amulet']
+    },
+    {
+        name: 'Pessac-Léognan Blanc',
+        type: 'white', region: 'Бордо, Франция',
+        desc: { ru: 'Исторический пэйринг для Аркашона.', ro: 'Asociere istorică pentru Arcachon.', en: 'Historic pairing for Arcachon.' },
+        pairs: ['eleonora']
+    },
+    {
+        name: 'Champagne Blanc de Blancs',
+        type: 'spark', region: 'Шампань, Франция',
+        desc: { ru: 'Меловая минеральность, деликатность.', ro: 'Mineralitate de cretă, delicatețe.', en: 'Chalky minerality, delicacy.' },
+        pairs: ['eleonora']
+    },
+    {
+        name: 'Purcari Chardonnay',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Кремовая текстура, яблоко.', ro: 'Textură cremoasă, măr.', en: 'Creamy texture, apple.' },
+        pairs: ['eleonora']
+    }
+];
+
 let currentLang = localStorage.getItem('oyster_lang') || 'ru';
+let currentSection = 'oysters';
+let currentWineFilter = 'all';
+
+function renderTabs() {
+    const t = UI[currentLang];
+    const tabsEl = document.getElementById('tabs');
+    tabsEl.innerHTML = OYSTERS.map(o => `
+        <button class="tab" data-target="${o.id}">${o.name}</button>
+    `).join('');
+}
 
 function renderCards() {
     const t = UI[currentLang];
@@ -813,6 +1300,125 @@ function renderCards() {
     `).join('');
 }
 
+function renderWineFilters() {
+    const t = UI[currentLang];
+    const filters = [
+        { key: 'all', label: t.all },
+        { key: 'white', label: t.white },
+        { key: 'rose', label: t.rose },
+        { key: 'spark', label: t.sparkling }
+    ];
+    document.getElementById('wine-filters').innerHTML = filters.map(f => `
+        <button class="filter-chip ${f.key === currentWineFilter ? 'active' : ''}" data-filter="${f.key}">${f.label}</button>
+    `).join('');
+}
+
+function renderWines() {
+    const t = UI[currentLang];
+    const filtered = currentWineFilter === 'all'
+        ? WINES
+        : WINES.filter(w => w.type === currentWineFilter);
+
+    const grid = document.getElementById('wine-grid');
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🍷</div><div class="empty-text">Нет вин в этой категории</div></div>`;
+        return;
+    }
+
+    const typeLabels = {
+        white: { ru: 'Белое', ro: 'Alb', en: 'White' },
+        rose: { ru: 'Розе', ro: 'Rosé', en: 'Rosé' },
+        spark: { ru: 'Игристое', ro: 'Spumant', en: 'Sparkling' }
+    };
+
+    grid.innerHTML = filtered.map(w => {
+        const pairOysters = w.pairs.map(pid => OYSTERS.find(o => o.id === pid)).filter(Boolean);
+        return `
+            <div class="wine-card">
+                <div class="wine-top">
+                    <div class="wine-name">${w.name}</div>
+                    <span class="wine-type-badge ${w.type}">${typeLabels[w.type][currentLang]}</span>
+                </div>
+                <div class="wine-region">${w.region}</div>
+                <div class="wine-desc">${w.desc[currentLang]}</div>
+                <div class="wine-oysters">
+                    ${pairOysters.map(o => `
+                        <span class="wine-oyster-tag" data-oyster="${o.id}">${o.name}</span>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    grid.querySelectorAll('.wine-oyster-tag').forEach(tag => {
+        tag.addEventListener('click', () => {
+            switchSection('oysters');
+            setTimeout(() => showOyster(tag.dataset.oyster), 100);
+        });
+    });
+}
+
+function renderCombos() {
+    const t = UI[currentLang];
+    const container = document.getElementById('combos-container');
+
+    const combos = [];
+    WINES.forEach(w => {
+        w.pairs.forEach(pid => {
+            const oyster = OYSTERS.find(o => o.id === pid);
+            if (oyster && w.type === 'white' && w.name.includes('Purcari')) {
+                combos.push({ oyster, wine: w });
+            }
+        });
+    });
+
+    const seen = new Set();
+    const uniqueCombos = combos.filter(c => {
+        const key = c.oyster.id + '-' + c.wine.name;
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+    });
+
+    if (uniqueCombos.length === 0) {
+        container.innerHTML = `<div class="empty-state"><div class="empty-icon">✨</div><div class="empty-text">Пока нет пэйрингов</div></div>`;
+        return;
+    }
+
+    container.innerHTML = uniqueCombos.map(c => `
+        <div class="combo-card">
+            <div class="combo-header">
+                <div class="combo-icon">🦪🍷</div>
+                <div>
+                    <div class="combo-title">${c.oyster.name} + ${c.wine.name}</div>
+                    <div class="combo-subtitle">${c.wine.region}</div>
+                </div>
+            </div>
+            <div class="combo-pair">
+                <div class="combo-item">
+                    <div class="combo-item-label">${t.combo_oyster}</div>
+                    <div class="combo-item-name">${c.oyster.name}</div>
+                    <div class="combo-item-detail">${c.oyster.badge} · ${c.oyster.price} MDL</div>
+                </div>
+                <div class="combo-item">
+                    <div class="combo-item-label">${t.combo_wine}</div>
+                    <div class="combo-item-name">${c.wine.name}</div>
+                    <div class="combo-item-detail">${c.wine.region}</div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+
+    container.querySelectorAll('.combo-title').forEach((el, i) => {
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', () => {
+            switchSection('oysters');
+            setTimeout(() => showOyster(uniqueCombos[i].oyster.id), 100);
+        });
+    });
+}
+
 function activateBars(cardEl) {
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -841,32 +1447,59 @@ function handleHash() {
     showOyster(valid ? hash : 'josephine');
 }
 
+function switchSection(section) {
+    currentSection = section;
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.section === section);
+    });
+    document.getElementById('section-oysters').style.display = section === 'oysters' ? '' : 'none';
+    document.getElementById('section-wines').style.display = section === 'wines' ? '' : 'none';
+    document.getElementById('section-combos').style.display = section === 'combos' ? '' : 'none';
+
+    if (section === 'oysters') handleHash();
+    if (section === 'wines') { renderWineFilters(); renderWines(); }
+    if (section === 'combos') renderCombos();
+}
+
 function setLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('oyster_lang', lang);
-    
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.lang === lang);
     });
-
+    document.querySelectorAll('[data-t]').forEach(el => {
+        const key = el.getAttribute('data-t');
+        if (UI[lang][key]) el.textContent = UI[lang][key];
+    });
+    renderTabs();
     renderCards();
-    
-    const activeTabId = document.querySelector('.tab.active')?.dataset.target || 'josephine';
-    showOyster(activeTabId);
+    switchSection(currentSection);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => setLanguage(e.target.dataset.lang));
+        btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
     });
-    
-    setLanguage(currentLang);
+
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.addEventListener('click', () => switchSection(btn.dataset.section));
+    });
 
     document.getElementById('tabs').addEventListener('click', e => {
         const btn = e.target.closest('.tab');
         if (btn) showOyster(btn.dataset.target);
     });
-    
+
+    document.getElementById('wine-filters').addEventListener('click', e => {
+        const chip = e.target.closest('.filter-chip');
+        if (chip) {
+            currentWineFilter = chip.dataset.filter;
+            renderWineFilters();
+            renderWines();
+        }
+    });
+
+    setLanguage(currentLang);
     handleHash();
 });
 
