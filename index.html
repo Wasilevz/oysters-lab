@@ -1291,196 +1291,226 @@ const OYSTERS = [
 
 const WINES = [
     {
-        name: 'Chardonnay Château Vartely',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Бочковая выдержка, спелые яблоки, сливочность.', ro: 'Maturare în butoi, mere coapte, cremozitate.', en: 'Barrel aged, ripe apples, creaminess.' },
-        pairs: ['josephine', 'sentenelles', 'eleonora']
-    },
-    {
-        name: 'Chablis 1er Cru',
-        type: 'white', region: 'Бургундия, Франция',
-        desc: { ru: 'Кремниевая минеральность, чистота, элегантность.', ro: 'Mineralitate de cremene, puritate, eleganță.', en: 'Flinty minerality, purity, elegance.' },
-        pairs: ['josephine']
-    },
-    {
-        name: 'Cricova Brut Prestige',
-        type: 'spark', region: 'Молдова',
-        desc: { ru: 'Игристое, мелкие пузырьки, свежесть.', ro: 'Spumant, bule fine, prospețime.', en: 'Sparkling, fine bubbles, freshness.' },
-        pairs: ['josephine']
-    },
-    {
-        name: 'Purcari Chardonnay Barrique',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Дубовая выдержка, ваниль, орех.', ro: 'Maturare în stejar, vanilie, nuci.', en: 'Oak aged, vanilla, nut.' },
-        pairs: ['gillardeau']
-    },
-    {
-        name: 'Champagne Deutz Brut Classic',
+        name: 'Moet & Chandon Brut Imperial',
         type: 'spark', region: 'Шампань, Франция',
-        desc: { ru: 'Дрожжевые ноты, бrioшь, минеральность.', ro: 'Note de drojdie, brioșă, mineralitate.', en: 'Yeast notes, brioche, minerality.' },
-        pairs: ['gillardeau']
+        desc: { ru: 'Баланс, зрелые фрукты, элегантность.', ro: 'Echilibru, fructe coapte, eleganță.', en: 'Balance, ripe fruits, elegance.' },
+        pairs: ['gold', 'gillardeau', 'eleonora']
     },
     {
-        name: 'Pouilly-Fumé',
-        type: 'white', region: 'Луара, Франция',
-        desc: { ru: 'Дымные минералы, крапива, цитрус.', ro: 'Minerale fumurii, urzică, citrice.', en: 'Smoky minerals, nettle, citrus.' },
-        pairs: ['gillardeau']
-    },
-    {
-        name: 'Sauvignon Blanc Purcari',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Травяной, цитрусовый, яркий.', ro: 'Erbaceu, citric, vibrant.', en: 'Herbal, citrus, vibrant.' },
-        pairs: ['tiamara', 'boudeuse']
-    },
-    {
-        name: 'Muscadet Sèvre et Maine',
-        type: 'white', region: 'Луара, Франция',
-        desc: { ru: 'Минеральный, морской, освежающий.', ro: 'Mineral, marin, răcoritor.', en: 'Mineral, marine, refreshing.' },
-        pairs: ['tiamara', 'finedeclaire']
-    },
-    {
-        name: 'Guinness Draught',
-        type: 'white', region: 'Дублин, Ирландия',
-        desc: { ru: 'Кремовый стаут, кофе, шоколад.', ro: 'Stout cremos, cafea, ciocolată.', en: 'Creamy stout, coffee, chocolate.' },
-        pairs: ['tiamara']
-    },
-    {
-        name: 'Champagne Moët & Chandon Brut',
+        name: 'Veuve Clicquot Brut',
         type: 'spark', region: 'Шампань, Франция',
-        desc: { ru: 'Баланс, зрелые фрукты, праздничность.', ro: 'Echilibru, fructe coapte, sărbătoare.', en: 'Balance, ripe fruits, festivity.' },
-        pairs: ['gold']
+        desc: { ru: 'Мощь, бrioшь, минеральность.', ro: 'Putere, brioșă, mineralitate.', en: 'Power, brioche, minerality.' },
+        pairs: ['gillardeau', 'speciale', 'gold']
     },
     {
-        name: 'Chablis Grand Cru',
-        type: 'white', region: 'Бургундия, Франция',
-        desc: { ru: 'Встреча двух гранд-крю.', ro: 'Întâlnirea a două grand cru-uri.', en: 'The meeting of two grand crus.' },
-        pairs: ['gold']
+        name: 'Dom Perignon Brut Vintage 2015',
+        type: 'spark', region: 'Шампань, Франция',
+        desc: { ru: 'Глубина, созревшие фрукты, шёлк.', ro: 'Adâncime, fructe mature, mătase.', en: 'Depth, mature fruits, silk.' },
+        pairs: ['gold', 'gillardeau']
     },
     {
-        name: 'Cricova Prestige Cuvée',
+        name: 'Ruinart Brut',
+        type: 'spark', region: 'Шампань, Франция',
+        desc: { ru: 'Цветы, цитрус, меловая свежесть.', ro: 'Flori, citrice, prospețime de cretă.', en: 'Flowers, citrus, chalky freshness.' },
+        pairs: ['josephine', 'royale', 'sentenelles']
+    },
+    {
+        name: 'Ruinart Rose',
+        type: 'rose', region: 'Шампань, Франция',
+        desc: { ru: 'Клубника, минеральность, шампанское.', ro: 'Căpșuni, mineralitate, șampanie.', en: 'Strawberry, minerality, champagne.' },
+        pairs: ['royale', 'ostraregal', 'sentenelles']
+    },
+    {
+        name: 'Champagne Pommery Brut Royal',
+        type: 'spark', region: 'Шампань, Франция',
+        desc: { ru: 'Свежесть, яблоко, мел.', ro: 'Prospețime, măr, cretă.', en: 'Freshness, apple, chalk.' },
+        pairs: ['josephine', 'amulet']
+    },
+    {
+        name: 'Piper Heidsieck Cuvee Brut',
+        type: 'spark', region: 'Шампань, Франция',
+        desc: { ru: 'Фрукты, бrioшь, утончённость.', ro: 'Fructe, brioșă, rafinament.', en: 'Fruits, brioche, refinement.' },
+        pairs: ['gold', 'eleonore']
+    },
+    {
+        name: 'Prosecco SERENA Superiore DOCG Brut',
+        type: 'spark', region: 'Тревизо, Италия',
+        desc: { ru: 'Виноград, лёгкость, свежесть.', ro: 'Struguri, ușurință, prospețime.', en: 'Grape, lightness, freshness.' },
+        pairs: ['royale', 'josephine', 'amulet']
+    },
+    {
+        name: 'CONTARINI Prosecco Superiore DOCG Brut',
+        type: 'spark', region: 'Вальдоббьадене, Италия',
+        desc: { ru: 'Цветочность, яблоко, тонкие泡泡.', ro: 'Floritate, măr, bule fine.', en: 'Florality, apple, fine bubbles.' },
+        pairs: ['josephine', 'sentenelles']
+    },
+    {
+        name: 'Ruggeri Cartizze Valdobbiadene DOCG Brut',
+        type: 'spark', region: 'Вальдоббьадене, Италия',
+        desc: { ru: 'Гран-крю prosecco, миндаль, зрелость.', ro: 'Grand cru prosecco, migdale, maturitate.', en: 'Grand cru prosecco, almond, maturity.' },
+        pairs: ['gold', 'gillardeau']
+    },
+    {
+        name: 'MESTRO Prosecco Superiore DOCG Brut',
+        type: 'spark', region: 'Вальдоббьадене, Италия',
+        desc: { ru: 'Сбалансированное, свежие фрукты.', ro: 'Echilibrat, fructe proaspete.', en: 'Balanced, fresh fruits.' },
+        pairs: ['josephine', 'royale']
+    },
+    {
+        name: 'Pago de Tharsys Cava Brut',
+        type: 'spark', region: 'Каталония, Испания',
+        desc: { ru: 'Минералы, цитрус, игристость.', ro: 'Minerale, citrice, spumant.', en: 'Minerals, citrus, sparkling.' },
+        pairs: ['boudeuse', 'finedeclaire']
+    },
+    {
+        name: 'Veuve Clicquot Demi Sec',
+        type: 'spark', region: 'Шампань, Франция',
+        desc: { ru: 'Мёд, персик, мягкость.', ro: 'Miere, piersică, delicatețe.', en: 'Honey, peach, softness.' },
+        pairs: ['ostraregal', 'royale']
+    },
+    {
+        name: 'Purcari Cuvee Alb Brut',
         type: 'spark', region: 'Молдова',
-        desc: { ru: 'Достойная молдавская альтернатива шампанскому.', ro: 'O alternativă moldovenească demnă de șampanie.', en: 'A worthy Moldovan alternative to champagne.' },
-        pairs: ['gold']
+        desc: { ru: 'Молдавское игристое, чистота.', ro: 'Spumant moldovenesc, puritate.', en: 'Moldovan sparkling, purity.' },
+        pairs: ['josephine', 'sentenelles', 'amulet']
     },
     {
-        name: 'Rosé Purcari Pinot Noir',
+        name: 'Purcari Cuvee Rose Brut',
         type: 'rose', region: 'Молдова',
-        desc: { ru: 'Деликатное, ягодное, нежное.', ro: 'Delicat, fructat, fin.', en: 'Delicate, fruity, tender.' },
+        desc: { ru: 'Ягодные ноты, деликатная пена.', ro: 'Note de fructe de pădure, spumă delicată.', en: 'Berry notes, delicate foam.' },
         pairs: ['royale', 'ostraregal']
     },
     {
-        name: 'Pinot Gris',
-        type: 'white', region: 'Эльзас, Франция',
-        desc: { ru: 'Белый персик, мед, округлость.', ro: 'Piersică albă, miere, rotunjime.', en: 'White peach, honey, roundness.' },
-        pairs: ['royale']
-    },
-    {
-        name: 'Prosecco DOC Brut',
-        type: 'spark', region: 'Венеция, Италия',
-        desc: { ru: 'Лёгкие пузырьки, яблоко, груша.', ro: 'Bule ușoare, măr, pară.', en: 'Light bubbles, apple, pear.' },
-        pairs: ['royale']
-    },
-    {
-        name: 'Viognier Château Vartely',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Абрикос, цветы, кремовая текстура.', ro: 'Caise, flori, textură cremoasă.', en: 'Apricot, flowers, creamy texture.' },
-        pairs: ['speciale', 'ostraregal']
-    },
-    {
-        name: 'Burgundy Blanc',
-        type: 'white', region: 'Бургундия, Франция',
-        desc: { ru: 'Маслянистая текстура, спелые фрукты.', ro: 'Textură untuită, fructe coapte.', en: 'Buttery texture, ripe fruits.' },
-        pairs: ['speciale']
-    },
-    {
-        name: 'Milestii Mici Spumant Brut',
+        name: 'CRICOVA Elogiu Brut Natur',
         type: 'spark', region: 'Молдова',
-        desc: { ru: 'Молдавское игристое, свежесть и кислотность.', ro: 'Spumant moldovenesc, prospețime și aciditate.', en: 'Moldovan sparkling, freshness and acidity.' },
-        pairs: ['speciale']
+        desc: { ru: 'Досек, чистый характер, минералы.', ro: 'Brut natur, caracter pur, minerale.', en: 'Brut nature, pure character, minerals.' },
+        pairs: ['tiamara', 'boudeuse']
     },
     {
-        name: 'Sancerre Blanc',
-        type: 'white', region: 'Луара, Франция',
-        desc: { ru: 'Кремниевая минеральность, чистота.', ro: 'Mineralitate de cremene, puritate.', en: 'Flinty minerality, purity.' },
-        pairs: ['boudeuse']
-    },
-    {
-        name: 'Sake Junmai Daiginjo',
-        type: 'white', region: 'Япония',
-        desc: { ru: 'Умами, цветочность, элегантность.', ro: 'Umami, floralitate, eleganță.', en: 'Umami, floral, elegance.' },
-        pairs: ['boudeuse']
-    },
-    {
-        name: 'Cricova Chardonnay Brut',
-        type: 'spark', region: 'Молдова',
-        desc: { ru: 'Яблочные тона, лёгкость, свежесть.', ro: 'Note de măr, ușurință, prospețime.', en: 'Apple tones, lightness, freshness.' },
-        pairs: ['finedeclaire']
-    },
-    {
-        name: 'Aligoté Purcari',
+        name: 'Castel Mimi Sauvignon Blanc',
         type: 'white', region: 'Молдова',
-        desc: { ru: 'Острая кислотность, минеральность.', ro: 'Aciditate ascuțită, mineralitate.', en: 'Sharp acidity, minerality.' },
-        pairs: ['finedeclaire']
+        desc: { ru: 'Цитрус, травы, яркая кислотность.', ro: 'Citrice, ierburi, aciditate vibrantă.', en: 'Citrus, herbs, vibrant acidity.' },
+        pairs: ['tiamara', 'finedeclaire', 'boudeuse']
     },
     {
-        name: 'Cricova Roze Sec',
+        name: 'Vinum Estate Riesling 2021',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Минеральный, цитрус, точность.', ro: 'Mineral, citric, precizie.', en: 'Mineral, citrus, precision.' },
+        pairs: ['tiamara', 'boudeuse']
+    },
+    {
+        name: 'BAHU Riesling 2023',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Свежий, цветочный, минеральный.', ro: 'Proaspăt, floral, mineral.', en: 'Fresh, floral, mineral.' },
+        pairs: ['finedeclaire', 'boudeuse']
+    },
+    {
+        name: 'Casa Garcia Vinho Verde',
+        type: 'white', region: 'Португалия',
+        desc: { ru: 'Лёгкость, цитрус, освежающий.', ro: 'Ușurință, citrice, răcoritor.', en: 'Lightness, citrus, refreshing.' },
+        pairs: ['tiamara', 'finedeclaire']
+    },
+    {
+        name: 'Vinum Selection Chardonnay 2021',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Сливочность, яблоко, округлость.', ro: 'Cremozitate, măr, rotunjime.', en: 'Creaminess, apple, roundness.' },
+        pairs: ['josephine', 'gillardeau', 'sentenelles']
+    },
+    {
+        name: 'TE WA Wines Chardonnay',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Спелые фрукты, бочковая нота.', ro: 'Fructe coapte, notă de butoi.', en: 'Ripe fruits, barrel note.' },
+        pairs: ['gillardeau', 'speciale']
+    },
+    {
+        name: 'Vinaria Nobila Chardonnay Barrique',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Дубовая выдержка, ваниль, орех.', ro: 'Maturare în stejar, vanilie, nuci.', en: 'Oak aged, vanilla, nut.' },
+        pairs: ['gillardeau', 'speciale', 'eleonore']
+    },
+    {
+        name: 'Novak Alb de Onitcani Clasique',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Элегантный, минеральный, чистый.', ro: 'Elegant, mineral, pur.', en: 'Elegant, mineral, pure.' },
+        pairs: ['josephine', 'royale']
+    },
+    {
+        name: 'Carpe Diem Feteasca Regala',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Цветы, экзотика, свежесть.', ro: 'Flori, exotic, prospețime.', en: 'Flowers, exotic, freshness.' },
+        pairs: ['royale', 'josephine']
+    },
+    {
+        name: 'Minis Terrios Alba Imparatesa',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Нежность, медовые тона, деликат.', ro: 'Delicatețe, tonuri de miere, fin.', en: 'Tenderness, honey tones, delicate.' },
+        pairs: ['josephine', 'sentenelles']
+    },
+    {
+        name: 'Divus Winery Pinot Noir',
+        type: 'red', region: 'Молдова',
+        desc: { ru: 'Лёгкий, ягодный, бархат.', ro: 'Ușor, fructat, catifelat.', en: 'Light, fruity, velvety.' },
+        pairs: ['ostraregal', 'sentenelles']
+    },
+    {
+        name: 'Chateau Cristi Pinot Noir',
+        type: 'red', region: 'Молдова',
+        desc: { ru: 'Классика, вишня, специи.', ro: 'Clasic, cireșe, condimente.', en: 'Classic, cherry, spices.' },
+        pairs: ['ostraregal', 'gillardeau']
+    },
+    {
+        name: 'Nocturne Purcari Rose Sec',
+        type: 'rose', region: 'Молдова',
+        desc: { ru: 'Ночные тона, ягоды, элегантность.', ro: 'Tonuri nocturne, fructe, eleganță.', en: 'Night tones, berries, elegance.' },
+        pairs: ['royale', 'sentenelles']
+    },
+    {
+        name: 'MIMI 9 MUSES Merlot Rose',
+        type: 'rose', region: 'Молдова',
+        desc: { ru: 'Мерло розе, нежность, фрукты.', ro: 'Merlot roz, delicatețe, fructe.', en: 'Merlot rosé, tenderness, fruits.' },
+        pairs: ['ostraregal', 'amulet']
+    },
+    {
+        name: 'Minis Terrios Rose',
         type: 'rose', region: 'Молдова',
         desc: { ru: 'Игривое, ягодное, освежающее.', ro: 'Jucăuș, fructat, răcoritor.', en: 'Playful, fruity, refreshing.' },
-        pairs: ['sentenelles']
+        pairs: ['sentenelles', 'royale']
     },
     {
-        name: 'Pinot Blanc',
-        type: 'white', region: 'Эльзас, Франция',
-        desc: { ru: 'Мягкая округлость, нежность.', ro: 'Rotunjime moale, delicatețe.', en: 'Soft roundness, tenderness.' },
-        pairs: ['sentenelles']
+        name: 'Castel Mimi Rara Neagra Rose',
+        type: 'rose', region: 'Молдова',
+        desc: { ru: 'Авторский, необычный, свежий.', ro: 'Artizanal, neobișnuit, proaspăt.', en: 'Artisanal, unusual, fresh.' },
+        pairs: ['royale', 'sentenelles', 'amulet']
     },
     {
-        name: 'Viognier / Marsanne',
-        type: 'white', region: 'Рона, Франция',
-        desc: { ru: 'Тропические тона, цветы, тело.', ro: 'Tonuri tropicale, flori, corp.', en: 'Tropical tones, flowers, body.' },
-        pairs: ['ostraregal']
-    },
-    {
-        name: 'Brut Rosé Champagne',
-        type: 'spark', region: 'Шампань, Франция',
-        desc: { ru: 'Ягодные ноты, игристость, праздник.', ro: 'Note de fructe de pădure, spumant, sărbătoare.', en: 'Berry notes, sparkling, celebration.' },
-        pairs: ['ostraregal']
-    },
-    {
-        name: 'Riesling Sec',
-        type: 'white', region: 'Альзас, Франция',
-        desc: { ru: 'Минеральный, цитрус, точность.', ro: 'Mineral, citric, precizie.', en: 'Mineral, citrus, precision.' },
-        pairs: ['amulet']
-    },
-    {
-        name: 'Sauvignon Blanc Fumé',
-        type: 'white', region: 'Луара, Франция',
-        desc: { ru: 'Дымные зелёные тона, свежесть.', ro: 'Note verzi fumurii, prospețime.', en: 'Smoky green tones, freshness.' },
-        pairs: ['amulet']
-    },
-    {
-        name: 'Milestii Mici Blanc de Blancs',
-        type: 'spark', region: 'Молдова',
-        desc: { ru: 'Минеральная точность, долгий финиш.', ro: 'Precizie minerală, final lung.', en: 'Mineral precision, long finish.' },
-        pairs: ['amulet']
-    },
-    {
-        name: 'Pessac-Léognan Blanc',
-        type: 'white', region: 'Бордо, Франция',
-        desc: { ru: 'Исторический пэйринг для Аркашона.', ro: 'Asociere istorică pentru Arcachon.', en: 'Historic pairing for Arcachon.' },
-        pairs: ['eleonora']
-    },
-    {
-        name: 'Champagne Blanc de Blancs',
-        type: 'spark', region: 'Шампань, Франция',
-        desc: { ru: 'Меловая минеральность, деликатность.', ro: 'Mineralitate de cretă, delicatețe.', en: 'Chalky minerality, delicacy.' },
-        pairs: ['eleonora']
-    },
-    {
-        name: 'Purcari Chardonnay',
+        name: 'Vinum Estate Feteasca Regala 2022',
         type: 'white', region: 'Молдова',
-        desc: { ru: 'Кремовая текстура, яблоко.', ro: 'Textură cremoasă, măr.', en: 'Creamy texture, apple.' },
-        pairs: ['eleonora']
+        desc: { ru: 'Экзотика, цветы, лёгкость.', ro: 'Exotic, flori, ușurință.', en: 'Exotic, flowers, lightness.' },
+        pairs: ['josephine', 'royale', 'amulet']
+    },
+    {
+        name: 'Gitana Winery Riesling',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Чистый рислинг, камень, цитрус.', ro: 'Riesling pur, piatră, citrice.', en: 'Pure riesling, stone, citrus.' },
+        pairs: ['tiamara', 'boudeuse', 'finedeclaire']
+    },
+    {
+        name: 'Domeniile Vorniceni Viorica',
+        type: 'white', region: 'Молдова',
+        desc: { ru: 'Местный сорт, цветы, мед.', ro: 'Soi local, flori, miere.', en: 'Local variety, flowers, honey.' },
+        pairs: ['josephine', 'sentenelles']
+    },
+    {
+        name: 'Bott Prosecco Gold',
+        type: 'spark', region: 'Тревизо, Италия',
+        desc: { ru: 'Золотое имя, фрукты, элегантность.', ro: 'Nume de aur, fructe, eleganță.', en: 'Golden name, fruits, elegance.' },
+        pairs: ['gold', 'josephine']
+    },
+    {
+        name: 'Vinum Spumant de calitate Brut Natur 2021',
+        type: 'spark', region: 'Молдова',
+        desc: { ru: 'Досек, чистый характер, свежесть.', ro: 'Brut natur, caracter pur, prospețime.', en: 'Brut nature, pure character, freshness.' },
+        pairs: ['tiamara', 'boudeuse', 'finedeclaire']
     }
 ];
 
