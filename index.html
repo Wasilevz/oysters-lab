@@ -559,7 +559,6 @@
             </div>
         </div>
         <div id="cards-container"></div>
-        <div class="map-section" id="mapSection"></div>
     </div>
 
     <!-- WINES SECTION -->
@@ -603,8 +602,6 @@ const UI = {
         quiz_match: 'совпадение', quiz_restart: 'Попробовать снова', quiz_next: 'Далее',
         quiz_result_title: 'Ваша устрица:',
         compare_title: 'Сравнение', compare_btn: 'Сравнить', compare_placeholder: 'Выберите устрицу',
-        map_title: 'Карта происхождения',
-        map_france: 'Франция', map_ireland: 'Ирландия', map_atlantic: 'Атлантика (глубоководная)'
     },
     ro: {
         taste: 'Profil Gustativ', origin: 'Origine', pairing: 'Băuturi Ideale',
@@ -630,8 +627,6 @@ const UI = {
         quiz_match: 'potrivire', quiz_restart: 'Încearcă din nou', quiz_next: 'Următorul',
         quiz_result_title: 'Stridia ta:',
         compare_title: 'Comparație', compare_btn: 'Compară', compare_placeholder: 'Alege o stridie',
-        map_title: 'Harta originii',
-        map_france: 'Franța', map_ireland: 'Irlanda', map_atlantic: 'Atlantic (adâncime)'
     },
     en: {
         taste: 'Taste Profile', origin: 'Origin', pairing: 'Perfect Pairings',
@@ -657,8 +652,6 @@ const UI = {
         quiz_match: 'match', quiz_restart: 'Try again', quiz_next: 'Next',
         quiz_result_title: 'Your oyster:',
         compare_title: 'Comparison', compare_btn: 'Compare', compare_placeholder: 'Choose an oyster',
-        map_title: 'Origin Map',
-        map_france: 'France', map_ireland: 'Ireland', map_atlantic: 'Atlantic (deep-water)'
     }
 };
 
@@ -1559,44 +1552,6 @@ function runCompare() {
     });
 }
 
-function renderMap() {
-    const t = UI[currentLang];
-    const regions = [
-        { flag: '🇫🇷', name: t.map_france, ids: ['josephine','gillardeau','royale','speciale','boudeuse','finedeclaire','eleonora'] },
-        { flag: '🇮🇪', name: t.map_ireland, ids: ['tiamara','ostraregal'] },
-        { flag: '🌊', name: t.map_atlantic, ids: ['sentenelles','amulet','gold'] }
-    ];
-    const section = document.getElementById('mapSection');
-    section.innerHTML = `
-        <div class="info-block" style="margin-bottom:0">
-            <div class="block-label">${t.map_title}</div>
-            <div class="map-regions">
-                ${regions.map(r => `
-                    <div class="map-region">
-                        <div class="map-region-header">
-                            <span class="map-region-flag">${r.flag}</span>
-                            <span class="map-region-name">${r.name}</span>
-                            <span class="map-region-count">${r.ids.length}</span>
-                        </div>
-                        <div class="map-region-oysters">
-                            ${r.ids.map(id => {
-                                const o = OYSTERS.find(o => o.id === id);
-                                return o ? `<span class="map-oyster-tag" data-oyster="${o.id}">${o.name}</span>` : '';
-                            }).join('')}
-                        </div>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `;
-    section.querySelectorAll('.map-oyster-tag').forEach(tag => {
-        tag.addEventListener('click', () => {
-            switchSection('oysters');
-            setTimeout(() => showOyster(tag.dataset.oyster), 100);
-        });
-    });
-}
-
 function renderQuiz() {
     const t = UI[currentLang];
     const overlay = document.getElementById('quizOverlay');
@@ -1820,7 +1775,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('compareBtn').addEventListener('click', runCompare);
 
     renderCompareSelects();
-    renderMap();
     setLanguage(currentLang);
     handleHash();
 });
