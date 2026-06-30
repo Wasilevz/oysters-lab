@@ -739,16 +739,16 @@
             </div>
         </div>
         <div class="main-nav">
-            <button class="nav-btn active" data-section="oysters"><span class="nav-icon">🦪</span> <span data-t="nav_oysters">Устрицы</span></button>
-            <button class="nav-btn" data-section="wines"><span class="nav-icon">🍷</span> <span data-t="nav_wines">Вина</span></button>
+            <button class="nav-btn active" data-section="oysters"><span class="nav-icon" id="navIconOysters"></span> <span data-t="nav_oysters">Устрицы</span></button>
+            <button class="nav-btn" data-section="wines"><span class="nav-icon" id="navIconWines"></span> <span data-t="nav_wines">Вина</span></button>
         </div>
     </header>
 
     <!-- OYSTERS SECTION -->
     <div id="section-oysters">
         <div class="action-bar" id="actionBar">
-            <button class="action-btn" id="quizTrigger" data-t="quiz_trigger">🎯 Найти свою устрицу</button>
-            <button class="action-btn" id="compareTrigger">⚖️ Сравнить</button>
+            <button class="action-btn" id="quizTrigger"><span id="quizTriggerIcon"></span> <span data-t="quiz_trigger">Найти свою устрицу</span></button>
+            <button class="action-btn" id="compareTrigger"><span id="compareTriggerIcon"></span> <span>Сравнить</span></button>
         </div>
         <div class="tabs-wrapper">
             <div class="tabs" id="tabs"></div>
@@ -761,7 +761,7 @@
         <div class="compare-panel">
             <div class="compare-panel-header">
                 <div class="compare-panel-title" data-t="compare_title">Сравнение</div>
-                <button class="compare-close" id="compareClose">✕</button>
+                <button class="compare-close" id="compareClose"></button>
             </div>
             <div class="compare-selects">
                 <select class="compare-select" id="compareSelect1"><option value="" data-t="compare_placeholder">Выберите устрицу</option></select>
@@ -796,7 +796,7 @@ const UI = {
         nav_oysters: 'Устрицы', nav_wines: 'Вина', nav_combos: 'Пэйринги',
         wine_region: 'Регион', wine_with: 'Подходит к', perfect: 'Идеальный пэйринг',
         all: 'Все', white: 'Белые', red: 'Красные', rose: 'Розовые', sparkling: 'Игристые',
-        quiz_trigger: '🎯 Найти свою устрицу',
+        quiz_trigger: 'Найти свою устрицу',
         quiz_title: 'Найди свою устрицу', quiz_sub: 'Ответь на 6 вопросов и мы подберём идеальную устрицу',
         quiz_q1: 'Какой уровень солёности вы предпочитаете?',
         quiz_q1a: 'Лёгкая солёность', quiz_q1b: 'Средняя', quiz_q1c: 'Насыщенная морская',
@@ -821,7 +821,7 @@ const UI = {
         nav_oysters: 'Stridii', nav_wines: 'Vinuri', nav_combos: 'Asocieri',
         wine_region: 'Regiune', wine_with: 'Se potrivește cu', perfect: 'Asociere ideală',
         all: 'Toate', white: 'Albe', red: 'Roșii', rose: 'Rosé', sparkling: 'Spumant',
-        quiz_trigger: '🎯 Găsește-ți stridia',
+        quiz_trigger: 'Găsește-ți stridia',
         quiz_title: 'Găsește-ți stridia', quiz_sub: 'Răspunde la 6 întrebări și îți vom recomanda stridia ideală',
         quiz_q1: 'Ce nivel de salinitate preferați?',
         quiz_q1a: 'Salinitate ușoară', quiz_q1b: 'Medie', quiz_q1c: 'Intens marină',
@@ -846,7 +846,7 @@ const UI = {
         nav_oysters: 'Oysters', nav_wines: 'Wines', nav_combos: 'Pairings',
         wine_region: 'Region', wine_with: 'Pairs with', perfect: 'Perfect Pairing',
         all: 'All', white: 'White', red: 'Red', rose: 'Rosé', sparkling: 'Sparkling',
-        quiz_trigger: '🎯 Find your oyster',
+        quiz_trigger: 'Find your oyster',
         quiz_title: 'Find Your Oyster', quiz_sub: 'Answer 6 questions and we\'ll find the perfect match',
         quiz_q1: 'What salinity level do you prefer?',
         quiz_q1a: 'Light salinity', quiz_q1b: 'Medium', quiz_q1c: 'Rich marine',
@@ -897,9 +897,9 @@ const OYSTERS = [
             en: 'Delicate sweetness and creaminess unfold alongside wines with soft acidity.'
         },
         drinks: [
-            { type: 'white', icon: '🍷', name: 'Chardonnay Château Vartely', why: { ru: 'Мягкая бочковая выдержка зеркалит сливочное послевкусие.', ro: 'Maturarea moale în butoi oglindește postgustul cremos.', en: 'Soft barrel aging mirrors the creamy aftertaste.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
-            { type: 'white', icon: '🍾', name: 'Chablis 1er Cru', why: { ru: 'Кремниевая минеральность усиливает ореховые ноты.', ro: 'Mineralitatea de cremene amplifică notele de nuci.', en: 'Flinty minerality enhances the nutty notes.' }, tag: { ru: 'Классика', ro: 'Clasic', en: 'Classic' } },
-            { type: 'bubb', icon: '✨', name: 'Cricova Brut Prestige', why: { ru: 'Пузырьки очищают нёбо и готовят к следующему глотку.', ro: 'Bulele curăță palatul și pregătesc pentru următoarea înghițitură.', en: 'Bubbles cleanse the palate and prepare for the next sip.' }, tag: { ru: 'Игристое', ro: 'Spumant', en: 'Sparkling' } }
+            { type: 'white', icon: 'wine', name: 'Chardonnay Château Vartely', why: { ru: 'Мягкая бочковая выдержка зеркалит сливочное послевкусие.', ro: 'Maturarea moale în butoi oglindește postgustul cremos.', en: 'Soft barrel aging mirrors the creamy aftertaste.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
+            { type: 'white', icon: 'champagne', name: 'Chablis 1er Cru', why: { ru: 'Кремниевая минеральность усиливает ореховые ноты.', ro: 'Mineralitatea de cremene amplifică notele de nuci.', en: 'Flinty minerality enhances the nutty notes.' }, tag: { ru: 'Классика', ro: 'Clasic', en: 'Classic' } },
+            { type: 'bubb', icon: 'sparkle', name: 'Cricova Brut Prestige', why: { ru: 'Пузырьки очищают нёбо и готовят к следующему глотку.', ro: 'Bulele curăță palatul și pregătesc pentru următoarea înghițitură.', en: 'Bubbles cleanse the palate and prepare for the next sip.' }, tag: { ru: 'Игристое', ro: 'Spumant', en: 'Sparkling' } }
         ]
     },
     {
@@ -932,9 +932,9 @@ const OYSTERS = [
             en: 'Maximum meatiness and richness require a wine with weight and structure.'
         },
         drinks: [
-            { type: 'white', icon: '🍷', name: 'Purcari Chardonnay Barrique', why: { ru: 'Выдержка в дубе гармонирует с ореховостью.', ro: 'Maturarea în stejar se armonizează cu notele de nuci.', en: 'Oak aging harmonizes with the nuttiness.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
-            { type: 'bubb', icon: '✨', name: 'Champagne Deutz Brut Classic', why: { ru: 'Дрожжевые ноты ведут диалог на равных.', ro: 'Notele de drojdie poartă un dialog de la egal la egal.', en: 'Yeast notes lead a dialogue on equal terms.' }, tag: { ru: 'Премиум', ro: 'Premium', en: 'Premium' } },
-            { type: 'white', icon: '🍾', name: 'Pouilly-Fumé', why: { ru: 'Дымные минеральные тона создают баланс.', ro: 'Tonurile minerale afumate creează echilibru.', en: 'Smoky mineral tones create balance.' }, tag: { ru: 'Контраст', ro: 'Contrast', en: 'Contrast' } }
+            { type: 'white', icon: 'wine', name: 'Purcari Chardonnay Barrique', why: { ru: 'Выдержка в дубе гармонирует с ореховостью.', ro: 'Maturarea în stejar se armonizează cu notele de nuci.', en: 'Oak aging harmonizes with the nuttiness.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
+            { type: 'bubb', icon: 'sparkle', name: 'Champagne Deutz Brut Classic', why: { ru: 'Дрожжевые ноты ведут диалог на равных.', ro: 'Notele de drojdie poartă un dialog de la egal la egal.', en: 'Yeast notes lead a dialogue on equal terms.' }, tag: { ru: 'Премиум', ro: 'Premium', en: 'Premium' } },
+            { type: 'white', icon: 'champagne', name: 'Pouilly-Fumé', why: { ru: 'Дымные минеральные тона создают баланс.', ro: 'Tonurile minerale afumate creează echilibru.', en: 'Smoky mineral tones create balance.' }, tag: { ru: 'Контраст', ro: 'Contrast', en: 'Contrast' } }
         ]
     },
     {
@@ -967,9 +967,9 @@ const OYSTERS = [
             en: 'High salinity calls for vibrant acidity and a green character.'
         },
         drinks: [
-            { type: 'white', icon: '🍷', name: 'Sauvignon Blanc Purcari', why: { ru: 'Цитрусовая кислотность рифмуется с морским характером.', ro: 'Aciditatea citrică rimează cu caracterul marin.', en: 'Citrus acidity rhymes with the marine character.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
-            { type: 'white', icon: '🍾', name: 'Muscadet Sèvre et Maine', why: { ru: 'Минеральность не перебивает океанский вкус.', ro: 'Mineralitatea nu acoperă gustul oceanic.', en: 'Minerality does not overpower the ocean taste.' }, tag: { ru: 'Классика', ro: 'Clasic', en: 'Classic' } },
-            { type: 'mineral', icon: '🍺', name: 'Guinness Draught', why: { ru: 'Кремовая горечь стаута усиливает солёность.', ro: 'Amărăciunea cremoasă a stout-ului intensifică salinitatea.', en: 'The creamy bitterness of the stout enhances salinity.' }, tag: { ru: 'Аутентично', ro: 'Autentic', en: 'Authentic' } }
+            { type: 'white', icon: 'wine', name: 'Sauvignon Blanc Purcari', why: { ru: 'Цитрусовая кислотность рифмуется с морским характером.', ro: 'Aciditatea citrică rimează cu caracterul marin.', en: 'Citrus acidity rhymes with the marine character.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
+            { type: 'white', icon: 'champagne', name: 'Muscadet Sèvre et Maine', why: { ru: 'Минеральность не перебивает океанский вкус.', ro: 'Mineralitatea nu acoperă gustul oceanic.', en: 'Minerality does not overpower the ocean taste.' }, tag: { ru: 'Классика', ro: 'Clasic', en: 'Classic' } },
+            { type: 'mineral', icon: 'beer', name: 'Guinness Draught', why: { ru: 'Кремовая горечь стаута усиливает солёность.', ro: 'Amărăciunea cremoasă a stout-ului intensifică salinitatea.', en: 'The creamy bitterness of the stout enhances salinity.' }, tag: { ru: 'Аутентично', ro: 'Autentic', en: 'Authentic' } }
         ]
     },
     {
@@ -1002,9 +1002,9 @@ const OYSTERS = [
             en: 'A luxurious oyster requires a drink on its level.'
         },
         drinks: [
-            { type: 'bubb', icon: '✨', name: 'Champagne Moët & Chandon Brut', why: { ru: 'Создаёт совершенный диалог с золотой устрицей.', ro: 'Creează un dialog perfect cu stridia de aur.', en: 'Creates a perfect dialogue with the golden oyster.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
-            { type: 'white', icon: '🍷', name: 'Chablis Grand Cru', why: { ru: 'Встреча двух гранд-крю.', ro: 'Întâlnirea a două grand cru-uri.', en: 'The meeting of two grand crus.' }, tag: { ru: 'Уровень', ro: 'Nivel', en: 'Level' } },
-            { type: 'bubb', icon: '🥂', name: 'Cricova Prestige Cuvée', why: { ru: 'Достойная молдавская альтернатива.', ro: 'O alternativă moldovenească demnă.', en: 'A worthy Moldovan alternative.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } }
+            { type: 'bubb', icon: 'sparkle', name: 'Champagne Moët & Chandon Brut', why: { ru: 'Создаёт совершенный диалог с золотой устрицей.', ro: 'Creează un dialog perfect cu stridia de aur.', en: 'Creates a perfect dialogue with the golden oyster.' }, tag: { ru: 'Идеальный пэйринг', ro: 'Asociere ideală', en: 'Perfect Pairing' } },
+            { type: 'white', icon: 'wine', name: 'Chablis Grand Cru', why: { ru: 'Встреча двух гранд-крю.', ro: 'Întâlnirea a două grand cru-uri.', en: 'The meeting of two grand crus.' }, tag: { ru: 'Уровень', ro: 'Nivel', en: 'Level' } },
+            { type: 'bubb', icon: 'glasses', name: 'Cricova Prestige Cuvée', why: { ru: 'Достойная молдавская альтернатива.', ro: 'O alternativă moldovenească demnă.', en: 'A worthy Moldovan alternative.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } }
         ]
     },
     {
@@ -1037,9 +1037,9 @@ const OYSTERS = [
             en: 'The softness of this oyster works well with different wine styles.'
         },
         drinks: [
-            { type: 'rose', icon: '🌸', name: 'Rosé Purcari Pinot Noir', why: { ru: 'Деликатное розе мягко обнимает сладость устрицы.', ro: 'Un rosé delicat îmbrățișează fin dulceața stridiei.', en: 'Delicate rosé softly embraces the sweetness of the oyster.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
-            { type: 'white', icon: '🍷', name: 'Pinot Gris', why: { ru: 'Тона белого персика идут рука об руку с минеральным финишем.', ro: 'Tonurile de piersică albă merg mână în mână cu finalul mineral.', en: 'White peach tones go hand in hand with the mineral finish.' }, tag: { ru: 'Гармония', ro: 'Armonie', en: 'Harmony' } },
-            { type: 'bubb', icon: '✨', name: 'Prosecco DOC Brut', why: { ru: 'Лёгкие пузырьки подчёркивают нежность.', ro: 'Bulele lejere subliniază delicatețea.', en: 'Light bubbles emphasize tenderness.' }, tag: { ru: 'Лёгкость', ro: 'Lejeritate', en: 'Lightness' } }
+            { type: 'rose', icon: 'flower', name: 'Rosé Purcari Pinot Noir', why: { ru: 'Деликатное розе мягко обнимает сладость устрицы.', ro: 'Un rosé delicat îmbrățișează fin dulceața stridiei.', en: 'Delicate rosé softly embraces the sweetness of the oyster.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'white', icon: 'wine', name: 'Pinot Gris', why: { ru: 'Тона белого персика идут рука об руку с минеральным финишем.', ro: 'Tonurile de piersică albă merg mână în mână cu finalul mineral.', en: 'White peach tones go hand in hand with the mineral finish.' }, tag: { ru: 'Гармония', ro: 'Armonie', en: 'Harmony' } },
+            { type: 'bubb', icon: 'sparkle', name: 'Prosecco DOC Brut', why: { ru: 'Лёгкие пузырьки подчёркивают нежность.', ro: 'Bulele lejere subliniază delicatețea.', en: 'Light bubbles emphasize tenderness.' }, tag: { ru: 'Лёгкость', ro: 'Lejeritate', en: 'Lightness' } }
         ]
     },
     {
@@ -1072,9 +1072,9 @@ const OYSTERS = [
             en: 'Dense structure — needs a wine with body and acidity.'
         },
         drinks: [
-            { type: 'white', icon: '🍷', name: 'Viognier Château Vartely', why: { ru: 'Viognier выдерживает мощность устрицы.', ro: 'Viognier face față puterii stridiei.', en: 'Viognier withstands the power of the oyster.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
-            { type: 'white', icon: '🍾', name: 'Burgundy Blanc', why: { ru: 'Объёмный Бургунь балансирует вкус маслянистой структурой.', ro: 'Burgundia voluminoasă echilibrează gustul.', en: 'Voluminous Burgundy balances the taste.' }, tag: { ru: 'Классика', ro: 'Clasic', en: 'Classic' } },
-            { type: 'bubb', icon: '✨', name: 'Milestii Mici Spumant Brut', why: { ru: 'Хорошая кислотность подчёркивает свежесть.', ro: 'Aciditatea bună subliniază prospețimea.', en: 'Good acidity emphasizes freshness.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } }
+            { type: 'white', icon: 'wine', name: 'Viognier Château Vartely', why: { ru: 'Viognier выдерживает мощность устрицы.', ro: 'Viognier face față puterii stridiei.', en: 'Viognier withstands the power of the oyster.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'white', icon: 'champagne', name: 'Burgundy Blanc', why: { ru: 'Объёмный Бургунь балансирует вкус маслянистой структурой.', ro: 'Burgundia voluminoasă echilibrează gustul.', en: 'Voluminous Burgundy balances the taste.' }, tag: { ru: 'Классика', ro: 'Clasic', en: 'Classic' } },
+            { type: 'bubb', icon: 'sparkle', name: 'Milestii Mici Spumant Brut', why: { ru: 'Хорошая кислотность подчёркивает свежесть.', ro: 'Aciditatea bună subliniază prospețimea.', en: 'Good acidity emphasizes freshness.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } }
         ]
     },
     {
@@ -1107,9 +1107,9 @@ const OYSTERS = [
             en: 'The iodine character opens up next to mineral wines.'
         },
         drinks: [
-            { type: 'white', icon: '🍷', name: 'Sancerre Blanc', why: { ru: 'Кремниевая минеральность Sancerre — прямое попадание.', ro: 'Mineralitatea Sancerre este o potrivire perfectă.', en: 'Sancerre minerality is a perfect match.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
-            { type: 'white', icon: '🍾', name: 'Sauvignon Blanc Purcari', why: { ru: 'Травяные тона поддерживают деликатный характер.', ro: 'Notele erbacee susțin caracterul delicat.', en: 'Herbal tones support the delicate character.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } },
-            { type: 'sake', icon: '🍶', name: 'Sake Junmai Daiginjo', why: { ru: 'Умами саке создаёт элегантный диалог с йодистостью.', ro: 'Umami din sake creează un dialog elegant cu iodul.', en: 'Sake umami creates an elegant dialogue with iodine.' }, tag: { ru: 'Неожиданно', ro: 'Neașteptat', en: 'Unexpected' } }
+            { type: 'white', icon: 'wine', name: 'Sancerre Blanc', why: { ru: 'Кремниевая минеральность Sancerre — прямое попадание.', ro: 'Mineralitatea Sancerre este o potrivire perfectă.', en: 'Sancerre minerality is a perfect match.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'white', icon: 'champagne', name: 'Sauvignon Blanc Purcari', why: { ru: 'Травяные тона поддерживают деликатный характер.', ro: 'Notele erbacee susțin caracterul delicat.', en: 'Herbal tones support the delicate character.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } },
+            { type: 'sake', icon: 'sake', name: 'Sake Junmai Daiginjo', why: { ru: 'Умами саке создаёт элегантный диалог с йодистостью.', ro: 'Umami din sake creează un dialog elegant cu iodul.', en: 'Sake umami creates an elegant dialogue with iodine.' }, tag: { ru: 'Неожиданно', ro: 'Neașteptat', en: 'Unexpected' } }
         ]
     },
     {
@@ -1142,9 +1142,9 @@ const OYSTERS = [
             en: 'A classic oyster — classic pairings.'
         },
         drinks: [
-            { type: 'white', icon: '🍷', name: 'Muscadet Sèvre et Maine', why: { ru: 'Минеральность не перебивает морской характер.', ro: 'Mineralitatea nu acoperă caracterul marin.', en: 'Minerality does not overpower the marine character.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
-            { type: 'bubb', icon: '✨', name: 'Cricova Chardonnay Brut', why: { ru: 'Игристая альтернатива с яблочными тонами.', ro: 'O alternativă spumantă cu note de măr.', en: 'Sparkling alternative with apple tones.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } },
-            { type: 'white', icon: '🍾', name: 'Aligoté Purcari', why: { ru: 'Сорт с острой кислотностью, рождённый для устриц.', ro: 'Un soi cu aciditate tăioasă, născut pentru stridii.', en: 'A grape with sharp acidity, born for oysters.' }, tag: { ru: 'Открытие', ro: 'Descoperire', en: 'Discovery' } }
+            { type: 'white', icon: 'wine', name: 'Muscadet Sèvre et Maine', why: { ru: 'Минеральность не перебивает морской характер.', ro: 'Mineralitatea nu acoperă caracterul marin.', en: 'Minerality does not overpower the marine character.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'bubb', icon: 'sparkle', name: 'Cricova Chardonnay Brut', why: { ru: 'Игристая альтернатива с яблочными тонами.', ro: 'O alternativă spumantă cu note de măr.', en: 'Sparkling alternative with apple tones.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } },
+            { type: 'white', icon: 'champagne', name: 'Aligoté Purcari', why: { ru: 'Сорт с острой кислотностью, рождённый для устриц.', ro: 'Un soi cu aciditate tăioasă, născut pentru stridii.', en: 'A grape with sharp acidity, born for oysters.' }, tag: { ru: 'Открытие', ro: 'Descoperire', en: 'Discovery' } }
         ]
     },
     {
@@ -1177,9 +1177,9 @@ const OYSTERS = [
             en: 'Tenderness looks for a wine with soft acidity.'
         },
         drinks: [
-            { type: 'white', icon: '🍷', name: 'Chardonnay Château Vartely', why: { ru: 'Спелое яблоко — идеальное зеркало для ореха.', ro: 'Mărul copt este oglinda perfectă pentru nuci.', en: 'Ripe apple is the perfect mirror for nuttiness.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
-            { type: 'rose', icon: '🌸', name: 'Cricova Roze Sec', why: { ru: 'Добавляет игривость без излишней сладости.', ro: 'Adaugă un aer jucăuș fără prea multă dulceață.', en: 'Adds playfulness without excess sweetness.' }, tag: { ru: 'Игривость', ro: 'Jucăuș', en: 'Playful' } },
-            { type: 'white', icon: '🍾', name: 'Pinot Blanc', why: { ru: 'Мягкая округлость — спокойный компаньон.', ro: 'Rotunjimea moale e un companion liniștit.', en: 'Soft roundness is a calm companion.' }, tag: { ru: 'Гармония', ro: 'Armonie', en: 'Harmony' } }
+            { type: 'white', icon: 'wine', name: 'Chardonnay Château Vartely', why: { ru: 'Спелое яблоко — идеальное зеркало для ореха.', ro: 'Mărul copt este oglinda perfectă pentru nuci.', en: 'Ripe apple is the perfect mirror for nuttiness.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'rose', icon: 'flower', name: 'Cricova Roze Sec', why: { ru: 'Добавляет игривость без излишней сладости.', ro: 'Adaugă un aer jucăuș fără prea multă dulceață.', en: 'Adds playfulness without excess sweetness.' }, tag: { ru: 'Игривость', ro: 'Jucăuș', en: 'Playful' } },
+            { type: 'white', icon: 'champagne', name: 'Pinot Blanc', why: { ru: 'Мягкая округлость — спокойный компаньон.', ro: 'Rotunjimea moale e un companion liniștit.', en: 'Soft roundness is a calm companion.' }, tag: { ru: 'Гармония', ro: 'Armonie', en: 'Harmony' } }
         ]
     },
     {
@@ -1212,9 +1212,9 @@ const OYSTERS = [
             en: 'Sweet oyster — fits both rosé and rich white.'
         },
         drinks: [
-            { type: 'white', icon: '🍷', name: 'Viognier / Marsanne', why: { ru: 'Тропические тона создают великолепный контраст.', ro: 'Tonurile tropicale creează un contrast excelent.', en: 'Tropical tones create a great contrast.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
-            { type: 'rose', icon: '🌸', name: 'Purcari Rosamour', why: { ru: 'Ягодная свежесть уравновешивает богатство устрицы.', ro: 'Prospețimea fructelor de pădure echilibrează bogăția stridiei.', en: 'Berry freshness balances the richness.' }, tag: { ru: 'Баланс', ro: 'Echilibru', en: 'Balance' } },
-            { type: 'bubb', icon: '✨', name: 'Brut Rosé Champagne', why: { ru: 'Усиливает сладкие ноты и добавляет праздничности.', ro: 'Amplifică notele dulci și adaugă aer de sărbătoare.', en: 'Enhances sweet notes and adds festivity.' }, tag: { ru: 'Праздник', ro: 'Sărbătoare', en: 'Celebration' } }
+            { type: 'white', icon: 'wine', name: 'Viognier / Marsanne', why: { ru: 'Тропические тона создают великолепный контраст.', ro: 'Tonurile tropicale creează un contrast excelent.', en: 'Tropical tones create a great contrast.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'rose', icon: 'flower', name: 'Purcari Rosamour', why: { ru: 'Ягодная свежесть уравновешивает богатство устрицы.', ro: 'Prospețimea fructelor de pădure echilibrează bogăția stridiei.', en: 'Berry freshness balances the richness.' }, tag: { ru: 'Баланс', ro: 'Echilibru', en: 'Balance' } },
+            { type: 'bubb', icon: 'sparkle', name: 'Brut Rosé Champagne', why: { ru: 'Усиливает сладкие ноты и добавляет праздничности.', ro: 'Amplifică notele dulci și adaugă aer de sărbătoare.', en: 'Enhances sweet notes and adds festivity.' }, tag: { ru: 'Праздник', ro: 'Sărbătoare', en: 'Celebration' } }
         ]
     },
     {
@@ -1227,7 +1227,7 @@ const OYSTERS = [
             en: 'An exquisite, <strong>subtle</strong> oyster. Unveils <strong>delicate sweetness</strong> and luxurious <strong>nutty notes</strong>.'
         },
         origin: {
-            flag: '🌊',
+            flag: 'wave',
             place: { ru: 'Глубоководные плантации', ro: 'Plantații de adâncime', en: 'Deep-water plantations' },
             region: { ru: 'Западная Европа', ro: 'Europa de Vest', en: 'Western Europe' },
             text: {
@@ -1247,9 +1247,9 @@ const OYSTERS = [
             en: 'Multifaceted profile seeks acidity with character.'
         },
         drinks: [
-            { type: 'white', icon: '🍷', name: 'Riesling Sec', why: { ru: 'Минеральный Рислинг — идеальный контрапункт.', ro: 'Rieslingul mineral este un contrapunct ideal.', en: 'Mineral Riesling is a perfect counterpoint.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
-            { type: 'white', icon: '🍾', name: 'Sauvignon Blanc Fumé', why: { ru: 'Дымные зелёные тона обрамляют йодистость.', ro: 'Notele verzi fumurii încadrează iodul.', en: 'Smoky green tones frame the iodine.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } },
-            { type: 'bubb', icon: '✨', name: 'Milestii Mici Blanc de Blancs', why: { ru: 'Минеральная точность и долгий финиш.', ro: 'Precizie minerală și un final lung.', en: 'Mineral precision and a long finish.' }, tag: { ru: 'Гордость', ro: 'Mândrie', en: 'Pride' } }
+            { type: 'white', icon: 'wine', name: 'Riesling Sec', why: { ru: 'Минеральный Рислинг — идеальный контрапункт.', ro: 'Rieslingul mineral este un contrapunct ideal.', en: 'Mineral Riesling is a perfect counterpoint.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'white', icon: 'champagne', name: 'Sauvignon Blanc Fumé', why: { ru: 'Дымные зелёные тона обрамляют йодистость.', ro: 'Notele verzi fumurii încadrează iodul.', en: 'Smoky green tones frame the iodine.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } },
+            { type: 'bubb', icon: 'sparkle', name: 'Milestii Mici Blanc de Blancs', why: { ru: 'Минеральная точность и долгий финиш.', ro: 'Precizie minerală și un final lung.', en: 'Mineral precision and a long finish.' }, tag: { ru: 'Гордость', ro: 'Mândrie', en: 'Pride' } }
         ]
     },
     {
@@ -1282,9 +1282,9 @@ const OYSTERS = [
             en: 'A variety from Aquitaine asks for Bordeaux wines.'
         },
         drinks: [
-            { type: 'white', icon: '🍷', name: 'Pessac-Léognan Blanc', why: { ru: 'Исторически идеальный пэйринг для Аркашона.', ro: 'Asocierea istorică ideală pentru Arcachon.', en: 'Historically ideal pairing for Arcachon.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
-            { type: 'bubb', icon: '✨', name: 'Champagne Blanc de Blancs', why: { ru: 'Меловая минеральность подчёркивает деликатность.', ro: 'Mineralitatea de cretă subliniază delicatețea.', en: 'Chalky minerality emphasizes delicacy.' }, tag: { ru: 'Гран Крю', ro: 'Grand Cru', en: 'Grand Cru' } },
-            { type: 'white', icon: '🍾', name: 'Purcari Chardonnay', why: { ru: 'Точное попадание в кремовую текстуру.', ro: 'Potrivire perfectă pe textura cremoasă.', en: 'Perfect match for the creamy texture.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } }
+            { type: 'white', icon: 'wine', name: 'Pessac-Léognan Blanc', why: { ru: 'Исторически идеальный пэйринг для Аркашона.', ro: 'Asocierea istorică ideală pentru Arcachon.', en: 'Historically ideal pairing for Arcachon.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'bubb', icon: 'sparkle', name: 'Champagne Blanc de Blancs', why: { ru: 'Меловая минеральность подчёркивает деликатность.', ro: 'Mineralitatea de cretă subliniază delicatețea.', en: 'Chalky minerality emphasizes delicacy.' }, tag: { ru: 'Гран Крю', ro: 'Grand Cru', en: 'Grand Cru' } },
+            { type: 'white', icon: 'champagne', name: 'Purcari Chardonnay', why: { ru: 'Точное попадание в кремовую текстуру.', ro: 'Potrivire perfectă pe textura cremoasă.', en: 'Perfect match for the creamy texture.' }, tag: { ru: 'Молдова', ro: 'Moldova', en: 'Moldova' } }
         ]
     }
 ];
@@ -1487,6 +1487,23 @@ const WINES = [
 let currentLang = localStorage.getItem('oyster_lang') || 'ru';
 let currentSection = 'oysters';
 let currentWineFilter = 'all';
+const ICONS = {
+    oyster: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2"/></svg>',
+    wine: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l-1 9a5 5 0 01-3 4.5M12 15.5V22M8 22h8"/><path d="M7.5 6h9"/></svg>',
+    target: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+    scale: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M1 7l5 6 5-6"/><path d="M13 7l5 6 5-6"/><circle cx="6" cy="13" r="2"/><circle cx="18" cy="13" r="2"/></svg>',
+    champagne: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2l-2 10a6 6 0 0012 0L16 2"/><path d="M12 12v6"/><path d="M9 18h6"/><path d="M12 2v-0"/></svg>',
+    sparkle: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l1.5 5.5L19 9l-5.5 1.5L12 16l-1.5-5.5L5 9l5.5-1.5z"/><path d="M18 14l.75 2.25L21 17l-2.25.75L18 20l-.75-2.25L15 17l2.25-.75z"/></svg>',
+    beer: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 11h1a3 3 0 010 6h-1"/><path d="M5 11V5a2 2 0 012-2h8a2 2 0 012 2v6"/><rect x="3" y="11" width="14" height="11" rx="2"/></svg>',
+    glasses: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2l2 8a4 4 0 008 0l2-8"/><path d="M12 10v4"/><path d="M9 22l3-8 3 8"/></svg>',
+    flower: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2a4 4 0 014 4c0 1.5-1 3-2 4"/><path d="M12 2a4 4 0 00-4 4c0 1.5 1 3 2 4"/><path d="M22 12a4 4 0 01-4 4c-1.5 0-3-1-4-2"/><path d="M22 12a4 4 0 00-4-4c-1.5 0-3 1-4 2"/><path d="M12 22a4 4 0 01-4-4c0-1.5 1-3 2-4"/><path d="M12 22a4 4 0 004-4c0-1.5-1-3-2-4"/><path d="M2 12a4 4 0 014-4c1.5 0 3 1 4 2"/><path d="M2 12a4 4 0 004 4c1.5 0 3-1 4-2"/></svg>',
+    sake: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2h6v4H9z"/><path d="M8 6h8l1 6a4 4 0 01-4 4h-2a4 4 0 01-4-4l1-6z"/><path d="M12 16v4"/><path d="M8 22h8"/></svg>',
+    wave: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>',
+    close: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+    result_oyster: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2"/></svg>',
+    empty_wine: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l-1 9a5 5 0 01-3 4.5M12 15.5V22M8 22h8"/><path d="M7.5 6h9"/></svg>'
+};
+
 let quizStep = 0;
 let quizAnswers = [];
 
@@ -1544,7 +1561,7 @@ function renderCards() {
             <div class="info-block">
                 <div class="block-label">${t.origin}</div>
                 <div class="origin-map-line">
-                    <span class="origin-flag">${o.origin.flag}</span>
+                    <span class="origin-flag">${ICONS[o.origin.flag] || o.origin.flag}</span>
                     <div>
                         <div class="origin-place">${o.origin.place[currentLang]}</div>
                         <div class="origin-region">${o.origin.region[currentLang]}</div>
@@ -1559,7 +1576,7 @@ function renderCards() {
                 <div class="drink-list">
                     ${o.drinks.map(d => `
                         <div class="drink-card">
-                            <div class="drink-icon ${d.type}">${d.icon}</div>
+                            <div class="drink-icon ${d.type}">${ICONS[d.icon] || d.icon}</div>
                             <div>
                                 <div class="drink-name">${d.name}</div>
                                 <div class="drink-why">${d.why[currentLang]}</div>
@@ -1607,7 +1624,7 @@ function renderWines() {
     const grid = document.getElementById('wine-grid');
 
     if (filtered.length === 0) {
-        grid.innerHTML = `<div class="empty-state"><div class="empty-icon">🍷</div><div class="empty-text">Нет вин в этой категории</div></div>`;
+        grid.innerHTML = `<div class="empty-state"><div class="empty-icon">${ICONS.empty_wine}</div><div class="empty-text">Нет вин в этой категории</div></div>`;
         return;
     }
 
@@ -1747,7 +1764,7 @@ function renderQuiz() {
     const progress = ((quizStep) / 6) * 100;
 
     card.innerHTML = `
-        <button class="quiz-close" id="quizCloseBtn">✕</button>
+        <button class="quiz-close" id="quizCloseBtn"></button>
         <div class="quiz-progress"><div class="quiz-progress-fill" style="width:${progress}%"></div></div>
         <div class="quiz-title">${t.quiz_title}</div>
         <div class="quiz-subtitle">${t.quiz_sub}</div>
@@ -1758,6 +1775,7 @@ function renderQuiz() {
         </div>
     `;
 
+    document.getElementById('quizCloseBtn').innerHTML = ICONS.close;
     document.getElementById('quizCloseBtn').addEventListener('click', () => {
         document.getElementById('quizOverlay').classList.remove('active');
         quizStep = 0;
@@ -1815,10 +1833,10 @@ function showQuizResult() {
     const best = scored[0];
 
     card.innerHTML = `
-        <button class="quiz-close" id="quizCloseBtn2">✕</button>
+        <button class="quiz-close" id="quizCloseBtn2"></button>
         <div class="quiz-progress"><div class="quiz-progress-fill" style="width:100%"></div></div>
         <div class="quiz-result">
-            <div class="quiz-result-icon">🦪</div>
+            <div class="quiz-result-icon" id="quizResultIcon"></div>
             <div class="quiz-result-name">${best.oyster.name}</div>
             <div class="quiz-result-badge">${best.oyster.badge}</div>
             <div class="quiz-result-match">${best.score}% ${t.quiz_match}</div>
@@ -1829,6 +1847,7 @@ function showQuizResult() {
         </div>
     `;
 
+    document.getElementById('quizCloseBtn2').innerHTML = ICONS.close;
     document.getElementById('quizCloseBtn2').addEventListener('click', () => {
         document.getElementById('quizOverlay').classList.remove('active');
     });
@@ -1894,6 +1913,13 @@ function setLanguage(lang) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('navIconOysters').innerHTML = ICONS.oyster;
+    document.getElementById('navIconWines').innerHTML = ICONS.wine;
+    document.getElementById('compareClose').innerHTML = ICONS.close;
+    document.getElementById('quizResultIcon').innerHTML = ICONS.result_oyster;
+    document.getElementById('quizTriggerIcon').innerHTML = ICONS.target;
+    document.getElementById('compareTriggerIcon').innerHTML = ICONS.scale;
+
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
     });
