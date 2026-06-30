@@ -322,18 +322,6 @@
             margin-top: 8px;
         }
 
-        /* radar chart */
-        .radar-wrap {
-            display: flex; justify-content: center;
-            padding: 10px 0 6px;
-        }
-        .radar-svg { width: 220px; height: 220px; }
-        .radar-grid { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 1; }
-        .radar-axis { stroke: rgba(255,255,255,0.08); stroke-width: 1; }
-        .radar-shape { fill: rgba(212,176,98,0.15); stroke: var(--gold); stroke-width: 2; }
-        .radar-dot { fill: var(--gold-light); }
-        .radar-label { font-size: 10px; font-weight: 600; fill: var(--muted); text-anchor: middle; }
-
         /* description */
         .desc {
             font-size: var(--fs-md);
@@ -1510,59 +1498,6 @@ function renderTabs() {
     `).join('');
 }
 
-function buildRadarSVG(o) {
-    const cx = 110, cy = 110, maxR = 60;
-    const keys = ['sal', 'iod', 'sw', 'meat'];
-    const n = 4;
-    const angleStep = (2 * Math.PI) / n;
-    const startAngle = -Math.PI / 2;
-
-    function polarToXY(angle, r) {
-        return { x: cx + r * Math.cos(angle), y: cy + r * Math.sin(angle) };
-    }
-
-    function polyPoints(r) {
-        return keys.map((_, i) => {
-            const p = polarToXY(startAngle + i * angleStep, r);
-            return `${p.x},${p.y}`;
-        }).join(' ');
-    }
-
-    const gridLines = [0.33, 0.66, 1].map(scale => {
-        return `<polygon class="radar-grid" points="${polyPoints(maxR * scale)}"/>`;
-    }).join('');
-
-    const axes = keys.map((_, i) => {
-        const p = polarToXY(startAngle + i * angleStep, maxR);
-        return `<line class="radar-axis" x1="${cx}" y1="${cy}" x2="${p.x}" y2="${p.y}"/>`;
-    }).join('');
-
-    const dataPoints = keys.map((k, i) => {
-        const r = (o[k] / 10) * maxR;
-        const p = polarToXY(startAngle + i * angleStep, r);
-        return p;
-    });
-
-    const shapePoints = dataPoints.map(p => `${p.x},${p.y}`).join(' ');
-    const shape = `<polygon class="radar-shape" points="${shapePoints}"/>`;
-
-    const dots = dataPoints.map(p => `<circle class="radar-dot" cx="${p.x}" cy="${p.y}" r="3"/>`).join('');
-
-    const t = UI[currentLang];
-    const labels = [
-        { key: 'sal', name: t.sal },
-        { key: 'iod', name: t.iod },
-        { key: 'sw', name: t.sw },
-        { key: 'meat', name: t.meat }
-    ];
-    const labelElems = labels.map((lb, i) => {
-        const p = polarToXY(startAngle + i * angleStep, maxR + 18);
-        return `<text class="radar-label" x="${p.x}" y="${p.y}">${lb.name}</text>`;
-    }).join('');
-
-    return `<div class="radar-wrap"><svg class="radar-svg" viewBox="0 0 220 220">${gridLines}${axes}${shape}${dots}${labelElems}</svg></div>`;
-}
-
 function renderCards() {
     const t = UI[currentLang];
     const TASTE_LABELS = [
@@ -1590,7 +1525,6 @@ function renderCards() {
 
             <div class="info-block">
                 <div class="block-label">${t.taste}</div>
-                ${buildRadarSVG(o)}
                 ${TASTE_LABELS.map(lb => `
                     <div class="taste-row" style="margin-bottom:10px">
                         <div class="taste-meta" style="font-size:var(--fs-sm)">
