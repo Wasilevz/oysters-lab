@@ -484,83 +484,6 @@
             color: var(--text);
         }
 
-        /* ─── COMBO SECTION ─── */
-        .combo-card {
-            background: var(--bg-card);
-            border: 1px solid var(--gold-line);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin: 0 20px 14px;
-        }
-
-        .combo-header {
-            display: flex; align-items: center; gap: 12px;
-            margin-bottom: 14px;
-            padding-bottom: 14px;
-            border-bottom: 1px solid var(--faint);
-        }
-
-        .combo-icon {
-            width: 44px; height: 44px; border-radius: 12px;
-            background: var(--gold-dim);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 22px;
-        }
-
-        .combo-title {
-            font-size: var(--fs-base); font-weight: 700; color: var(--text);
-        }
-
-        .combo-subtitle {
-            font-size: var(--fs-sm); color: var(--muted); margin-top: 2px;
-        }
-
-        .combo-pair {
-            display: flex; gap: 10px; align-items: stretch;
-        }
-
-        .combo-item {
-            flex: 1;
-            background: var(--surface-2);
-            border: 1px solid rgba(255,255,255,0.03);
-            border-radius: var(--radius-sm);
-            padding: 14px;
-        }
-
-        .combo-item-label {
-            font-size: var(--fs-xs); font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.12em;
-            color: var(--gold); margin-bottom: 8px;
-        }
-
-        .combo-item-name {
-            font-size: var(--fs-base); font-weight: 700; color: var(--text);
-            line-height: 1.35; margin-bottom: 5px;
-        }
-
-        .combo-item-detail {
-            font-size: var(--fs-sm); color: var(--muted); line-height: 1.45;
-        }
-
-        /* ─── EMPTY STATE ─── */
-        .empty-state {
-            text-align: center;
-            padding: 48px 20px;
-            color: var(--muted);
-        }
-
-        .empty-icon {
-            font-size: 2.5rem;
-            margin-bottom: 14px;
-            opacity: 0.3;
-        }
-
-        .empty-text {
-            font-size: var(--fs-md);
-            line-height: 1.6;
-            font-weight: 500;
-        }
-
         /* ─── RESPONSIVE ─── */
         @media (min-width: 481px) {
             body { padding: 20px 0; }
@@ -595,7 +518,6 @@
         <div class="main-nav">
             <button class="nav-btn active" data-section="oysters"><span class="nav-icon">🦪</span> <span data-t="nav_oysters">Устрицы</span></button>
             <button class="nav-btn" data-section="wines"><span class="nav-icon">🍷</span> <span data-t="nav_wines">Вина</span></button>
-            <button class="nav-btn" data-section="combos"><span class="nav-icon">✨</span> <span data-t="nav_combos">Пэйринги</span></button>
         </div>
     </header>
 
@@ -615,11 +537,6 @@
         <div class="wine-grid" id="wine-grid"></div>
     </div>
 
-    <!-- COMBOS SECTION -->
-    <div id="section-combos" style="display:none;">
-        <div id="combos-container"></div>
-    </div>
-
 </div>
 
 <script>
@@ -630,8 +547,7 @@ const UI = {
         sal: 'Солёность', iod: 'Йодистость', sw: 'Сладость', meat: 'Мясистость',
         nav_oysters: 'Устрицы', nav_wines: 'Вина', nav_combos: 'Пэйринги',
         wine_region: 'Регион', wine_with: 'Подходит к', perfect: 'Идеальный пэйринг',
-        all: 'Все', white: 'Белые', red: 'Красные', rose: 'Розовые', sparkling: 'Игристые',
-        combo_oyster: 'Устрица', combo_wine: 'Вино', combo_why: 'Почему этот пэйринг'
+        all: 'Все', white: 'Белые', red: 'Красные', rose: 'Розовые', sparkling: 'Игристые'
     },
     ro: {
         taste: 'Profil Gustativ', origin: 'Origine', pairing: 'Băuturi Ideale',
@@ -639,8 +555,7 @@ const UI = {
         sal: 'Salinitate', iod: 'Iod', sw: 'Dulceață', meat: 'Cărnozitate',
         nav_oysters: 'Stridii', nav_wines: 'Vinuri', nav_combos: 'Asocieri',
         wine_region: 'Regiune', wine_with: 'Se potrivește cu', perfect: 'Asociere ideală',
-        all: 'Toate', white: 'Albe', red: 'Roșii', rose: 'Rosé', sparkling: 'Spumant',
-        combo_oyster: 'Stridie', combo_wine: 'Vin', combo_why: 'De ce această asociere'
+        all: 'Toate', white: 'Albe', red: 'Roșii', rose: 'Rosé', sparkling: 'Spumant'
     },
     en: {
         taste: 'Taste Profile', origin: 'Origin', pairing: 'Perfect Pairings',
@@ -648,8 +563,7 @@ const UI = {
         sal: 'Salinity', iod: 'Iodine', sw: 'Sweetness', meat: 'Meatiness',
         nav_oysters: 'Oysters', nav_wines: 'Wines', nav_combos: 'Pairings',
         wine_region: 'Region', wine_with: 'Pairs with', perfect: 'Perfect Pairing',
-        all: 'All', white: 'White', red: 'Red', rose: 'Rosé', sparkling: 'Sparkling',
-        combo_oyster: 'Oyster', combo_wine: 'Wine', combo_why: 'Why this pairing'
+        all: 'All', white: 'White', red: 'Red', rose: 'Rosé', sparkling: 'Sparkling'
     }
 };
 
@@ -1429,66 +1343,6 @@ function renderWines() {
     });
 }
 
-function renderCombos() {
-    const t = UI[currentLang];
-    const container = document.getElementById('combos-container');
-
-    const combos = [];
-    WINES.forEach(w => {
-        w.pairs.forEach(pid => {
-            const oyster = OYSTERS.find(o => o.id === pid);
-            if (oyster && w.type === 'white' && w.name.includes('Purcari')) {
-                combos.push({ oyster, wine: w });
-            }
-        });
-    });
-
-    const seen = new Set();
-    const uniqueCombos = combos.filter(c => {
-        const key = c.oyster.id + '-' + c.wine.name;
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-    });
-
-    if (uniqueCombos.length === 0) {
-        container.innerHTML = `<div class="empty-state"><div class="empty-icon">✨</div><div class="empty-text">Пока нет пэйрингов</div></div>`;
-        return;
-    }
-
-    container.innerHTML = uniqueCombos.map(c => `
-        <div class="combo-card">
-            <div class="combo-header">
-                <div class="combo-icon">🦪🍷</div>
-                <div>
-                    <div class="combo-title">${c.oyster.name} + ${c.wine.name}</div>
-                    <div class="combo-subtitle">${c.wine.region}</div>
-                </div>
-            </div>
-            <div class="combo-pair">
-                <div class="combo-item">
-                    <div class="combo-item-label">${t.combo_oyster}</div>
-                    <div class="combo-item-name">${c.oyster.name}</div>
-                    <div class="combo-item-detail">${c.oyster.badge} · ${c.oyster.price} MDL</div>
-                </div>
-                <div class="combo-item">
-                    <div class="combo-item-label">${t.combo_wine}</div>
-                    <div class="combo-item-name">${c.wine.name}</div>
-                    <div class="combo-item-detail">${c.wine.region}</div>
-                </div>
-            </div>
-        </div>
-    `).join('');
-
-    container.querySelectorAll('.combo-title').forEach((el, i) => {
-        el.style.cursor = 'pointer';
-        el.addEventListener('click', () => {
-            switchSection('oysters');
-            setTimeout(() => showOyster(uniqueCombos[i].oyster.id), 100);
-        });
-    });
-}
-
 function activateBars(cardEl) {
     requestAnimationFrame(() => {
         requestAnimationFrame(() => {
@@ -1524,11 +1378,9 @@ function switchSection(section) {
     });
     document.getElementById('section-oysters').style.display = section === 'oysters' ? '' : 'none';
     document.getElementById('section-wines').style.display = section === 'wines' ? '' : 'none';
-    document.getElementById('section-combos').style.display = section === 'combos' ? '' : 'none';
 
     if (section === 'oysters') handleHash();
     if (section === 'wines') { renderWineFilters(); renderWines(); }
-    if (section === 'combos') renderCombos();
 }
 
 function setLanguage(lang) {
