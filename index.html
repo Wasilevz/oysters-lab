@@ -784,8 +784,8 @@ const UI = {
         quiz_q4a: 'С белым вином', quiz_q4b: 'С игристым', quiz_q4c: 'Просто так, без напитков',
         quiz_q5: 'Что важнее — традиция или эксклюзивность?',
         quiz_q5a: 'Классика и проверенное', quiz_q5b: 'Что-то необычное', quiz_q5c: 'Не важно',
-        quiz_q6: 'Бюджет?',
-        quiz_q6a: 'До 90 MDL', quiz_q6b: '90-130 MDL', quiz_q6c: 'Без ограничений',
+        quiz_q6: 'Какой регион вас интересует?',
+        quiz_q6a: 'Франция (классика)', quiz_q6b: 'Ирландия (мощные)', quiz_q6c: 'Любой',
         quiz_match: 'совпадение', quiz_restart: 'Попробовать снова', quiz_next: 'Далее',
         quiz_result_title: 'Ваша устрица:',
         compare_title: 'Сравнение', compare_btn: 'Сравнить', compare_placeholder: 'Выберите устрицу',
@@ -812,8 +812,8 @@ const UI = {
         quiz_q4a: 'Cu vin alb', quiz_q4b: 'Cu spumant', quiz_q4c: 'Fără băuturi',
         quiz_q5: 'Tradiție sau exclusivitate?',
         quiz_q5a: 'Clasic și verificat', quiz_q5b: 'Ceva neobișnuit', quiz_q5c: 'Nu contează',
-        quiz_q6: 'Buget?',
-        quiz_q6a: 'Până la 90 MDL', quiz_q6b: '90-130 MDL', quiz_q6c: 'Fără limitări',
+        quiz_q6: 'Ce regiune vă interesează?',
+        quiz_q6a: 'Franța (clasic)', quiz_q6b: 'Irlanda (puternice)', quiz_q6c: 'Oricare',
         quiz_match: 'potrivire', quiz_restart: 'Încearcă din nou', quiz_next: 'Următorul',
         quiz_result_title: 'Stridia ta:',
         compare_title: 'Comparație', compare_btn: 'Compară', compare_placeholder: 'Alege o stridie',
@@ -840,8 +840,8 @@ const UI = {
         quiz_q4a: 'White wine', quiz_q4b: 'Sparkling wine', quiz_q4c: 'No drinks, just oysters',
         quiz_q5: 'Tradition or exclusivity?',
         quiz_q5a: 'Classic & proven', quiz_q5b: 'Something unique', quiz_q5c: 'Doesn\'t matter',
-        quiz_q6: 'Budget?',
-        quiz_q6a: 'Under 90 MDL', quiz_q6b: '90-130 MDL', quiz_q6c: 'No limits',
+        quiz_q6: 'Which region interests you?',
+        quiz_q6a: 'France (classic)', quiz_q6b: 'Ireland (powerful)', quiz_q6c: 'Any region',
         quiz_match: 'match', quiz_restart: 'Try again', quiz_next: 'Next',
         quiz_result_title: 'Your oyster:',
         compare_title: 'Comparison', compare_btn: 'Compare', compare_placeholder: 'Choose an oyster',
@@ -1884,9 +1884,9 @@ function showQuizResult() {
         if (quizAnswers[4] === 1) score += uniqueIds.includes(o.id) ? 20 : 5;
         if (quizAnswers[4] === 2) score += 10;
 
-        if (quizAnswers[5] === 0) score += parseInt(o.price) <= 90 ? 20 : 0;
-        if (quizAnswers[5] === 1) score += (parseInt(o.price) > 90 && parseInt(o.price) <= 130) ? 20 : 8;
-        if (quizAnswers[5] === 2) score += 20;
+        if (quizAnswers[5] === 0) score += o.origin.flag === '🇫🇷' ? 20 : 3;
+        if (quizAnswers[5] === 1) score += o.origin.flag === '🇮🇪' ? 20 : 3;
+        if (quizAnswers[5] === 2) score += 12;
 
         return { oyster: o, score: Math.min(Math.round(score), 100) };
     }).sort((a, b) => b.score - a.score);
