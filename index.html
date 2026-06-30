@@ -795,7 +795,7 @@ const UI = {
         sal: 'Солёность', iod: 'Йодистость', sw: 'Сладость', meat: 'Мясистость',
         nav_oysters: 'Устрицы', nav_wines: 'Вина', nav_combos: 'Пэйринги',
         wine_region: 'Регион', wine_with: 'Подходит к', perfect: 'Идеальный пэйринг',
-        all: 'Все', white: 'Белые', red: 'Красные', rose: 'Розовые', sparkling: 'Игристые',
+        white: 'Белые', red: 'Красные', rose: 'Розовые', sparkling: 'Игристые',
         quiz_trigger: 'Найти свою устрицу',
         quiz_title: 'Найди свою устрицу', quiz_sub: 'Ответь на 6 вопросов и мы подберём идеальную устрицу',
         quiz_q1: 'Какой уровень солёности вы предпочитаете?',
@@ -820,7 +820,7 @@ const UI = {
         sal: 'Salinitate', iod: 'Iod', sw: 'Dulceață', meat: 'Cărnozitate',
         nav_oysters: 'Stridii', nav_wines: 'Vinuri', nav_combos: 'Asocieri',
         wine_region: 'Regiune', wine_with: 'Se potrivește cu', perfect: 'Asociere ideală',
-        all: 'Toate', white: 'Albe', red: 'Roșii', rose: 'Rosé', sparkling: 'Spumant',
+        white: 'Albe', red: 'Roșii', rose: 'Rosé', sparkling: 'Spumant',
         quiz_trigger: 'Găsește-ți stridia',
         quiz_title: 'Găsește-ți stridia', quiz_sub: 'Răspunde la 6 întrebări și îți vom recomanda stridia ideală',
         quiz_q1: 'Ce nivel de salinitate preferați?',
@@ -845,7 +845,7 @@ const UI = {
         sal: 'Salinity', iod: 'Iodine', sw: 'Sweetness', meat: 'Meatiness',
         nav_oysters: 'Oysters', nav_wines: 'Wines', nav_combos: 'Pairings',
         wine_region: 'Region', wine_with: 'Pairs with', perfect: 'Perfect Pairing',
-        all: 'All', white: 'White', red: 'Red', rose: 'Rosé', sparkling: 'Sparkling',
+        white: 'White', red: 'Red', rose: 'Rosé', sparkling: 'Sparkling',
         quiz_trigger: 'Find your oyster',
         quiz_title: 'Find Your Oyster', quiz_sub: 'Answer 6 questions and we\'ll find the perfect match',
         quiz_q1: 'What salinity level do you prefer?',
@@ -1341,7 +1341,7 @@ const WINES = [
     {
         name: 'CONTARINI Prosecco Superiore DOCG Brut',
         type: 'spark', region: 'Вальдоббьадене, Италия',
-        desc: { ru: 'Цветочность, яблоко, тонкие泡泡.', ro: 'Floritate, măr, bule fine.', en: 'Florality, apple, fine bubbles.' },
+        desc: { ru: 'Цветочность, яблоко, тонкие пузырьки.', ro: 'Floritate, măr, bule fine.', en: 'Florality, apple, fine bubbles.' },
         pairs: ['josephine', 'sentenelles']
     },
     {
@@ -1516,7 +1516,7 @@ const WINES = [
 
 let currentLang = localStorage.getItem('oyster_lang') || 'ru';
 let currentSection = 'oysters';
-let currentWineFilter = 'all';
+let currentWineFilter = 'white';
 const ICONS = {
     oyster: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2"/></svg>',
     wine: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l-1 9a5 5 0 01-3 4.5M12 15.5V22M8 22h8"/><path d="M7.5 6h9"/></svg>',
@@ -1635,7 +1635,6 @@ function renderCards() {
 function renderWineFilters() {
     const t = UI[currentLang];
     const filters = [
-        { key: 'all', label: t.all },
         { key: 'white', label: t.white },
         { key: 'rose', label: t.rose },
         { key: 'spark', label: t.sparkling }
@@ -1647,9 +1646,7 @@ function renderWineFilters() {
 
 function renderWines() {
     const t = UI[currentLang];
-    const filtered = currentWineFilter === 'all'
-        ? WINES
-        : WINES.filter(w => w.type === currentWineFilter);
+    const filtered = WINES.filter(w => w.type === currentWineFilter);
 
     const grid = document.getElementById('wine-grid');
 
