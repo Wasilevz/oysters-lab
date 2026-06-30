@@ -817,7 +817,36 @@ const OYSTERS = [
             ru: ['«Royale» — маркетинговое название для устриц премиальной категории выше «Spéciale».', 'Проходят финальную очистку в проточной морской воде не менее 3 суток.', 'Французы употребляют около 2 миллиардов устриц в год.'],
             ro: ['„Royale" este o denumire de marketing pentru stridii premium deasupra categoriei „Spéciale".', 'Trec printr-o purificare finală în apă de mare curgătoare timp de 3 zile.', 'Francezii consumă aproximativ 2 miliarde de stridii anual.'],
             en: ['"Royale" is a marketing name for premium oysters above the "Spéciale" category.', 'They undergo final purification in running seawater for 3 days.', 'The French consume about 2 billion oysters a year.']
-        }
+        },
+        pairingIntro: {
+            ru: 'Мягкость этой устрицы хорошо работает с разными стилями вин.',
+            ro: 'Moliciunea acestei stridii se potrivește cu diverse stiluri de vin.',
+            en: 'The softness of this oyster works well with different wine styles.'
+        },
+        drinks: [
+            { type: 'rose', icon: '🌸', name: 'Rosé Purcari Pinot Noir', why: { ru: 'Деликатное розе мягко обнимает сладость устрицы.', ro: 'Un rosé delicat îmbrățișează fin dulceața stridiei.', en: 'Delicate rosé softly embraces the sweetness of the oyster.' }, tag: { ru: 'Идеально', ro: 'Ideal', en: 'Perfect' } },
+            { type: 'white', icon: '🍷', name: 'Pinot Gris', why: { ru: 'Тона белого персика идут рука об руку с минеральным финишем.', ro: 'Tonurile de piersică albă merg mână în mână cu finalul mineral.', en: 'White peach tones go hand in hand with the mineral finish.' }, tag: { ru: 'Гармония', ro: 'Armonie', en: 'Harmony' } },
+            { type: 'bubb', icon: '✨', name: 'Prosecco DOC Brut', why: { ru: 'Лёгкие пузырьки подчёркивают нежность.', ro: 'Bulele lejere subliniază delicatețea.', en: 'Light bubbles emphasize tenderness.' }, tag: { ru: 'Лёгкость', ro: 'Lejeritate', en: 'Lightness' } }
+        ]
+    },
+    {
+        id: 'speciale', name: 'Spéciale', badge: 'High Index', price: '110',
+        sal: 5, iod: 5, sw: 8, meat: 10,
+        terroir: { ru: 'Французские клеры', ro: 'Claire franceze', en: 'French claires' },
+        desc: {
+            ru: 'Очень <strong>плотная</strong> устрица с феноменальным индексом мясистости. Вкус раскрывается <strong>морской солёностью</strong>, которая перерастает в <strong>ореховый оттенок</strong>.',
+            ro: 'O stridie foarte <strong>densă</strong> cu un indice de cărnozitate fenomenal. Gustul se deschide cu o <strong>salinitate marină</strong>, care se transformă într-o <strong>nuanță de nuci</strong>.',
+            en: 'A very <strong>dense</strong> oyster with a phenomenal meatiness index. The taste opens with <strong>marine salinity</strong>, which develops into a <strong>nutty hue</strong>.'
+        },
+        origin: {
+            flag: '🇫🇷',
+            place: { ru: 'Клеры Маренн-Олерон', ro: 'Claire Marennes-Oléron', en: 'Claires Marennes-Oléron' },
+            region: { ru: 'Шарант-Маритим', ro: 'Charente-Maritime', en: 'Charente-Maritime' },
+            text: {
+                ru: 'Высшая ступень в системе клеров. Устрица проводит в бассейнах <strong>минимум 4 недели</strong> при низкой плотности.',
+                ro: 'Cea mai înaltă treaptă în sistemul claires. Stridia petrece <strong>minim 4 săptămâni</strong> în bazine cu densitate redusă.',
+                en: 'The highest tier in the claire system. The oyster spends <strong>at least 4 weeks</strong> in low-density basins.'
+            }
         },
         facts: {
             ru: ['«Spéciale» — высшая официальная категория во французской классификации.', 'Одна Spéciale покрывает суточную норму цинка.', 'Spéciale de Claire часто побеждает на дегустациях и чемпионатах Франции.'],
