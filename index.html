@@ -758,14 +758,14 @@
 
     <!-- OYSTERS SECTION -->
     <div id="section-oysters">
-        <div class="tabs-wrapper">
-            <div class="tabs" id="tabs"></div>
-        </div>
-        <div id="cards-container"></div>
         <div class="action-bar" id="actionBar">
             <button class="action-btn" id="quizTrigger" data-t="quiz_trigger">🎯 Найти свою устрицу</button>
             <button class="action-btn" id="compareTrigger">⚖️ Сравнить</button>
         </div>
+        <div class="tabs-wrapper">
+            <div class="tabs" id="tabs"></div>
+        </div>
+        <div id="cards-container"></div>
     </div>
 
     <!-- COMPARE OVERLAY -->
@@ -1956,7 +1956,6 @@ function setLanguage(lang) {
     renderTabs();
     renderCards();
     renderCompareSelects();
-    renderMap();
     switchSection(currentSection);
 }
 
