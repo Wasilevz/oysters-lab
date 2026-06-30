@@ -1848,6 +1848,7 @@ function showQuizResult() {
     `;
 
     document.getElementById('quizCloseBtn2').innerHTML = ICONS.close;
+    document.getElementById('quizResultIcon').innerHTML = ICONS.result_oyster;
     document.getElementById('quizCloseBtn2').addEventListener('click', () => {
         document.getElementById('quizOverlay').classList.remove('active');
     });
@@ -1916,7 +1917,6 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('navIconOysters').innerHTML = ICONS.oyster;
     document.getElementById('navIconWines').innerHTML = ICONS.wine;
     document.getElementById('compareClose').innerHTML = ICONS.close;
-    document.getElementById('quizResultIcon').innerHTML = ICONS.result_oyster;
     document.getElementById('quizTriggerIcon').innerHTML = ICONS.target;
     document.getElementById('compareTriggerIcon').innerHTML = ICONS.scale;
 
