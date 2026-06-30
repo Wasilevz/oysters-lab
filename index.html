@@ -503,6 +503,84 @@
             color: var(--text);
         }
 
+        /* quiz trigger */
+        .quiz-trigger {
+            display: flex; justify-content: center;
+            padding: 16px 20px 0;
+        }
+        .quiz-trigger-btn {
+            background: var(--surface);
+            border: 1px solid var(--faint);
+            color: var(--muted);
+            font-size: var(--fs-sm); font-weight: 600;
+            padding: 12px 24px; border-radius: var(--radius-sm);
+            cursor: pointer; transition: all 0.25s ease;
+            display: flex; align-items: center; gap: 8px;
+            letter-spacing: 0.02em;
+        }
+        .quiz-trigger-btn:hover { border-color: var(--gold-line); color: var(--text); }
+        .quiz-trigger-btn.active { border-color: var(--gold); color: var(--gold-light); background: var(--gold-dim); }
+
+        /* compare bar */
+        .compare-bar {
+            display: flex; gap: 8px; padding: 12px 20px;
+            background: var(--surface); border-bottom: 1px solid var(--faint);
+            align-items: center;
+        }
+        .compare-select {
+            flex: 1; background: var(--bg-card); border: 1px solid var(--faint);
+            border-radius: var(--radius-xs); padding: 10px 12px;
+            font-size: var(--fs-sm); color: var(--text);
+            font-family: 'DM Sans', sans-serif; appearance: none;
+            cursor: pointer; color-scheme: dark;
+        }
+        .compare-select option { background: var(--bg-card); color: var(--text); }
+        .compare-select:focus { outline: none; border-color: var(--gold-line); }
+        .compare-btn {
+            background: var(--surface); border: 1px solid var(--faint);
+            color: var(--muted); font-size: var(--fs-xs); font-weight: 600;
+            padding: 10px 16px; border-radius: var(--radius-xs); cursor: pointer;
+            white-space: nowrap; letter-spacing: 0.02em; transition: all 0.25s ease;
+        }
+        .compare-btn:hover { border-color: var(--gold-line); color: var(--text); }
+        .compare-result {
+            display: none; padding: 20px;
+        }
+        .compare-result.active { display: block; }
+        .compare-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 12px;
+        }
+        .compare-col {
+            background: var(--bg-card); border: 1px solid var(--faint);
+            border-radius: var(--radius-sm); padding: 16px; text-align: center;
+        }
+        .compare-col-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: var(--fs-md); font-weight: 600;
+            color: var(--text); margin-bottom: 4px;
+        }
+        .compare-col-price {
+            font-size: var(--fs-sm); color: var(--gold-light); font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .compare-row {
+            display: flex; justify-content: space-between;
+            padding: 8px 0; border-bottom: 1px solid var(--faint);
+            font-size: var(--fs-sm);
+        }
+        .compare-row:last-child { border-bottom: none; }
+        .compare-label { color: var(--muted); }
+        .compare-val { font-weight: 700; color: var(--text); }
+        .compare-val.winner { color: var(--gold-light); }
+        .compare-close {
+            background: var(--surface); border: 1px solid var(--faint);
+            color: var(--muted); width: 34px; height: 34px;
+            border-radius: var(--radius-xs); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; transition: all 0.2s ease;
+        }
+        .compare-close:hover { border-color: var(--gold-line); color: var(--text); }
+
         /* ─── RESPONSIVE ─── */
         @media (min-width: 481px) {
             body { padding: 20px 0; }
@@ -1700,7 +1778,7 @@ function showOyster(id) {
 function handleHash() {
     const hash = window.location.hash.replace('#', '').toLowerCase();
     const valid = OYSTERS.find(o => o.id === hash);
-    showOyster(valid ? hash : 'josephine');
+    showOyster(valid ? hash : 'gillardeau');
 }
 
 function switchSection(section) {
