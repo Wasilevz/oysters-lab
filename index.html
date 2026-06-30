@@ -321,7 +321,7 @@
             display: flex; justify-content: center;
             padding: 10px 0 6px;
         }
-        .radar-svg { width: 200px; height: 200px; }
+        .radar-svg { width: 220px; height: 220px; }
         .radar-grid { fill: none; stroke: rgba(255,255,255,0.06); stroke-width: 1; }
         .radar-axis { stroke: rgba(255,255,255,0.08); stroke-width: 1; }
         .radar-shape { fill: rgba(212,176,98,0.15); stroke: var(--gold); stroke-width: 2; }
@@ -1289,7 +1289,7 @@ function renderTabs() {
 }
 
 function buildRadarSVG(o) {
-    const cx = 100, cy = 100, maxR = 70;
+    const cx = 110, cy = 110, maxR = 60;
     const keys = ['sal', 'iod', 'sw', 'meat'];
     const n = 4;
     const angleStep = (2 * Math.PI) / n;
@@ -1338,7 +1338,7 @@ function buildRadarSVG(o) {
         return `<text class="radar-label" x="${p.x}" y="${p.y}">${lb.name}</text>`;
     }).join('');
 
-    return `<div class="radar-wrap"><svg class="radar-svg" viewBox="0 0 200 200">${gridLines}${axes}${shape}${dots}${labelElems}</svg></div>`;
+    return `<div class="radar-wrap"><svg class="radar-svg" viewBox="0 0 220 220">${gridLines}${axes}${shape}${dots}${labelElems}</svg></div>`;
 }
 
 function renderCards() {
