@@ -245,6 +245,7 @@
         .dish-thumb { width: 84px; height: 84px; flex-shrink: 0; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.7; cursor: pointer; }
         .dish-thumb svg { width: 30px; height: 30px; }
         .dish-thumb:hover, .dish-thumb:active { border-color: var(--gold); opacity: 0.95; transform: scale(1.04); }
+        .dish-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
         .wine-content { flex: 1; min-width: 0; }
         .wine-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
         .wine-name { font-size: var(--fs-base); font-weight: 700; color: var(--text); line-height: 1.35; }
@@ -272,7 +273,7 @@
         .photo-lightbox-close:hover { border-color: var(--gold-line); color: var(--text); }
         .photo-lightbox-image { width: 100%; aspect-ratio: 1 / 1; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.75; margin-bottom: 18px; overflow: hidden; }
         .photo-lightbox-image svg { width: 88px; height: 88px; }
-        .photo-lightbox-image img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-lightbox-image img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
         .photo-lightbox-name { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-lg); font-weight: 600; color: var(--text); text-align: center; margin-bottom: 6px; }
         .photo-lightbox-price { font-size: var(--fs-md); color: var(--gold-light); font-weight: 800; text-align: center; margin-bottom: 12px; }
         .photo-lightbox-desc { font-size: var(--fs-sm); color: var(--body-text); line-height: 1.65; text-align: center; }
@@ -377,7 +378,6 @@
         </div>
     </header>
 
-    <!-- OYSTERS SECTION -->
     <div id="section-oysters">
         <div class="action-bar" id="actionBar">
             <button class="action-btn" id="quizTrigger"><span id="quizTriggerIcon"></span> <span data-t="quiz_trigger">Найти свою устрицу</span></button>
@@ -389,7 +389,6 @@
         <div id="cards-container"></div>
     </div>
 
-    <!-- COMPARE OVERLAY -->
     <div class="compare-overlay" id="compareOverlay">
         <div class="compare-panel">
             <div class="compare-panel-header">
@@ -405,7 +404,6 @@
         </div>
     </div>
 
-    <!-- FOOD MENU SECTION -->
     <div id="section-food" style="display:none;">
         <div class="tabs-wrapper">
             <div class="tabs" id="food-tabs"></div>
@@ -415,12 +413,10 @@
 
 </div>
 
-<!-- QUIZ OVERLAY -->
 <div class="quiz-overlay" id="quizOverlay">
     <div class="quiz-card" id="quizCard"></div>
 </div>
 
-<!-- PHOTO LIGHTBOX -->
 <div class="photo-lightbox" id="photoLightbox">
     <div class="photo-lightbox-panel">
         <button class="photo-lightbox-close" id="photoLightboxClose"></button>
@@ -432,6 +428,7 @@
 </div>
 
 <script>
+// ==================== UI TEXTS ====================
 const UI = {
     ru: {
         taste: 'Вкусовой профиль', origin: 'Происхождение', pairing: 'Идеальные напитки',
@@ -507,387 +504,7 @@ const UI = {
     }
 };
 
-// Массив устриц с добавленным полем regionGroup
-const OYSTERS = [
-    {
-        id: 'josephine', name: 'Joséphine', badge: 'Premium Choice', price: '80',
-        sal: 3, iod: 5, sw: 7, meat: 8, regionGroup: 'france',
-        terroir: { ru: 'Маренн-Олерон, Франция', ro: 'Marennes-Oléron, Franța', en: 'Marennes-Oléron, France' },
-        desc: {
-            ru: 'Изысканный, мягкий и невероятно деликатный моллюск. Первый контакт дарит <strong>лёгкую солёность</strong>, которая моментально растворяется в шелковистой сладости. В финале раскрываются благородные <strong>ореховые ноты</strong> и долгое сливочное послевкусие.',
-            ro: 'O moluscă rafinată, moale și incredibil de delicată. Primul contact oferă o <strong>salinitate ușoară</strong>, care se dizolvă instantaneu într-o dulceață mătăsoasă. În final se dezvăluie note nobile de <strong>nuci</strong> și un postgust lung și cremos.',
-            en: 'Refined, soft, and incredibly delicate mollusk. The first contact offers a <strong>light salinity</strong> that instantly dissolves into a silky sweetness. The finale reveals noble <strong>nutty notes</strong> and a long creamy aftertaste.'
-        },
-        origin: {
-            flag: '🇫🇷',
-            place: { ru: 'Маренн-Олерон', ro: 'Marennes-Oléron', en: 'Marennes-Oléron' },
-            region: { ru: 'Шарант-Маритим, Западная Франция', ro: 'Charente-Maritime, Vestul Franței', en: 'Charente-Maritime, Western France' },
-            text: {
-                ru: 'Маренн-Олерон — <strong>старейший устричный регион мира</strong>. Joséphine дозревает в особых глиняных бассейнах — <strong>клерах</strong>, где микроводоросль придаёт раковине характерный зеленоватый оттенок и неповторимый вкус.',
-                ro: 'Marennes-Oléron este <strong>cea mai veche regiune stridieră din lume</strong>. Joséphine se maturează în bazine speciale de lut — <strong>claires</strong>, unde o microalgă îi conferă o nuanță verzuie caracteristică și un gust inconfundabil.',
-                en: 'Marennes-Oléron is the <strong>oldest oyster region in the world</strong>. Joséphine matures in special clay basins — <strong>claires</strong>, where a microalgae gives the shell a characteristic greenish tint and a unique taste.'
-            }
-        },
-        facts: {
-            ru: ['Названа в честь императрицы Жозефины Богарне.', 'Как и все устрицы Маренн-Олерон, может иметь лёгкий зеленоватый оттенок от микроводоросли Navicula ostrearia — так называемая «marennine».', 'Принадлежит к высшей категории «Spéciale de Claire» — самая мясистая и ценная.'],
-            ro: ['Numită în onoarea împărătesei Joséphine de Beauharnais.', 'Ca toate stridiile din Marennes-Oléron, poate avea o ușoară nuanță verzuie de la microalga Navicula ostrearia — așa-numita „marennină".', 'Aparține categoriei superioare „Spéciale de Claire" — cea mai cărnoasă și mai valoroasă.'],
-            en: ['Named in honor of Empress Joséphine de Beauharnais.', 'Like all Marennes-Oléron oysters, may show a slight greenish tint from the microalgae Navicula ostrearia — known as "marennine".', 'Belongs to the premium "Spéciale de Claire" category — the meatiest and most valued.']
-        }
-    },
-    {
-        id: 'gillardeau', name: 'Gillardeau', badge: 'Grand Cru', price: '90',
-        sal: 4, iod: 4, sw: 8, meat: 10, regionGroup: 'france',
-        terroir: { ru: 'Маренн-Олерон / Нормандия / Ирландия', ro: 'Marennes-Oléron / Normandia / Irlanda', en: 'Marennes-Oléron / Normandy / Ireland' },
-        desc: {
-            ru: 'Икона высокой кухни и абсолютный эталон. <strong>Плотная, мясистая</strong> устрица с мощным концентрированным вкусом. Лёгкая сладость топлёного масла и глубокий <strong>ореховый оттенок</strong> обжаренного фундука в финале.',
-            ro: 'Icoana haute cuisine și un etalon absolut. O stridie <strong>densă, cărnoasă</strong>, cu un gust puternic concentrat. O dulceață ușoară de unt topit și o notă profundă de <strong>alune prăjite</strong> la final.',
-            en: 'The icon of haute cuisine and an absolute standard. A <strong>dense, meaty</strong> oyster with a powerful concentrated flavor. Light sweetness of melted butter and a deep <strong>roasted hazelnut</strong> note in the finish.'
-        },
-        origin: {
-            flag: '🇫🇷',
-            place: { ru: 'Маренн-Олерон + Нормандия + Ирландия', ro: 'Marennes-Oléron + Normandia + Irlanda', en: 'Marennes-Oléron + Normandy + Ireland' },
-            region: { ru: 'Франция и Ирландия', ro: 'Franța și Irlanda', en: 'France and Ireland' },
-            text: {
-                ru: 'Семья Gillardeau выращивает устриц уже 5 поколений. Около половины устриц дозревает в Нормандии, остальные — в графстве Корк и Керри в Ирландии. Метод <strong>«аффинаж»</strong> занимает от 3 до 5 лет — значительно дольше стандартных 18 месяцев.',
-                ro: 'Familia Gillardeau crește stridii de 5 generații. Aproximativ jumătate se maturează în Normandia, restul în Cork și Kerry, Irlanda. Metoda <strong>„afinaj"</strong> durează între 3 și 5 ani — mult peste cele 18 luni standard.',
-                en: 'The Gillardeau family has been farming oysters for 5 generations. About half mature in Normandy, the rest in County Cork and County Kerry, Ireland. The <strong>"affinage"</strong> method takes 3 to 5 years — far beyond the standard 18 months.'
-            }
-        },
-        facts: {
-            ru: ['Каждая устрица Gillardeau лазерно маркируется буквой «G» на раковине.', 'Цикл производства занимает от 3 до 5 лет — в разы дольше стандартных устриц.', 'Её называют «Rolls-Royce среди устриц».'],
-            ro: ['Fiecare stridie Gillardeau este marcată cu laser cu litera „G” pe cochilie.', 'Ciclul de producție durează între 3 și 5 ani — de mai multe ori mai mult decât standardul.', 'Este supranumită „Rolls-Royce-ul stridiilor".'],
-            en: ['Each Gillardeau oyster is laser-engraved with a "G" on the shell.', 'The production cycle takes 3 to 5 years — several times longer than standard oysters.', 'It is called the "Rolls-Royce of oysters".']
-        }
-    },
-    {
-        id: 'tiamara', name: 'Tia Mara', badge: 'Wild Atlantic', price: '80',
-        sal: 4, iod: 4, sw: 8, meat: 8, regionGroup: 'ireland',
-        terroir: { ru: 'Залив Донегал, Ирландия', ro: 'Golful Donegal, Irlanda', en: 'Donegal Bay, Ireland' },
-        desc: {
-            ru: 'Бескомпромиссная, мощная и невероятно <strong>свежая</strong> устрица. Обрушивается на рецепторы <strong>яркой морской солёностью</strong>. Атлетичная хрустящая текстура сменяется лёгкой сладостью и <strong>цитрусовыми нотками</strong> на финише.',
-            ro: 'O stridie fără compromisuri, puternică și incredibil de <strong>proaspătă</strong>. Lovește receptorii cu o <strong>salinitate marină vibrantă</strong>. Textura crocantă și atletică lasă loc unei dulceți ușoare și <strong>notelor de citrice</strong>.',
-            en: 'Uncompromising, powerful, and incredibly <strong>fresh</strong> oyster. It hits the receptors with <strong>vibrant marine salinity</strong>. The athletic crispy texture gives way to light sweetness and <strong>citrus notes</strong>.'
-        },
-        origin: {
-            flag: '🇮🇪',
-            place: { ru: 'Залив Донегал', ro: 'Golful Donegal', en: 'Donegal Bay' },
-            region: { ru: 'Северо-западная Ирландия', ro: 'Nord-vestul Irlandei', en: 'North-West Ireland' },
-            text: {
-                ru: 'Залив Донегал — один из самых чистых участков океана. Устрицы здесь растут <strong>дикими</strong>. Холодная вода делает текстуру плотной и хрустящей.',
-                ro: 'Golful Donegal este una dintre cele mai curate zone oceanice. Stridiile cresc aici <strong>sălbatice</strong>. Apa rece face textura densă și crocantă.',
-                en: 'Donegal Bay is one of the cleanest ocean areas. Oysters grow here <strong>wild</strong>. Cold water makes the texture dense and crisp.'
-            }
-        },
-        facts: {
-            ru: ['«Tia Mara» переводится как «Морская леди» на гэльском.', 'Ирландия славится Голуэйским устричным фестивалем — старейшим в мире (с 1954 г.).', 'В холодных водах устрица растёт медленнее, набирая больше питательных веществ.'],
-            ro: ['„Tia Mara" înseamnă „Doamna Mării" în limba gaelică.', 'Irlanda este faimoasă pentru Festivalul de Stridii Galway — cel mai vechi din lume (din 1954).', 'În apele reci, stridia crește mai încet, acumulând mai mulți nutrienți.'],
-            en: ['"Tia Mara" translates as "Sea Lady" in Gaelic.', 'Ireland is famous for the Galway International Oyster Festival — the oldest in the world (since 1954).', 'In cold waters, the oyster grows slower, accumulating more nutrients.']
-        }
-    },
-    {
-        id: 'gold', name: 'Gold', badge: 'Luxury Edition', price: '120',
-        sal: 4, iod: 5, sw: 8, meat: 9, regionGroup: 'other',
-        terroir: { ru: 'Ирландия / Бретань', ro: 'Irlanda / Bretania', en: 'Ireland / Brittany' },
-        desc: {
-            ru: '<strong>Утончённая</strong> и роскошная устрица с напылением из 24-каратного золота. Внутри — фантастически плотное тело с <strong>лёгкой йодистостью, ореховым вкусом</strong> и долгим сливочным послевкусием.',
-            ro: 'O stridie <strong>rafinată</strong> și luxoasă, acoperită cu aur de 24 de carate. În interior — un corp dens, cu <strong>o ușoară notă de iod, gust de nuci</strong> și un postgust cremos lung.',
-            en: 'A <strong>refined</strong> and luxurious oyster coated in 24-karat gold. Inside — a fantastically dense body with <strong>light iodine, nutty flavor</strong>, and a long creamy aftertaste.'
-        },
-        origin: {
-            flag: '🇫🇷',
-            place: { ru: 'Бретань / Ирландия', ro: 'Bretania / Irlanda', en: 'Brittany / Ireland' },
-            region: { ru: 'Атлантическое побережье', ro: 'Coasta Atlantică', en: 'Atlantic Coast' },
-            text: {
-                ru: 'Gold — продукт <strong>двойного терруара</strong>. Золотое напыление наносится вручную уже <strong>после раскрытия раковины</strong> — золото пищевое.',
-                ro: 'Gold este produsul unui <strong>terroir dublu</strong>. Pulberea de aur este aplicată manual <strong>după deschiderea cochiliei</strong> — aur alimentar.',
-                en: 'Gold is a product of a <strong>double terroir</strong>. Gold leaf is applied by hand <strong>after the shell is opened</strong> — edible gold.'
-            }
-        },
-        facts: {
-            ru: ['Пищевое золото E175 абсолютно нейтрально на вкус и запах.', 'Традиция есть устриц с золотом восходит к пирам эпохи Возрождения.', 'Входит в топ-3 самых фотографируемых блюд в ресторанах.'],
-            ro: ['Aurul alimentar E175 este absolut neutru la gust și miros.', 'Tradiția stridiilor cu aur datează din timpul ospețelor renascentiste.', 'Este în top 3 cele mai fotografiate preparate din restaurante.'],
-            en: ['Edible gold E175 is absolutely neutral in taste and smell.', 'The tradition of eating oysters with gold dates back to Renaissance feasts.', 'Included in the top 3 most photographed restaurant dishes.']
-        }
-    },
-    {
-        id: 'royale', name: 'Royale', badge: 'Royal Choice', price: '100',
-        sal: 3, iod: 4, sw: 7, meat: 8, regionGroup: 'france',
-        terroir: { ru: 'Атлантика, Франция', ro: 'Atlantic, Franța', en: 'Atlantic, France' },
-        desc: {
-            ru: 'Невероятно <strong>мягкая, с нежной текстурой</strong>, которая буквально тает на языке. Деликатный <strong>сладковатый вкус</strong> с лёгкими минеральными нотами в финале.',
-            ro: 'Incredibil de <strong>moale, cu o textură delicată</strong>, care pur și simplu se topește. Un <strong>gust ușor dulceag</strong>, cu note minerale fine la final.',
-            en: 'Incredibly <strong>soft, with a delicate texture</strong> that literally melts. A delicate <strong>sweetish taste</strong> with light mineral notes in the finale.'
-        },
-        origin: {
-            flag: '🇫🇷',
-            place: { ru: 'Атлантическое побережье', ro: 'Coasta Atlantică', en: 'Atlantic Coast' },
-            region: { ru: 'Западная Франция', ro: 'Vestul Franței', en: 'Western France' },
-            text: {
-                ru: 'Royale — собирательное название категории устриц <strong>высшего класса</strong>. Дозревает в условиях контролируемой плотности посадки.',
-                ro: 'Royale este denumirea categoriei de stridii de <strong>clasa superioară</strong>. Se maturează în condiții de densitate controlată.',
-                en: 'Royale is a collective name for the <strong>premium class</strong> oyster category. Matures under controlled density conditions.'
-            }
-        },
-        facts: {
-            ru: ['«Royale» — маркетинговое название для устриц премиальной категории выше «Spéciale».', 'Проходят финальную очистку в проточной морской воде не менее 3 суток.', 'Французы употребляют около 2 миллиардов устриц в год.'],
-            ro: ['„Royale" este o denumire de marketing pentru stridii premium deasupra categoriei „Spéciale".', 'Trec printr-o purificare finală în apă de mare curgătoare timp de 3 zile.', 'Francezii consumă aproximativ 2 miliarde de stridii anual.'],
-            en: ['"Royale" is a marketing name for premium oysters above the "Spéciale" category.', 'They undergo final purification in running seawater for 3 days.', 'The French consume about 2 billion oysters a year.']
-        }
-    },
-    {
-        id: 'speciale', name: 'Spéciale', badge: 'High Index', price: '90',
-        sal: 5, iod: 5, sw: 8, meat: 10, regionGroup: 'france',
-        terroir: { ru: 'Французские клеры', ro: 'Claire franceze', en: 'French claires' },
-        desc: {
-            ru: 'Очень <strong>плотная</strong> устрица с феноменальным индексом мясистости. Вкус раскрывается <strong>морской солёностью</strong>, которая перерастает в <strong>ореховый оттенок</strong>.',
-            ro: 'O stridie foarte <strong>densă</strong> cu un indice de cărnozitate fenomenal. Gustul se deschide cu o <strong>salinitate marină</strong>, care se transformă într-o <strong>nuanță de nuci</strong>.',
-            en: 'A very <strong>dense</strong> oyster with a phenomenal meatiness index. The taste opens with <strong>marine salinity</strong>, which develops into a <strong>nutty hue</strong>.'
-        },
-        origin: {
-            flag: '🇫🇷',
-            place: { ru: 'Клеры Маренн-Олерон', ro: 'Claire Marennes-Oléron', en: 'Claires Marennes-Oléron' },
-            region: { ru: 'Шарант-Маритим', ro: 'Charente-Maritime', en: 'Charente-Maritime' },
-            text: {
-                ru: 'Высшая ступень в системе клеров. Устрица проводит в бассейнах <strong>минимум 4 недели</strong> при низкой плотности.',
-                ro: 'Cea mai înaltă treaptă în sistemul claires. Stridia petrece <strong>minim 4 săptămâni</strong> în bazine cu densitate redusă.',
-                en: 'The highest tier in the claire system. The oyster spends <strong>at least 4 weeks</strong> in low-density basins.'
-            }
-        },
-        facts: {
-            ru: ['«Spéciale» — высшая официальная категория во французской классификации.', 'Одна Spéciale покрывает суточную норму цинка.', 'Spéciale de Claire часто побеждает на дегустациях и чемпионатах Франции.'],
-            ro: ['„Spéciale" — cea mai înaltă categorie oficială în clasificarea franceză.', 'O singură Spéciale acoperă doza zilnică de zinc.', 'Spéciale de Claire câștigă adesea degustări și campionate în Franța.'],
-            en: ['"Spéciale" — the highest official category in the French classification.', 'One Spéciale covers the daily requirement of zinc.', 'Spéciale de Claire often wins tastings and championships in France.']
-        }
-    },
-    {
-        id: 'boudeuse', name: 'Boudeuse', badge: 'Masterpiece', price: '60',
-        sal: 4, iod: 5, sw: 8, meat: 7, regionGroup: 'france',
-        terroir: { ru: 'Маренн-Олерон', ro: 'Marennes-Oléron', en: 'Marennes-Oléron' },
-        desc: {
-            ru: 'Хит для ценителей. Эта маленькая устрица упрямо росла вглубь раковины. <strong>Сбалансированная</strong>, с <strong>йодистым оттенком</strong> и нежной текстурой.',
-            ro: 'Un hit pentru cunoscători. Această stridie mică a crescut încăpățânat în adâncimea cochiliei. <strong>Echilibrată</strong>, cu <strong>nuanțe de iod</strong> și o textură fină.',
-            en: 'A hit for connoisseurs. This small oyster stubbornly grew deep into the shell. <strong>Balanced</strong>, with <strong>iodine notes</strong> and a delicate texture.'
-        },
-        origin: {
-            flag: '🇫🇷',
-            place: { ru: 'Маренн-Олерон', ro: 'Marennes-Oléron', en: 'Marennes-Oléron' },
-            region: { ru: 'Ферма Давида Эрве', ro: 'Ferma lui David Hervé', en: 'David Hervé Farm' },
-            text: {
-                ru: 'Boudeuse — авторская устрица <strong>David Hervé</strong>. Название получила за форму: устрица «надулась» и росла <strong>в глубину</strong>.',
-                ro: 'Boudeuse este o stridie de autor de la <strong>David Hervé</strong>. Numele provine de la forma sa: a crescut <strong>în adâncime</strong>.',
-                en: 'Boudeuse is an author oyster by <strong>David Hervé</strong>. Named for its shape: it grew <strong>deep</strong> into the shell.'
-            }
-        },
-        facts: {
-            ru: ['«Boudeuse» означает «надутая, капризная».', 'В ней накапливается больше собственного натурального сока.', 'David Hervé — пятикратный чемпион Франции.'],
-            ro: ['„Boudeuse” înseamnă „supărată, capricioasă”.', 'Acumulează mai mult din propriul suc natural.', 'David Hervé este de cinci ori campion al Franței.'],
-            en: ['"Boudeuse" means "sulky, capricious".', 'It accumulates more of its own natural liquor.', 'David Hervé is a five-time champion of France.']
-        }
-    },
-    {
-        id: 'finedeclaire', name: 'Fine de Claire', badge: 'Classic', price: '35',
-        sal: 6, iod: 5, sw: 5, meat: 5, regionGroup: 'france',
-        terroir: { ru: 'Маренн-Олерон', ro: 'Marennes-Oléron', en: 'Marennes-Oléron' },
-        desc: {
-            ru: 'Одна из самых известных устриц во Франции. Приятно <strong>хрустящая</strong> текстура покоряет <strong>освежающей солёностью</strong> и уходит в <strong>минеральное послевкусие</strong>.',
-            ro: 'Una dintre cele mai cunoscute stridii din Franța. Textura plăcut <strong>crocantă</strong> cucerește cu o <strong>salinitate revigorantă</strong> și trece într-un <strong>postgust mineral</strong>.',
-            en: 'One of the most renowned oysters in France. A pleasantly <strong>crisp</strong> texture captivates with <strong>refreshing salinity</strong> and fades into a <strong>mineral aftertaste</strong>.'
-        },
-        origin: {
-            flag: '🇫🇷',
-            place: { ru: 'Клеры Маренн-Олерон', ro: 'Claire Marennes-Oléron', en: 'Claires Marennes-Oléron' },
-            region: { ru: 'Шарант-Маритим', ro: 'Charente-Maritime', en: 'Charente-Maritime' },
-            text: {
-                ru: '«Клер» — это бывшие соляные болота. Именно здесь родилась концепция <strong>аффинажа устриц</strong>.',
-                ro: '„Claire” sunt foste mlaștini sărate. Aici a luat naștere conceptul de <strong>afinaj al stridiilor</strong>.',
-                en: '"Claire" are former salt marshes. This is where the concept of <strong>oyster affinage</strong> was born.'
-            }
-        },
-        facts: {
-            ru: ['Fine de Claire — самая продаваемая устрица в мире.', '«Fine» — официальный стандарт мясистости.', 'Эрнест Хемингуэй любил их с холодным Шабли.'],
-            ro: ['Fine de Claire — cea mai vândută stridie din lume.', '„Fine” este un standard oficial de cărnozitate.', 'Ernest Hemingway le adora cu un Chablis rece.'],
-            en: ['Fine de Claire is the best-selling oyster in the world.', '"Fine" is an official meatiness standard.', 'Ernest Hemingway loved them with cold Chablis.']
-        }
-    },
-    {
-        id: 'sentenelles', name: 'Sentenelles', badge: 'Selected', price: '120',
-        sal: 4, iod: 5, sw: 6, meat: 8, regionGroup: 'france',
-        terroir: { ru: 'Глубоководная Атлантика', ro: 'Atlanticul de mare adâncime', en: 'Deep-water Atlantic' },
-        desc: {
-            ru: 'Удивительно гармоничный и <strong>нежный</strong> сорт. Встречает лёгкой солёностью и демонстрирует переплетение глубоких <strong>ореховых нот</strong>.',
-            ro: 'Un soi uimitor de armonios și <strong>delicat</strong>. Întâmpină cu o salinitate ușoară și demonstrează <strong>note profunde de nuci</strong>.',
-            en: 'An amazingly harmonious and <strong>delicate</strong> variety. Welcomes with light salinity and shows deep <strong>nutty notes</strong>.'
-        },
-        origin: {
-            flag: '🇫🇷',
-            place: { ru: 'Глубоководная Атлантика', ro: 'Atlanticul de mare adâncime', en: 'Deep-water Atlantic' },
-            region: { ru: 'Западное побережье', ro: 'Coasta de Vest', en: 'West Coast' },
-            text: {
-                ru: 'Выращиваются на <strong>лантернах</strong>, подвешенных в толще воды. Устрица питается планктоном срединных вод.',
-                ro: 'Crescute în <strong>lanterne</strong> suspendate în apă. Stridia se hrănește cu plancton din apele de mijloc.',
-                en: 'Grown on <strong>lanterns</strong> suspended in the water column. The oyster feeds on mid-water plankton.'
-            }
-        },
-        facts: {
-            ru: ['Метод лантерн заимствован у японских устричников.', 'Устрицы постоянно покачиваются на волнах.', 'Название от слова «sentinelle» (часовой).'],
-            ro: ['Metoda lanternelor e preluată de la japonezi.', 'Stridiile se leagănă constant pe valuri.', 'Numele provine de la „sentinelle” (santinela).'],
-            en: ['The lantern method was borrowed from the Japanese.', 'Oysters constantly sway on the waves.', 'Named after "sentinelle" (sentinel).']
-        }
-    },
-    {
-        id: 'ostraregal', name: 'Ostrea Regal', badge: 'Boutrais', price: '75',
-        sal: 6, iod: 7, sw: 8, meat: 9, regionGroup: 'ireland',
-        terroir: { ru: 'Северная Ирландия', ro: 'Irlanda de Nord', en: 'Northern Ireland' },
-        desc: {
-            ru: 'Плотная, невероятно <strong>мясистая</strong> устрица с фантастическим профилем <strong>выраженной сладости</strong> и морским послевкусием.',
-            ro: 'O stridie densă, incredibil de <strong>cărnoasă</strong>, cu un profil de <strong>dulceață pronunțată</strong> și postgust marin.',
-            en: 'Dense, incredibly <strong>meaty</strong> oyster with a fantastic profile of <strong>pronounced sweetness</strong> and marine aftertaste.'
-        },
-        origin: {
-            flag: '🇮🇪',
-            place: { ru: 'Северное побережье Ирландии', ro: 'Coasta de Nord a Irlandei', en: 'Northern Coast of Ireland' },
-            region: { ru: 'Фермы семьи Бутрэ', ro: 'Fermele familiei Boutrais', en: 'Boutrais Family Farms' },
-            text: {
-                ru: 'Семья Boutrais сочетает <strong>французскую технику</strong> с уникальным ирландским терруаром.',
-                ro: 'Familia Boutrais combină <strong>tehnica franceză</strong> cu un terroir irlandez unic.',
-                en: 'The Boutrais family combines <strong>French technique</strong> with a unique Irish terroir.'
-            }
-        },
-        facts: {
-            ru: ['Ostrea — научное название плоской устрицы.', 'Сладость объясняется высоким содержанием гликогена.', 'В Древнем Риме устрицы были валютой.'],
-            ro: ['Ostrea este denumirea științifică a stridiei plate.', 'Dulceața se datorează conținutului ridicat de glicogen.', 'În Roma Antică, stridiile erau monedă de schimb.'],
-            en: ['Ostrea is the scientific name for the flat oyster.', 'The sweetness is due to high glycogen content.', 'In Ancient Rome, oysters were currency.']
-        }
-    },
-    {
-        id: 'amulet', name: 'Amulet', badge: 'Gourmet', price: '55',
-        sal: 4, iod: 5, sw: 7, meat: 7, regionGroup: 'other',
-        terroir: { ru: 'Открытая Атлантика', ro: 'Atlanticul Deschis', en: 'Open Atlantic' },
-        desc: {
-            ru: 'Изысканная, <strong>утончённая</strong> устрица. Раскрывается <strong>нежная сладость</strong> и роскошные <strong>ореховые ноты</strong>.',
-            ro: 'O stridie <strong>rafinată</strong> și subtilă. Se dezvăluie o <strong>dulceață delicată</strong> și <strong>note de nuci</strong> luxoase.',
-            en: 'An exquisite, <strong>subtle</strong> oyster. Unveils <strong>delicate sweetness</strong> and luxurious <strong>nutty notes</strong>.'
-        },
-        origin: {
-            flag: 'wave',
-            place: { ru: 'Глубоководные плантации', ro: 'Plantații de adâncime', en: 'Deep-water plantations' },
-            region: { ru: 'Западная Европа', ro: 'Europa de Vest', en: 'Western Europe' },
-            text: {
-                ru: 'Выращивается вдали от берега, что обеспечивает <strong>равномерную солёность</strong> круглый год.',
-                ro: 'Crescută departe de țărm, asigurând o <strong>salinitate uniformă</strong> tot anul.',
-                en: 'Grown far from the shore, providing <strong>uniform salinity</strong> year-round.'
-            }
-        },
-        facts: {
-            ru: ['Симметричная раковина — результат метода «тамблинга».', 'Устрица пережила динозавров.', 'Содержит суточную норму цинка.'],
-            ro: ['Cochilia simetrică este rezultatul metodei „tumbling”.', 'Stridia a supraviețuit dinozaurilor.', 'Conține doza zilnică de zinc.'],
-            en: ['Symmetrical shell is the result of the "tumbling" method.', 'The oyster survived the dinosaurs.', 'Contains the daily norm of zinc.']
-        }
-    },
-    {
-        id: 'eleonora', name: 'Eléonore', badge: 'Reserve', price: '95',
-        sal: 5, iod: 6, sw: 6, meat: 8, regionGroup: 'france',
-        terroir: { ru: 'Жиронда, Аркашон', ro: 'Gironde, Arcachon', en: 'Gironde, Arcachon' },
-        desc: {
-            ru: 'Редкая, <strong>эксклюзивная</strong> устрица. Тонкая <strong>йодистая нотка</strong> переходит в <strong>сладость</strong> и долгий финиш с намёком на лесной орех.',
-            ro: 'O stridie <strong>exclusivistă</strong> rară. O <strong>notă fină de iod</strong> trece în <strong>dulceață</strong> și un postgust de alune de pădure.',
-            en: 'A rare, <strong>exclusive</strong> oyster. A fine <strong>iodine note</strong> transitions into <strong>sweetness</strong> and a hazelnut finish.'
-        },
-        origin: {
-            flag: '🇫🇷',
-            place: { ru: 'Бассейн Аркашон', ro: 'Bazinul Arcachon', en: 'Arcachon Basin' },
-            region: { ru: 'Аквитания, Франция', ro: 'Aquitania, Franța', en: 'Aquitaine, France' },
-            text: {
-                ru: 'Аркашон — <strong>закрытый залив</strong> и историческая родина современного устрицеводства.',
-                ro: 'Arcachon — <strong>un golf închis</strong> și patria istorică a stridiculturii moderne.',
-                en: 'Arcachon is a <strong>closed bay</strong> and the historic birthplace of modern oyster farming.'
-            }
-        },
-        facts: {
-            ru: ['Названа в честь Элеоноры Аквитанской.', 'Выращиваются на деревянных кольях (пике) с 1860-х годов.', 'Аркашон даёт треть устриц Франции.'],
-            ro: ['Numită în onoarea Eleonorei de Aquitania.', 'Crescute pe țăruși de lemn din anii 1860.', 'Arcachon dă o treime din stridiile Franței.'],
-            en: ['Named after Eleanor of Aquitaine.', 'Grown on wooden stakes since the 1860s.', 'Arcachon produces a third of France\'s oysters.']
-        }
-    }
-];
-
-const FOOD_CATEGORIES = [
-    {
-        key: 'tacos',
-        label: { ru: 'Тако', ro: 'Tacos', en: 'Tacos' },
-        subtitle: { ru: 'Хрустящие лепёшки с морем внутри', ro: 'Foițe crocante cu mare în interior', en: 'Crispy shells with the sea inside' },
-        items: [
-            { id: 'taco-octopus', name: 'Тако с осьминогом', price: '190', weight: '2 шт', desc: 'Нежные щупальца осьминога, авокадо и цитрусовый соус.' },
-            { id: 'taco-shrimp', name: 'Тако с креветками', price: '100', weight: '2 шт', desc: 'Сочные креветки, свежие овощи и лёгкий пряный соус.' },
-            { id: 'taco-crab', name: 'Тако с камчатским крабом', price: '300', weight: '2 шт', desc: 'Мясо камчатского краба с цитрусово-сливочным дрессингом.' }
-        ]
-    },
-    {
-        key: 'hotdogs',
-        label: { ru: 'Хот-доги', ro: 'Hot-dogs', en: 'Hot Dogs' },
-        subtitle: { ru: 'Роллы с морепродуктами в бриоши', ro: 'Rulouri cu fructe de mare în brioșă', en: 'Seafood rolls in brioche' },
-        items: [
-            { id: 'hotdog-octopus', name: 'Хот-дог с осьминогом', price: '190', weight: '1 шт', desc: 'Тёплая булочка бриошь, нежный осьминог и лимонная эмульсия.' },
-            { id: 'hotdog-shrimp', name: 'Хот-дог с креветками', price: '120', weight: '1 шт', desc: 'Классический lobster-стайл ролл с креветками и травами.' },
-            { id: 'hotdog-crab', name: 'Хот-дог с Камчатским крабом', price: '300', weight: '1 шт', desc: 'Прекрасная булочка бриошь с натуральным Камчатским крабом.' }
-        ]
-    },
-    {
-        key: 'mussels',
-        label: { ru: 'Мидии', ro: 'Midii', en: 'Mussels' },
-        subtitle: { ru: 'Атлантические мидии в котелке', ro: 'Midii atlantice în oală', en: 'Atlantic mussels in a pot' },
-        items: [
-            { id: 'mussels-cream', name: 'Мидии в сливочно-винном соусе', price: '400', weight: '950 г', desc: 'Мидии, тушёные в белом вине со сливками, чесноком и петрушкой.' },
-            { id: 'mussels-tomato', name: 'Мидии в томатном соусе', price: '350', weight: '950 г', desc: 'Мидии в ароматном томатном соусе с базиликом и перцем чили.' }
-        ]
-    },
-    {
-        key: 'seafood',
-        label: { ru: 'Морепродукты', ro: 'Fructe de mare', en: 'Seafood' },
-        subtitle: { ru: 'Из холодной витрины и с гриля', ro: 'Din vitrina rece și de la grătar', en: 'From the cold case and the grill' },
-        items: [
-            { id: 'crab-rillette', name: 'Рийет из камчатского краба', price: '200', weight: '160 г', desc: 'Нежный паштет из краба с гренками.' },
-            { id: 'shrimp-grill', name: 'Креветки на гриле', price: '200', weight: '250 гр', desc: 'Тигровые креветки обжаренные на гриле с фирменным соусом OystersLab.' },
-            { id: 'carabinero', name: 'Креветки CARABINERO', price: '1000', weight: '200 гр', desc: 'Знаменитые Испанские креветки.' }
-        ]
-    },
-    {
-        key: 'platters',
-        label: { ru: 'Плато', ro: 'Platou', en: 'Platters' },
-        subtitle: { ru: 'Королевские платтеры для компании', ro: 'Platouri regale pentru companie', en: 'Royal platters to share' },
-        items: [
-            { id: 'seafood-platter', name: 'Плато с морепродуктами', price: '1000', weight: '1200 г', desc: 'Креветки, осьминог, кальмары, картошечка, кукуруза, 2 соуса.' }
-        ]
-    },
-    {
-        key: 'bakedoysters',
-        label: { ru: 'Запечённые устрицы', ro: 'Stridii la cuptor', en: 'Baked Oysters' },
-        items: [
-            { id: 'baked-classic', name: 'Классическая запечённая устрица', price: '70', weight: '1 шт', desc: 'Устрица с чесноком, сыром и зеленью.' },
-            { id: 'baked-truffle', name: 'Устрицы с трюфелем', price: '70', weight: '1 шт', desc: 'Устрица запечённая с трюфелем.' },
-            { id: 'baked-spicy', name: 'Устрица пикантная', price: '70', weight: '1 шт', desc: 'Запечённая устрица с пикантными нотками.' }
-        ]
-    },
-    {
-        key: 'snacks',
-        label: { ru: 'Закуски', ro: 'Gustări', en: 'Snacks' },
-        items: [
-            { id: 'olives', name: 'Оливки', price: '100', weight: '300 гр', desc: 'Прекрасная закуска к бокалу вина.' },
-            { id: 'snack-mix', name: 'Микс закусок', price: '130', weight: '200 гр', desc: 'Пармезан, Прошутто, Оливки, Гриссини.' }
-        ]
-    },
-    {
-        key: 'desserts',
-        label: { ru: 'Десерты', ro: 'Deserturi', en: 'Desserts' },
-        items: [
-            { id: 'icecream-caviar', name: 'Мороженное с чёрной икрой', price: '120', weight: '200 г', desc: 'Сливочный пломбир посыпанный сухой чёрной икрой русского осетра.' }
-        ]
-    }
-];
-
-let currentLang = localStorage.getItem('oyster_lang') || 'ru';
-let currentSection = 'oysters';
-let currentFoodCategory = 'tacos';
+// ==================== ICONS ====================
 const ICONS = {
     oyster: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2"/></svg>',
     wine: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l-1 9a5 5 0 01-3 4.5M12 15.5V22M8 22h8"/><path d="M7.5 6h9"/></svg>',
@@ -907,9 +524,76 @@ const ICONS = {
     plate: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M3 9h18M3 15h18"/></svg>'
 };
 
+// ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
+let currentLang = localStorage.getItem('oyster_lang') || 'ru';
+let currentSection = 'oysters';
+let currentFoodCategory = 'tacos';
 let quizStep = 0;
 let quizAnswers = [];
 
+// ==================== ПУСТЫЕ МАССИВЫ (заполняются из Supabase) ====================
+let OYSTERS = [];
+let FOOD_CATEGORIES = [];
+
+// ==================== КОНФИГУРАЦИЯ SUPABASE ====================
+const SUPABASE_URL = 'https://lgtgzazoqzenedgzbzmf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxndGd6YXpvcXplbmVkZ3piem1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTYyMjksImV4cCI6MjEwNDI3MjIyOX0.9eH14E5PbaM2PTkW9o7m2f9pCzFYdVF0NXVxZ-X57AQ';
+
+// ==================== ЗАГРУЗКА ДАННЫХ ====================
+async function loadData() {
+    try {
+        const headers = {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`
+        };
+
+        const oystersRes = await fetch(`${SUPABASE_URL}/rest/v1/oysters?select=*`, { headers });
+        if (!oystersRes.ok) throw new Error('Ошибка загрузки устриц');
+        const oystersRaw = await oystersRes.json();
+
+        const catRes = await fetch(`${SUPABASE_URL}/rest/v1/food_categories?select=*&order=sort_order.asc`, { headers });
+        if (!catRes.ok) throw new Error('Ошибка загрузки категорий');
+        const categoriesRaw = await catRes.json();
+
+        const itemsRes = await fetch(`${SUPABASE_URL}/rest/v1/food_items?select=*&order=sort_order.asc`, { headers });
+        if (!itemsRes.ok) throw new Error('Ошибка загрузки блюд');
+        const itemsRaw = await itemsRes.json();
+
+        OYSTERS = oystersRaw.map(o => ({
+            ...o,
+            desc: o.description,
+            regionGroup: o.region_group
+        }));
+
+        FOOD_CATEGORIES = categoriesRaw.map(cat => ({
+            key: cat.id,
+            label: cat.label,
+            subtitle: cat.subtitle,
+            items: itemsRaw
+                .filter(item => item.category_id === cat.id)
+                .map(item => ({
+                    ...item,
+                    desc: item.description
+                }))
+        }));
+
+        renderTabs();
+        renderCards();
+        renderCompareSelects();
+        if (currentSection === 'food') {
+            renderFoodTabs();
+            renderFoodCards();
+            scrollActiveFoodTabIntoView();
+        }
+        handleHash();
+
+    } catch (error) {
+        console.error('Не удалось загрузить данные:', error);
+        document.body.innerHTML = `<div style="color:white; text-align:center; padding:40px;">Ошибка загрузки данных. Пожалуйста, обновите страницу.</div>`;
+    }
+}
+
+// ==================== ФУНКЦИИ РЕНДЕРИНГА ====================
 function renderTabs() {
     const tabsEl = document.getElementById('tabs');
     tabsEl.innerHTML = OYSTERS.map(o => `
@@ -1183,13 +867,17 @@ function scrollActiveFoodTabIntoView() {
 function renderFoodCards() {
     const cat = FOOD_CATEGORIES.find(c => c.key === currentFoodCategory);
     const container = document.getElementById('food-cards-container');
+    if (!cat) {
+        container.innerHTML = '<div style="color:var(--muted); text-align:center; padding:20px;">Нет категории</div>';
+        return;
+    }
     container.innerHTML = `
         <div class="wine-grid">
             ${cat.items.map(item => `
                 <div class="wine-card animate-in" style="animation-delay: ${Math.random() * 0.2}s">
                     <div class="wine-card-inner">
                         <div class="dish-thumb" data-id="${item.id}" role="button" tabindex="0" aria-label="${item.name}">
-                            ${ICONS.plate}
+                            ${item.image_url ? `<img src="${item.image_url}" alt="${item.name}" loading="lazy">` : ICONS.plate}
                         </div>
                         <div class="wine-content">
                             <div class="wine-top">
@@ -1207,7 +895,12 @@ function renderFoodCards() {
 }
 
 function openPhotoLightbox(item) {
-    document.getElementById('photoLightboxImage').innerHTML = ICONS.plate;
+    const imgContainer = document.getElementById('photoLightboxImage');
+    if (item.image_url) {
+        imgContainer.innerHTML = `<img src="${item.image_url}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm)">`;
+    } else {
+        imgContainer.innerHTML = ICONS.plate;
+    }
     document.getElementById('photoLightboxName').textContent = item.name;
     document.getElementById('photoLightboxPrice').textContent = item.price + ' MDL' + (item.weight ? ' · ' + item.weight : '');
     document.getElementById('photoLightboxDesc').textContent = item.desc;
@@ -1217,7 +910,7 @@ function openPhotoLightbox(item) {
 function handleHash() {
     const hash = window.location.hash.replace('#', '').toLowerCase();
     const valid = OYSTERS.find(o => o.id === hash);
-    showOyster(valid ? hash : 'gillardeau');
+    showOyster(valid ? hash : (OYSTERS.length > 0 ? OYSTERS[0].id : null));
 }
 
 function switchSection(section) {
@@ -1251,6 +944,7 @@ function setLanguage(lang) {
     switchSection(currentSection);
 }
 
+// ==================== ИНИЦИАЛИЗАЦИЯ ====================
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('navIconOysters').innerHTML = ICONS.oyster;
     document.getElementById('navIconFood').innerHTML = ICONS.menu;
@@ -1326,9 +1020,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (item) openPhotoLightbox(item);
     });
 
-    renderCompareSelects();
-    setLanguage(currentLang);
-    handleHash();
+    loadData().then(() => {
+        setLanguage(currentLang);
+    });
 });
 
 window.addEventListener('hashchange', handleHash);
