@@ -491,10 +491,12 @@ function renderItems() {
         list.innerHTML = '<div class="empty-state">Пока нет блюд. Добавьте первое.</div>';
         return;
     }
-    list.innerHTML = itemsData.map(item => `
+    list.innerHTML = itemsData.map(item => {
+        const displayName = (item.name && typeof item.name === 'object') ? (item.name.ru || item.name.en || item.name.ro || '') : (item.name || '');
+        return `
         <div class="list-item">
             <div class="info">
-                <div class="name">${escapeHtml(item.name)}</div>
+                <div class="name">${escapeHtml(displayName)}</div>
                 <div class="sub">${escapeHtml(item.category_id || '')} · ${item.price ?? 0} MDL</div>
             </div>
             <div class="actions">
@@ -502,7 +504,8 @@ function renderItems() {
                 <button class="danger" onclick="deleteItem('${item.id}')">Удалить</button>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 function escapeHtml(str) {
@@ -716,8 +719,16 @@ function generateCategoryForm(c) {
 
 function generateItemForm(item) {
     const data = item || {
-        id: '', category_id: categoriesData[0]?.id || '', name: '', price: 0, weight: '', description: '', image_url: '', sort_order: 0
+        id: '', category_id: categoriesData[0]?.id || '',
+        name: { ru: '', ro: '', en: '' }, price: 0, weight: '',
+        description: { ru: '', ro: '', en: '' }, image_url: '', sort_order: 0
     };
+    // Защита от старых записей, где name/description ещё были простыми строками
+    if (typeof data.name === 'string') data.name = { ru: data.name, ro: '', en: '' };
+    if (typeof data.description === 'string') data.description = { ru: data.description, ro: '', en: '' };
+    data.name = data.name || { ru: '', ro: '', en: '' };
+    data.description = data.description || { ru: '', ro: '', en: '' };
+
     const catOptions = categoriesData.map(c => `
         <option value="${escapeHtml(c.id)}" ${data.category_id === c.id ? 'selected' : ''}>${escapeHtml(c.label?.ru || c.id)}</option>
     `).join('');
@@ -727,14 +738,26 @@ function generateItemForm(item) {
         <input type="text" id="f_id" value="${escapeHtml(data.id)}" ${editingId ? 'readonly' : ''}>
         <label>Категория</label>
         <select id="f_category_id">${catOptions}</select>
+
         <label>Название</label>
-        <input type="text" id="f_name" value="${escapeHtml(data.name)}">
+        <div class="lang-fields">
+            <div><label>RU</label><input type="text" id="f_name_ru" value="${escapeHtml(data.name.ru)}"></div>
+            <div><label>RO</label><input type="text" id="f_name_ro" value="${escapeHtml(data.name.ro)}"></div>
+            <div><label>EN</label><input type="text" id="f_name_en" value="${escapeHtml(data.name.en)}"></div>
+        </div>
+
         <label>Цена</label>
         <input type="number" id="f_price" value="${data.price ?? 0}">
         <label>Вес/порция</label>
         <input type="text" id="f_weight" value="${escapeHtml(data.weight || '')}">
+
         <label>Описание</label>
-        <textarea id="f_description">${escapeHtml(data.description || '')}</textarea>
+        <div class="lang-fields">
+            <div><label>RU</label><textarea id="f_description_ru">${escapeHtml(data.description.ru)}</textarea></div>
+            <div><label>RO</label><textarea id="f_description_ro">${escapeHtml(data.description.ro)}</textarea></div>
+            <div><label>EN</label><textarea id="f_description_en">${escapeHtml(data.description.en)}</textarea></div>
+        </div>
+
         <label>Порядок</label>
         <input type="number" id="f_sort_order" value="${data.sort_order ?? 0}">
         <h3>Изображение</h3>
@@ -903,10 +926,18 @@ document.getElementById('modalSave').addEventListener('click', async () => {
             const item = {
                 id: idValue,
                 category_id: document.getElementById('f_category_id').value,
-                name: document.getElementById('f_name').value,
+                name: {
+                    ru: document.getElementById('f_name_ru').value,
+                    ro: document.getElementById('f_name_ro').value,
+                    en: document.getElementById('f_name_en').value
+                },
                 price: parseFloat(document.getElementById('f_price').value) || 0,
                 weight: document.getElementById('f_weight').value,
-                description: document.getElementById('f_description').value,
+                description: {
+                    ru: document.getElementById('f_description_ru').value,
+                    ro: document.getElementById('f_description_ro').value,
+                    en: document.getElementById('f_description_en').value
+                },
                 image_url: document.getElementById('f_image_url').value,
                 sort_order: parseInt(document.getElementById('f_sort_order').value) || 0
             };
