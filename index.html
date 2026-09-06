@@ -58,7 +58,18 @@
             line-height: 1.5;
         }
 
-        .shell { width: 100%; max-width: 480px; min-height: 100vh; min-height: 100dvh; position: relative; overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom); background: var(--bg); }
+        .shell {
+            width: 100%;
+            max-width: 480px;
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+            overflow-x: hidden;      /* fallback */
+            overflow-x: clip;        /* современный, не ломает sticky */
+            padding-bottom: env(safe-area-inset-bottom);
+            background: var(--bg);
+        }
+
         .shell::before {
             content: '';
             position: fixed;
@@ -70,16 +81,18 @@
             z-index: 0;
         }
 
-        /* ─── HEADER ─── */
+        /* ─── HEADER (улучшенный sticky) ─── */
         header {
             padding: calc(22px + env(safe-area-inset-top)) 20px 16px;
             border-bottom: 1px solid var(--faint);
+            position: -webkit-sticky; /* Safari */
             position: sticky;
             top: 0;
             z-index: 100;
             background: rgba(6,10,16,0.92);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
+            will-change: transform;   /* небольшая оптимизация */
         }
 
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
@@ -1160,6 +1173,13 @@ function renderFoodTabs() {
     `).join('');
 }
 
+function scrollActiveFoodTabIntoView() {
+    const activeTab = document.querySelector('#food-tabs .tab.active');
+    if (activeTab) {
+        activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+    }
+}
+
 function renderFoodCards() {
     const cat = FOOD_CATEGORIES.find(c => c.key === currentFoodCategory);
     const container = document.getElementById('food-cards-container');
@@ -1211,6 +1231,7 @@ function switchSection(section) {
     if (section === 'food') {
         renderFoodTabs();
         renderFoodCards();
+        scrollActiveFoodTabIntoView();
     }
 }
 
@@ -1256,6 +1277,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentFoodCategory = btn.dataset.cat;
             renderFoodTabs();
             renderFoodCards();
+            scrollActiveFoodTabIntoView();
         }
     });
 
