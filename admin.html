@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Админ-панель Oyster's LAB</title>
+    <style>
+        :root {
+            --bg: #0c1118;
+            --surface: #111820;
+            --border: #1f2b3a;
+            --text: #f0ece4;
+            --muted: #7a8fa3;
+            --gold: #d4b062;
+            --gold-light: #e8cc8a;
+            --gold-dim: rgba(212,176,98,0.1);
+            --danger: #e05a5a;
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 900px;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--gold-light);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .login-box {
+            max-width: 400px;
+            margin: 40px auto;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 30px;
+        }
+        .login-box h2 { margin-bottom: 20px; text-align: center; }
+        input[type="password"],
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 10px 12px;
+            background: #0a0f15;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 12px;
+            font-family: inherit;
+        }
+        textarea { min-height: 80px; resize: vertical; }
+        label {
+            font-size: 0.9rem;
+            color: var(--muted);
+            display: block;
+            margin-bottom: 4px;
+        }
+        button {
+            background: var(--gold-dim);
+            border: 1px solid var(--gold);
+            color: var(--gold-light);
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            margin-right: 8px;
+            font-size: 0.95rem;
+        }
+        button:hover {
+            background: var(--gold);
+            color: #000;
+        }
+        button.danger {
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+        button.danger:hover {
+            background: var(--danger);
+            color: #fff;
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .hidden { display: none !important; }
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--muted);
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            background: var(--gold-dim);
+            border-color: var(--gold);
+            color: var(--gold-light);
+        }
+        .list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+        }
+        .list-item .info {
+            flex: 1;
+        }
+        .list-item .name {
+            font-weight: 600;
+        }
+        .list-item .sub {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            z-index: 100;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .modal {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 700px;
+            padding: 24px;
+            margin: auto;
+        }
+        .modal h2 {
+            margin-bottom: 20px;
+            color: var(--gold-light);
+        }
+        .lang-fields {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .image-upload {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .image-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            background: var(--surface);
+            border: 1px dashed var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .image-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--muted);
+        }
+        .field-error {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: -8px;
+            margin-bottom: 12px;
+        }
+        @media (max-width: 600px) {
+            .list-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Админ-панель Oyster's LAB</h1>
+
+    <!-- ЭКРАН ВХОДА -->
+    <div id="loginScreen" class="login-box hidden">
+        <h2>Вход</h2>
+        <label>Пароль</label>
+        <input type="password" id="passwordInput" placeholder="Введите пароль">
+        <button id="loginBtn" style="width:100%">Войти</button>
+        <div id="loginError" style="color:var(--danger); margin-top:10px; text-align:center;"></div>
+    </div>
+
+    <!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
+    <div id="mainPanel" class="hidden">
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="oysters">Устрицы</button>
+            <button class="tab-btn" data-tab="categories">Категории блюд</button>
+            <button class="tab-btn" data-tab="items">Блюда</button>
+            <button id="logoutBtn" class="danger" style="margin-left:auto">Выйти</button>
+        </div>
+
+        <div id="globalError" class="field-error hidden" style="margin-bottom:12px;"></div>
+
+        <!-- Раздел устриц -->
+        <div id="oystersSection">
+            <button id="addOysterBtn">+ Добавить устрицу</button>
+            <div id="oystersList" class="list"></div>
+        </div>
+
+        <!-- Раздел категорий -->
+        <div id="categoriesSection" class="hidden">
+            <button id="addCategoryBtn">+ Добавить категорию</button>
+            <div id="categoriesList" class="list"></div>
+        </div>
+
+        <!-- Раздел блюд -->
+        <div id="itemsSection" class="hidden">
+            <button id="addItemBtn">+ Добавить блюдо</button>
+            <div id="itemsList" class="list"></div>
+        </div>
+    </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО РЕДАКТИРОВАНИЯ -->
+<div id="modalOverlay" class="modal-overlay hidden">
+    <div class="modal">
+        <h2 id="modalTitle"></h2>
+        <div id="modalContent"></div>
+        <div style="display:flex; justify-content:flex-end; margin-top:16px">
+            <button id="modalCancel">Отмена</button>
+            <button id="modalSave">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let authToken = localStorage.getItem('admin_token') || '';
+let currentTab = 'oysters';
+let oystersData = [];
+let categoriesData = [];
+let itemsData = [];
+let editingId = null;
+let editingType = '';
+
+// ========== ОБЁРТКА ДЛЯ ЗАПРОСОВ (авто-логаут при истёкшем токене) ==========
+async function apiFetch(url, options = {}) {
+    let res;
+    try {
+        res = await fetch(url, {
+            ...options,
+            headers: {
+                ...(options.headers || {}),
+                'Authorization': `Bearer ${authToken}`
+            }
+        });
+    } catch (err) {
+        showGlobalError('Ошибка сети. Проверьте подключение.');
+        throw err;
+    }
+
+    if (res.status === 401) {
+        authToken = '';
+        localStorage.removeItem('admin_token');
+        document.getElementById('mainPanel').classList.add('hidden');
+        document.getElementById('loginScreen').classList.remove('hidden');
+        document.getElementById('loginError').textContent = 'Сессия истекла, войдите снова';
+        throw new Error('Unauthorized');
+    }
+
+    if (!res.ok) {
+        let msg = 'Ошибка запроса';
+        try {
+            const data = await res.clone().json();
+            msg = data.error || msg;
+        } catch {}
+        showGlobalError(msg);
+    }
+
+    return res;
+}
+
+function showGlobalError(msg) {
+    const el = document.getElementById('globalError');
+    if (!el) { alert(msg); return; }
+    el.textContent = msg;
+    el.classList.remove('hidden');
+    setTimeout(() => el.classList.add('hidden'), 5000);
+}
+
+// Проверка токена при загрузке
+if (authToken) {
+    showMain();
+    loadAllData();
+} else {
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('mainPanel').classList.add('hidden');
+}
+
+// ========== АВТОРИЗАЦИЯ ==========
+document.getElementById('loginBtn').addEventListener('click', doLogin);
+document.getElementById('passwordInput').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') doLogin();
+});
+
+async function doLogin() {
+    const password = document.getElementById('passwordInput').value;
+    const loginBtn = document.getElementById('loginBtn');
+    const errorEl = document.getElementById('loginError');
+    errorEl.textContent = '';
+
+    if (!password) {
+        errorEl.textContent = 'Введите пароль';
+        return;
+    }
+
+    loginBtn.disabled = true;
+    try {
+        const res = await fetch('/api/auth', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ password })
+        });
+        const data = await res.json();
+        if (data.token) {
+            authToken = data.token;
+            localStorage.setItem('admin_token', authToken);
+            showMain();
+            loadAllData();
+        } else {
+            errorEl.textContent = data.error || 'Ошибка входа';
+        }
+    } catch (err) {
+        errorEl.textContent = 'Ошибка сети';
+    } finally {
+        loginBtn.disabled = false;
+    }
+}
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    authToken = '';
+    localStorage.removeItem('admin_token');
+    document.getElementById('loginScreen').classList.remove('hidden');
+    document.getElementById('mainPanel').classList.add('hidden');
+});
+
+function showMain() {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('mainPanel').classList.remove('hidden');
+    switchTab('oysters');
+}
+
+// ========== ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ==========
+document.querySelectorAll('.tab-btn[data-tab]').forEach(btn => {
+    btn.addEventListener('click', () => switchTab(btn.dataset.tab));
+});
+
+function switchTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.tab-btn[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+    document.getElementById('oystersSection').classList.toggle('hidden', tab !== 'oysters');
+    document.getElementById('categoriesSection').classList.toggle('hidden', tab !== 'categories');
+    document.getElementById('itemsSection').classList.toggle('hidden', tab !== 'items');
+}
+
+// ========== ЗАГРУЗКА ДАННЫХ ==========
+async function loadAllData() {
+    try {
+        await Promise.all([loadOysters(), loadCategories(), loadItems()]);
+    } catch (err) {
+        // apiFetch уже показал сообщение / сделал логаут при 401
+    }
+}
+
+async function loadOysters() {
+    const res = await apiFetch('/api/oysters');
+    if (!res.ok) return;
+    oystersData = await res.json();
+    renderOysters();
+}
+
+async function loadCategories() {
+    const res = await apiFetch('/api/food-categories');
+    if (!res.ok) return;
+    categoriesData = await res.json();
+    renderCategories();
+}
+
+async function loadItems() {
+    const res = await apiFetch('/api/food-items');
+    if (!res.ok) return;
+    itemsData = await res.json();
+    renderItems();
+}
+
+// ========== РЕНДЕР СПИСКОВ ==========
+function renderOysters() {
+    const list = document.getElementById('oystersList');
+    if (!oystersData.length) {
+        list.innerHTML = '<div class="empty-state">Пока нет устриц. Добавьте первую.</div>';
+        return;
+    }
+    list.innerHTML = oystersData.map(o => `
+        <div class="list-item">
+            <div class="info">
+                <div class="name">${escapeHtml(o.name)}</div>
+                <div class="sub">${escapeHtml(o.badge || '')} · ${o.price ?? 0} MDL</div>
+            </div>
+            <div class="actions">
+                <button onclick="editOyster('${o.id}')">Изменить</button>
+                <button class="danger" onclick="deleteOyster('${o.id}')">Удалить</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderCategories() {
+    const list = document.getElementById('categoriesList');
+    if (!categoriesData.length) {
+        list.innerHTML = '<div class="empty-state">Пока нет категорий. Добавьте первую.</div>';
+        return;
+    }
+    list.innerHTML = categoriesData.map(c => `
+        <div class="list-item">
+            <div class="info">
+                <div class="name">${escapeHtml(c.label?.ru || c.id)}</div>
+                <div class="sub">${c.sort_order ? 'Порядок: ' + c.sort_order : ''}</div>
+            </div>
+            <div class="actions">
+                <button onclick="editCategory('${c.id}')">Изменить</button>
+                <button class="danger" onclick="deleteCategory('${c.id}')">Удалить</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function renderItems() {
+    const list = document.getElementById('itemsList');
+    if (!itemsData.length) {
+        list.innerHTML = '<div class="empty-state">Пока нет блюд. Добавьте первое.</div>';
+        return;
+    }
+    list.innerHTML = itemsData.map(item => `
+        <div class="list-item">
+            <div class="info">
+                <div class="name">${escapeHtml(item.name)}</div>
+                <div class="sub">${escapeHtml(item.category_id || '')} · ${item.price ?? 0} MDL</div>
+            </div>
+            <div class="actions">
+                <button onclick="editItem('${item.id}')">Изменить</button>
+                <button class="danger" onclick="deleteItem('${item.id}')">Удалить</button>
+            </div>
+        </div>
+    `).join('');
+}
+
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
+// ========== ФУНКЦИИ УДАЛЕНИЯ ==========
+async function deleteOyster(id) {
+    if (!confirm('Удалить устрицу?')) return;
+    try {
+        await apiFetch(`/api/oysters?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        loadOysters();
+    } catch {}
+}
+async function deleteCategory(id) {
+    if (!confirm('Удалить категорию? Связанные блюда также будут удалены.')) return;
+    try {
+        await apiFetch(`/api/food-categories?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        loadCategories();
+        loadItems();
+    } catch {}
+}
+async function deleteItem(id) {
+    if (!confirm('Удалить блюдо?')) return;
+    try {
+        await apiFetch(`/api/food-items?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        loadItems();
+    } catch {}
+}
+
+// ========== РЕДАКТИРОВАНИЕ / ДОБАВЛЕНИЕ ==========
+function editOyster(id) {
+    const oyster = oystersData.find(o => o.id === id);
+    editingId = id;
+    editingType = 'oyster';
+    showModal('Устрица', generateOysterForm(oyster));
+}
+
+function editCategory(id) {
+    const category = categoriesData.find(c => c.id === id);
+    editingId = id;
+    editingType = 'category';
+    showModal('Категория', generateCategoryForm(category));
+}
+
+function editItem(id) {
+    const item = itemsData.find(i => i.id === id);
+    editingId = id;
+    editingType = 'item';
+    showModal('Блюдо', generateItemForm(item));
+}
+
+document.getElementById('addOysterBtn').addEventListener('click', () => {
+    editingId = null;
+    editingType = 'oyster';
+    showModal('Новая устрица', generateOysterForm(null));
+});
+document.getElementById('addCategoryBtn').addEventListener('click', () => {
+    editingId = null;
+    editingType = 'category';
+    showModal('Новая категория', generateCategoryForm(null));
+});
+document.getElementById('addItemBtn').addEventListener('click', () => {
+    editingId = null;
+    editingType = 'item';
+    if (!categoriesData.length) {
+        alert('Сначала создайте хотя бы одну категорию');
+        return;
+    }
+    showModal('Новое блюдо', generateItemForm(null));
+});
+
+// ========== ГЕНЕРАЦИЯ ФОРМ ==========
+function generateOysterForm(o) {
+    const data = o || {
+        id: '', name: '', badge: '', price: 0, sal: 5, iod: 5, sw: 5, meat: 5,
+        region_group: 'france',
+        terroir: { ru: '', ro: '', en: '' },
+        description: { ru: '', ro: '', en: '' },
+        origin: {
+            flag: '🇫🇷',
+            place: { ru: '', ro: '', en: '' },
+            region: { ru: '', ro: '', en: '' },
+            text: { ru: '', ro: '', en: '' }
+        },
+        facts: { ru: ['','',''], ro: ['','',''], en: ['','',''] },
+        image_url: ''
+    };
+    // Защита от неполных объектов, пришедших из БД
+    data.terroir = data.terroir || { ru:'', ro:'', en:'' };
+    data.description = data.description || { ru:'', ro:'', en:'' };
+    data.origin = data.origin || { flag:'', place:{}, region:{}, text:{} };
+    data.origin.place = data.origin.place || {};
+    data.origin.region = data.origin.region || {};
+    data.origin.text = data.origin.text || {};
+    data.facts = data.facts || { ru:[], ro:[], en:[] };
+
+    return `
+        <label>ID (уникальный, латиницей)</label>
+        <input type="text" id="f_id" value="${escapeHtml(data.id)}" ${editingId ? 'readonly' : ''}>
+
+        <label>Название</label>
+        <input type="text" id="f_name" value="${escapeHtml(data.name)}">
+
+        <label>Бейдж</label>
+        <input type="text" id="f_badge" value="${escapeHtml(data.badge)}">
+
+        <label>Цена (MDL)</label>
+        <input type="number" id="f_price" value="${data.price ?? 0}">
+
+        <div class="lang-fields">
+            <div><label>Солёность</label><input type="number" id="f_sal" value="${data.sal ?? 5}" min="0" max="10"></div>
+            <div><label>Йодистость</label><input type="number" id="f_iod" value="${data.iod ?? 5}" min="0" max="10"></div>
+            <div><label>Сладость</label><input type="number" id="f_sw" value="${data.sw ?? 5}" min="0" max="10"></div>
+            <div><label>Мясистость</label><input type="number" id="f_meat" value="${data.meat ?? 5}" min="0" max="10"></div>
+        </div>
+
+        <label>Регион (группа)</label>
+        <select id="f_region_group">
+            <option value="france" ${data.region_group === 'france' ? 'selected' : ''}>Франция</option>
+            <option value="ireland" ${data.region_group === 'ireland' ? 'selected' : ''}>Ирландия</option>
+            <option value="other" ${data.region_group === 'other' ? 'selected' : ''}>Другое</option>
+        </select>
+
+        <h3>Терруар</h3>
+        <div class="lang-fields">
+            <div><label>RU</label><input type="text" id="f_terroir_ru" value="${escapeHtml(data.terroir.ru)}"></div>
+            <div><label>RO</label><input type="text" id="f_terroir_ro" value="${escapeHtml(data.terroir.ro)}"></div>
+            <div><label>EN</label><input type="text" id="f_terroir_en" value="${escapeHtml(data.terroir.en)}"></div>
+        </div>
+
+        <h3>Описание</h3>
+        <div class="lang-fields">
+            <div><label>RU</label><textarea id="f_desc_ru">${escapeHtml(data.description.ru)}</textarea></div>
+            <div><label>RO</label><textarea id="f_desc_ro">${escapeHtml(data.description.ro)}</textarea></div>
+            <div><label>EN</label><textarea id="f_desc_en">${escapeHtml(data.description.en)}</textarea></div>
+        </div>
+
+        <h3>Происхождение</h3>
+        <label>Флаг (эмодзи или 'wave')</label>
+        <input type="text" id="f_origin_flag" value="${escapeHtml(data.origin.flag)}">
+        <div class="lang-fields">
+            <div><label>Место RU</label><input type="text" id="f_origin_place_ru" value="${escapeHtml(data.origin.place.ru)}"></div>
+            <div><label>Место RO</label><input type="text" id="f_origin_place_ro" value="${escapeHtml(data.origin.place.ro)}"></div>
+            <div><label>Место EN</label><input type="text" id="f_origin_place_en" value="${escapeHtml(data.origin.place.en)}"></div>
+        </div>
+        <div class="lang-fields">
+            <div><label>Регион RU</label><input type="text" id="f_origin_region_ru" value="${escapeHtml(data.origin.region.ru)}"></div>
+            <div><label>Регион RO</label><input type="text" id="f_origin_region_ro" value="${escapeHtml(data.origin.region.ro)}"></div>
+            <div><label>Регион EN</label><input type="text" id="f_origin_region_en" value="${escapeHtml(data.origin.region.en)}"></div>
+        </div>
+        <div class="lang-fields">
+            <div><label>Текст RU</label><textarea id="f_origin_text_ru">${escapeHtml(data.origin.text.ru)}</textarea></div>
+            <div><label>Текст RO</label><textarea id="f_origin_text_ro">${escapeHtml(data.origin.text.ro)}</textarea></div>
+            <div><label>Текст EN</label><textarea id="f_origin_text_en">${escapeHtml(data.origin.text.en)}</textarea></div>
+        </div>
+
+        <h3>Факты (по 3 на язык)</h3>
+        ${['ru','ro','en'].map(lang => `
+            <label>${lang.toUpperCase()}</label>
+            <div class="lang-fields">
+                <input type="text" id="f_fact_${lang}_0" value="${escapeHtml(data.facts[lang]?.[0] || '')}">
+                <input type="text" id="f_fact_${lang}_1" value="${escapeHtml(data.facts[lang]?.[1] || '')}">
+                <input type="text" id="f_fact_${lang}_2" value="${escapeHtml(data.facts[lang]?.[2] || '')}">
+            </div>
+        `).join('')}
+
+        <h3>Изображение</h3>
+        <div class="image-upload">
+            <div class="image-preview" id="imagePreview">
+                ${data.image_url ? `<img src="${escapeHtml(data.image_url)}" alt="">` : '<span>Нет фото</span>'}
+            </div>
+            <input type="file" id="imageFile" accept="image/*">
+        </div>
+        <div id="imageUploadStatus" class="field-error hidden"></div>
+        <input type="hidden" id="f_image_url" value="${escapeHtml(data.image_url || '')}">
+    `;
+}
+
+function generateCategoryForm(c) {
+    const data = c || {
+        id: '', label: { ru:'', ro:'', en:'' }, subtitle: { ru:'', ro:'', en:'' }, sort_order: 0
+    };
+    data.label = data.label || { ru:'', ro:'', en:'' };
+    data.subtitle = data.subtitle || { ru:'', ro:'', en:'' };
+    return `
+        <label>ID</label>
+        <input type="text" id="f_id" value="${escapeHtml(data.id)}" ${editingId ? 'readonly' : ''}>
+        <label>Название</label>
+        <div class="lang-fields">
+            <div><label>RU</label><input type="text" id="f_label_ru" value="${escapeHtml(data.label.ru)}"></div>
+            <div><label>RO</label><input type="text" id="f_label_ro" value="${escapeHtml(data.label.ro)}"></div>
+            <div><label>EN</label><input type="text" id="f_label_en" value="${escapeHtml(data.label.en)}"></div>
+        </div>
+        <label>Подзаголовок</label>
+        <div class="lang-fields">
+            <div><label>RU</label><input type="text" id="f_subtitle_ru" value="${escapeHtml(data.subtitle.ru)}"></div>
+            <div><label>RO</label><input type="text" id="f_subtitle_ro" value="${escapeHtml(data.subtitle.ro)}"></div>
+            <div><label>EN</label><input type="text" id="f_subtitle_en" value="${escapeHtml(data.subtitle.en)}"></div>
+        </div>
+        <label>Порядок</label>
+        <input type="number" id="f_sort_order" value="${data.sort_order ?? 0}">
+    `;
+}
+
+function generateItemForm(item) {
+    const data = item || {
+        id: '', category_id: categoriesData[0]?.id || '', name: '', price: 0, weight: '', description: '', image_url: '', sort_order: 0
+    };
+    const catOptions = categoriesData.map(c => `
+        <option value="${escapeHtml(c.id)}" ${data.category_id === c.id ? 'selected' : ''}>${escapeHtml(c.label?.ru || c.id)}</option>
+    `).join('');
+
+    return `
+        <label>ID</label>
+        <input type="text" id="f_id" value="${escapeHtml(data.id)}" ${editingId ? 'readonly' : ''}>
+        <label>Категория</label>
+        <select id="f_category_id">${catOptions}</select>
+        <label>Название</label>
+        <input type="text" id="f_name" value="${escapeHtml(data.name)}">
+        <label>Цена</label>
+        <input type="number" id="f_price" value="${data.price ?? 0}">
+        <label>Вес/порция</label>
+        <input type="text" id="f_weight" value="${escapeHtml(data.weight || '')}">
+        <label>Описание</label>
+        <textarea id="f_description">${escapeHtml(data.description || '')}</textarea>
+        <label>Порядок</label>
+        <input type="number" id="f_sort_order" value="${data.sort_order ?? 0}">
+        <h3>Изображение</h3>
+        <div class="image-upload">
+            <div class="image-preview" id="imagePreview">
+                ${data.image_url ? `<img src="${escapeHtml(data.image_url)}" alt="">` : '<span>Нет фото</span>'}
+            </div>
+            <input type="file" id="imageFile" accept="image/*">
+        </div>
+        <div id="imageUploadStatus" class="field-error hidden"></div>
+        <input type="hidden" id="f_image_url" value="${escapeHtml(data.image_url || '')}">
+    `;
+}
+
+// ========== МОДАЛЬНОЕ ОКНО ==========
+function showModal(title, contentHTML) {
+    document.getElementById('modalTitle').textContent = title;
+    document.getElementById('modalContent').innerHTML = contentHTML;
+    document.getElementById('modalOverlay').classList.remove('hidden');
+
+    // Обработчик загрузки изображения
+    const fileInput = document.getElementById('imageFile');
+    if (fileInput) {
+        fileInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const statusEl = document.getElementById('imageUploadStatus');
+            const MAX_SIZE = 5 * 1024 * 1024; // 5MB
+            if (file.size > MAX_SIZE) {
+                statusEl.textContent = 'Файл слишком большой (макс. 5 МБ)';
+                statusEl.classList.remove('hidden');
+                fileInput.value = '';
+                return;
+            }
+            statusEl.classList.add('hidden');
+
+            const reader = new FileReader();
+            reader.onload = async () => {
+                try {
+                    const base64 = reader.result.split(',')[1];
+                    const fileName = `${Date.now()}_${file.name}`.replace(/[^a-zA-Z0-9._-]/g, '_');
+                    const res = await apiFetch('/api/upload-image', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            fileName,
+                            fileBase64: base64,
+                            contentType: file.type
+                        })
+                    });
+                    const data = await res.json();
+                    if (data.url) {
+                        document.getElementById('f_image_url').value = data.url;
+                        document.querySelector('#imagePreview').innerHTML = `<img src="${data.url}" alt="">`;
+                    } else {
+                        statusEl.textContent = data.error || 'Ошибка загрузки изображения';
+                        statusEl.classList.remove('hidden');
+                    }
+                } catch (err) {
+                    statusEl.textContent = 'Ошибка загрузки изображения';
+                    statusEl.classList.remove('hidden');
+                }
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+}
+
+document.getElementById('modalCancel').addEventListener('click', () => {
+    document.getElementById('modalOverlay').classList.add('hidden');
+});
+
+document.getElementById('modalSave').addEventListener('click', async () => {
+    const idValue = document.getElementById('f_id').value.trim();
+    if (!idValue) {
+        alert('Заполните поле ID');
+        return;
+    }
+    // ID: только латиница, цифры, дефис, подчёркивание
+    if (!/^[a-zA-Z0-9_-]+$/.test(idValue)) {
+        alert('ID может содержать только латинские буквы, цифры, - и _');
+        return;
+    }
+
+    const saveBtn = document.getElementById('modalSave');
+    saveBtn.disabled = true;
+
+    try {
+        if (editingType === 'oyster') {
+            const oyster = {
+                id: idValue,
+                name: document.getElementById('f_name').value,
+                badge: document.getElementById('f_badge').value,
+                price: parseFloat(document.getElementById('f_price').value) || 0,
+                sal: parseInt(document.getElementById('f_sal').value) || 0,
+                iod: parseInt(document.getElementById('f_iod').value) || 0,
+                sw: parseInt(document.getElementById('f_sw').value) || 0,
+                meat: parseInt(document.getElementById('f_meat').value) || 0,
+                region_group: document.getElementById('f_region_group').value,
+                terroir: {
+                    ru: document.getElementById('f_terroir_ru').value,
+                    ro: document.getElementById('f_terroir_ro').value,
+                    en: document.getElementById('f_terroir_en').value
+                },
+                description: {
+                    ru: document.getElementById('f_desc_ru').value,
+                    ro: document.getElementById('f_desc_ro').value,
+                    en: document.getElementById('f_desc_en').value
+                },
+                origin: {
+                    flag: document.getElementById('f_origin_flag').value,
+                    place: {
+                        ru: document.getElementById('f_origin_place_ru').value,
+                        ro: document.getElementById('f_origin_place_ro').value,
+                        en: document.getElementById('f_origin_place_en').value
+                    },
+                    region: {
+                        ru: document.getElementById('f_origin_region_ru').value,
+                        ro: document.getElementById('f_origin_region_ro').value,
+                        en: document.getElementById('f_origin_region_en').value
+                    },
+                    text: {
+                        ru: document.getElementById('f_origin_text_ru').value,
+                        ro: document.getElementById('f_origin_text_ro').value,
+                        en: document.getElementById('f_origin_text_en').value
+                    }
+                },
+                facts: {
+                    ru: [0,1,2].map(i => document.getElementById(`f_fact_ru_${i}`).value),
+                    ro: [0,1,2].map(i => document.getElementById(`f_fact_ro_${i}`).value),
+                    en: [0,1,2].map(i => document.getElementById(`f_fact_en_${i}`).value)
+                },
+                image_url: document.getElementById('f_image_url').value
+            };
+            await apiFetch('/api/oysters', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(oyster)
+            });
+            await loadOysters();
+        }
+        else if (editingType === 'category') {
+            const category = {
+                id: idValue,
+                label: {
+                    ru: document.getElementById('f_label_ru').value,
+                    ro: document.getElementById('f_label_ro').value,
+                    en: document.getElementById('f_label_en').value
+                },
+                subtitle: {
+                    ru: document.getElementById('f_subtitle_ru').value,
+                    ro: document.getElementById('f_subtitle_ro').value,
+                    en: document.getElementById('f_subtitle_en').value
+                },
+                sort_order: parseInt(document.getElementById('f_sort_order').value) || 0
+            };
+            await apiFetch('/api/food-categories', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(category)
+            });
+            await loadCategories();
+        }
+        else if (editingType === 'item') {
+            const item = {
+                id: idValue,
+                category_id: document.getElementById('f_category_id').value,
+                name: document.getElementById('f_name').value,
+                price: parseFloat(document.getElementById('f_price').value) || 0,
+                weight: document.getElementById('f_weight').value,
+                description: document.getElementById('f_description').value,
+                image_url: document.getElementById('f_image_url').value,
+                sort_order: parseInt(document.getElementById('f_sort_order').value) || 0
+            };
+            await apiFetch('/api/food-items', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(item)
+            });
+            await loadItems();
+        }
+        document.getElementById('modalOverlay').classList.add('hidden');
+    } catch (err) {
+        // ошибка уже показана через apiFetch/showGlobalError
+    } finally {
+        saveBtn.disabled = false;
+    }
+});
+</script>
+</body>
+</html>
