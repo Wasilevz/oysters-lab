@@ -2,7 +2,10 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#060a10">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Oyster's LAB — Гастрономический Гид</title>
     <meta name="description" content="Гастрономический гид по устрицам и винам Oyster's LAB.">
     <style>
@@ -39,7 +42,11 @@
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; }
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg) !important;
+            height: 100%;
+        }
 
         select, input, textarea, button {
             font-family: inherit;
@@ -48,7 +55,7 @@
         select option { background: var(--bg-card); color: var(--text); }
 
         body {
-            background: var(--bg);
+            background: var(--bg) !important;
             color: var(--text);
             font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: var(--fs-base);
@@ -60,7 +67,7 @@
             line-height: 1.5;
         }
 
-        .shell { width: 100%; max-width: 480px; min-height: 100vh; position: relative; overflow-x: hidden; }
+        .shell { width: 100%; max-width: 480px; min-height: 100vh; min-height: 100dvh; position: relative; overflow-x: hidden; padding-bottom: env(safe-area-inset-bottom); background: var(--bg); }
 
         .shell::before {
             content: '';
@@ -75,7 +82,7 @@
 
         /* ─── HEADER ─── */
         header {
-            padding: 22px 20px 16px;
+            padding: calc(22px + env(safe-area-inset-top)) 20px 16px;
             border-bottom: 1px solid var(--faint);
             position: sticky;
             top: 0;
@@ -416,7 +423,7 @@
             margin-top: 8px; white-space: nowrap;
         }
 
-        /* ─── WINE SECTION ─── */
+        /* ─── FOOD MENU SECTION ─── */
         .section-title {
             font-family: 'Cormorant Garamond', serif;
             font-size: var(--fs-lg); font-weight: 600;
@@ -439,9 +446,39 @@
         }
         .wine-card:hover { border-color: var(--gold-line); }
 
+        .wine-card-inner {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .dish-thumb {
+            width: 84px;
+            height: 84px;
+            flex-shrink: 0;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--surface), var(--surface-2));
+            border: 1px dashed var(--gold-line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            opacity: 0.7;
+            cursor: pointer;
+        }
+        .dish-thumb svg { width: 30px; height: 30px; }
+        .dish-thumb:hover, .dish-thumb:active {
+            border-color: var(--gold);
+            opacity: 0.95;
+            transform: scale(1.04);
+        }
+
+        .wine-content { flex: 1; min-width: 0; }
+
         .wine-top {
             display: flex; justify-content: space-between; align-items: flex-start;
             margin-bottom: 8px;
+            gap: 8px;
         }
 
         .wine-name {
@@ -489,6 +526,85 @@
         .wine-oyster-tag:hover {
             background: var(--gold-line);
             color: var(--text);
+        }
+
+        /* dish photo placeholder */
+        .dish-photo-placeholder {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            border-radius: var(--radius);
+            background: linear-gradient(135deg, var(--surface), var(--surface-2));
+            border: 1px dashed var(--gold-line);
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: var(--fs-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 20px;
+        }
+        .dish-photo-placeholder svg { opacity: 0.4; }
+
+        .dish-weight {
+            font-size: var(--fs-sm); color: var(--muted);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            letter-spacing: 0.02em;
+        }
+
+        /* photo lightbox */
+        .photo-lightbox {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(6,10,16,0.94);
+            z-index: 300; display: none;
+            justify-content: center; align-items: center;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 20px;
+        }
+        .photo-lightbox.active { display: flex; }
+        .photo-lightbox-panel {
+            width: 100%; max-width: 400px;
+            background: var(--bg-card); border: 1px solid var(--faint);
+            border-radius: var(--radius); padding: 20px;
+            position: relative;
+            animation: slideUp 0.3s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        .photo-lightbox-close {
+            position: absolute; top: 16px; right: 16px;
+            background: var(--surface); border: 1px solid var(--faint);
+            color: var(--muted); width: 34px; height: 34px;
+            border-radius: var(--radius-xs); cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; transition: all 0.2s ease; z-index: 2;
+        }
+        .photo-lightbox-close:hover { border-color: var(--gold-line); color: var(--text); }
+        .photo-lightbox-image {
+            width: 100%; aspect-ratio: 1 / 1;
+            border-radius: var(--radius-sm);
+            background: linear-gradient(135deg, var(--surface), var(--surface-2));
+            border: 1px dashed var(--gold-line);
+            display: flex; align-items: center; justify-content: center;
+            color: var(--gold); opacity: 0.75;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .photo-lightbox-image svg { width: 88px; height: 88px; }
+        .photo-lightbox-image img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+        .photo-lightbox-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: var(--fs-lg); font-weight: 600; color: var(--text);
+            text-align: center; margin-bottom: 6px;
+        }
+        .photo-lightbox-price {
+            font-size: var(--fs-md); color: var(--gold-light); font-weight: 800;
+            text-align: center; margin-bottom: 12px;
+        }
+        .photo-lightbox-desc {
+            font-size: var(--fs-sm); color: var(--body-text); line-height: 1.65;
+            text-align: center;
         }
 
         /* quiz trigger */
@@ -740,7 +856,7 @@
         </div>
         <div class="main-nav">
             <button class="nav-btn active" data-section="oysters"><span class="nav-icon" id="navIconOysters"></span> <span data-t="nav_oysters">Устрицы</span></button>
-            <button class="nav-btn" data-section="wines"><span class="nav-icon" id="navIconWines"></span> <span data-t="nav_wines">Вина</span></button>
+            <button class="nav-btn" data-section="food"><span class="nav-icon" id="navIconFood"></span> <span data-t="nav_food">Меню</span></button>
         </div>
     </header>
 
@@ -772,12 +888,12 @@
         </div>
     </div>
 
-    <!-- WINES SECTION -->
-    <div id="section-wines" style="display:none;">
-        <div class="filters-section">
-            <div class="filter-row" id="wine-filters"></div>
+    <!-- FOOD MENU SECTION -->
+    <div id="section-food" style="display:none;">
+        <div class="tabs-wrapper">
+            <div class="tabs" id="food-tabs"></div>
         </div>
-        <div class="wine-grid" id="wine-grid"></div>
+        <div id="food-cards-container"></div>
     </div>
 
 </div>
@@ -787,15 +903,25 @@
     <div class="quiz-card" id="quizCard"></div>
 </div>
 
+<!-- PHOTO LIGHTBOX -->
+<div class="photo-lightbox" id="photoLightbox">
+    <div class="photo-lightbox-panel">
+        <button class="photo-lightbox-close" id="photoLightboxClose"></button>
+        <div class="photo-lightbox-image" id="photoLightboxImage"></div>
+        <div class="photo-lightbox-name" id="photoLightboxName"></div>
+        <div class="photo-lightbox-price" id="photoLightboxPrice"></div>
+        <div class="photo-lightbox-desc" id="photoLightboxDesc"></div>
+    </div>
+</div>
+
 <script>
 const UI = {
     ru: {
         taste: 'Вкусовой профиль', origin: 'Происхождение', pairing: 'Идеальные напитки',
         facts: 'Интересные факты', low: '− слабо', high: 'интенсивно +', unit: '/ шт.',
         sal: 'Солёность', iod: 'Йодистость', sw: 'Сладость', meat: 'Мясистость',
-        nav_oysters: 'Устрицы', nav_wines: 'Вина', nav_combos: 'Пэйринги',
-        wine_region: 'Регион', wine_with: 'Подходит к', perfect: 'Идеальный пэйринг',
-        white: 'Белые', red: 'Красные', rose: 'Розовые', sparkling: 'Игристые',
+        nav_oysters: 'Устрицы', nav_food: 'Меню',
+        composition: 'Состав',
         quiz_trigger: 'Найти свою устрицу',
         quiz_title: 'Найди свою устрицу', quiz_sub: 'Ответь на 6 вопросов и мы подберём идеальную устрицу',
         quiz_q1: 'Какой уровень солёности вы предпочитаете?',
@@ -818,9 +944,8 @@ const UI = {
         taste: 'Profil Gustativ', origin: 'Origine', pairing: 'Băuturi Ideale',
         facts: 'Fapte Interesante', low: '− slab', high: 'intens +', unit: '/ buc.',
         sal: 'Salinitate', iod: 'Iod', sw: 'Dulceață', meat: 'Cărnozitate',
-        nav_oysters: 'Stridii', nav_wines: 'Vinuri', nav_combos: 'Asocieri',
-        wine_region: 'Regiune', wine_with: 'Se potrivește cu', perfect: 'Asociere ideală',
-        white: 'Albe', red: 'Roșii', rose: 'Rosé', sparkling: 'Spumant',
+        nav_oysters: 'Stridii', nav_food: 'Meniu',
+        composition: 'Compoziție',
         quiz_trigger: 'Găsește-ți stridia',
         quiz_title: 'Găsește-ți stridia', quiz_sub: 'Răspunde la 6 întrebări și îți vom recomanda stridia ideală',
         quiz_q1: 'Ce nivel de salinitate preferați?',
@@ -843,9 +968,8 @@ const UI = {
         taste: 'Taste Profile', origin: 'Origin', pairing: 'Perfect Pairings',
         facts: 'Interesting Facts', low: '− mild', high: 'intense +', unit: '/ pc.',
         sal: 'Salinity', iod: 'Iodine', sw: 'Sweetness', meat: 'Meatiness',
-        nav_oysters: 'Oysters', nav_wines: 'Wines', nav_combos: 'Pairings',
-        wine_region: 'Region', wine_with: 'Pairs with', perfect: 'Perfect Pairing',
-        white: 'White', red: 'Red', rose: 'Rosé', sparkling: 'Sparkling',
+        nav_oysters: 'Oysters', nav_food: 'Menu',
+        composition: 'Composition',
         quiz_trigger: 'Find your oyster',
         quiz_title: 'Find Your Oyster', quiz_sub: 'Answer 6 questions and we\'ll find the perfect match',
         quiz_q1: 'What salinity level do you prefer?',
@@ -1289,237 +1413,87 @@ const OYSTERS = [
     }
 ];
 
-const WINES = [
+const FOOD_CATEGORIES = [
     {
-        name: 'Moet & Chandon Brut Imperial',
-        type: 'spark', region: 'Шампань, Франция',
-        desc: { ru: 'Баланс, зрелые фрукты, элегантность.', ro: 'Echilibru, fructe coapte, eleganță.', en: 'Balance, ripe fruits, elegance.' },
-        pairs: ['gold', 'gillardeau', 'eleonora']
+        key: 'tacos',
+        label: { ru: 'Тако', ro: 'Tacos', en: 'Tacos' },
+        subtitle: { ru: 'Хрустящие лепёшки с морем внутри', ro: 'Foițe crocante cu mare în interior', en: 'Crispy shells with the sea inside' },
+        items: [
+            { id: 'taco-octopus', name: 'Тако с осьминогом', price: '190', weight: '2 шт', desc: 'Нежные щупальца осьминога, авокадо и цитрусовый соус.' },
+            { id: 'taco-shrimp', name: 'Тако с креветками', price: '100', weight: '2 шт', desc: 'Сочные креветки, свежие овощи и лёгкий пряный соус.' },
+            { id: 'taco-crab', name: 'Тако с камчатским крабом', price: '300', weight: '2 шт', desc: 'Мясо камчатского краба с цитрусово-сливочным дрессингом.' }
+        ]
     },
     {
-        name: 'Veuve Clicquot Brut',
-        type: 'spark', region: 'Шампань, Франция',
-        desc: { ru: 'Мощь, бrioшь, минеральность.', ro: 'Putere, brioșă, mineralitate.', en: 'Power, brioche, minerality.' },
-        pairs: ['gillardeau', 'speciale', 'gold']
+        key: 'hotdogs',
+        label: { ru: 'Хот-доги', ro: 'Hot-dogs', en: 'Hot Dogs' },
+        subtitle: { ru: 'Роллы с морепродуктами в бриоши', ro: 'Rulouri cu fructe de mare în brioșă', en: 'Seafood rolls in brioche' },
+        items: [
+            { id: 'hotdog-octopus', name: 'Хот-дог с осьминогом', price: '190', weight: '1 шт', desc: 'Тёплая булочка бриошь, нежный осьминог и лимонная эмульсия.' },
+            { id: 'hotdog-shrimp', name: 'Хот-дог с креветками', price: '120', weight: '1 шт', desc: 'Классический lobster-стайл ролл с креветками и травами.' },
+            { id: 'hotdog-crab', name: 'Хот-дог с Камчатским крабом', price: '300', weight: '1 шт', desc: 'Прекрасная булочка бриошь с натуральным Камчатским крабом.' }
+        ]
     },
     {
-        name: 'Dom Perignon Brut Vintage 2015',
-        type: 'spark', region: 'Шампань, Франция',
-        desc: { ru: 'Глубина, созревшие фрукты, шёлк.', ro: 'Adâncime, fructe mature, mătase.', en: 'Depth, mature fruits, silk.' },
-        pairs: ['gold', 'gillardeau']
+        key: 'mussels',
+        label: { ru: 'Мидии', ro: 'Midii', en: 'Mussels' },
+        subtitle: { ru: 'Атлантические мидии в котелке', ro: 'Midii atlantice în oală', en: 'Atlantic mussels in a pot' },
+        items: [
+            { id: 'mussels-cream', name: 'Мидии в сливочно-винном соусе', price: '400', weight: '950 г', desc: 'Мидии, тушёные в белом вине со сливками, чесноком и петрушкой.' },
+            { id: 'mussels-tomato', name: 'Мидии в томатном соусе', price: '350', weight: '950 г', desc: 'Мидии в ароматном томатном соусе с базиликом и перцем чили.' }
+        ]
     },
     {
-        name: 'Ruinart Brut',
-        type: 'spark', region: 'Шампань, Франция',
-        desc: { ru: 'Цветы, цитрус, меловая свежесть.', ro: 'Flori, citrice, prospețime de cretă.', en: 'Flowers, citrus, chalky freshness.' },
-        pairs: ['josephine', 'royale', 'sentenelles']
+        key: 'seafood',
+        label: { ru: 'Морепродукты', ro: 'Fructe de mare', en: 'Seafood' },
+        subtitle: { ru: 'Из холодной витрины и с гриля', ro: 'Din vitrina rece și de la grătar', en: 'From the cold case and the grill' },
+        items: [
+            { id: 'crab-rillette', name: 'Рийет из камчатского краба', price: '200', weight: '160 г', desc: 'Нежный паштет из краба с гренками.' },
+            { id: 'shrimp-grill', name: 'Креветки на гриле', price: '200', weight: '250 гр', desc: 'Тигровые креветки обжаренные на гриле с фирменным соусом OystersLab.' },
+            { id: 'carabinero', name: 'Креветки CARABINERO', price: '1000', weight: '200 гр', desc: 'Знаменитые Испанские креветки.' }
+        ]
     },
     {
-        name: 'Ruinart Rose',
-        type: 'rose', region: 'Шампань, Франция',
-        desc: { ru: 'Клубника, минеральность, шампанское.', ro: 'Căpșuni, mineralitate, șampanie.', en: 'Strawberry, minerality, champagne.' },
-        pairs: ['royale', 'ostraregal', 'sentenelles']
+        key: 'platters',
+        label: { ru: 'Плато', ro: 'Platou', en: 'Platters' },
+        subtitle: { ru: 'Королевские платтеры для компании', ro: 'Platouri regale pentru companie', en: 'Royal platters to share' },
+        items: [
+            { id: 'seafood-platter', name: 'Плато с морепродуктами', price: '1000', weight: '1200 г', desc: 'Креветки, осьминог, кальмары, картошечка, кукуруза, 2 соуса.' }
+        ]
     },
     {
-        name: 'Champagne Pommery Brut Royal',
-        type: 'spark', region: 'Шампань, Франция',
-        desc: { ru: 'Свежесть, яблоко, мел.', ro: 'Prospețime, măr, cretă.', en: 'Freshness, apple, chalk.' },
-        pairs: ['josephine', 'amulet']
+        key: 'bakedoysters',
+        label: { ru: 'Запечённые устрицы', ro: 'Stridii la cuptor', en: 'Baked Oysters' },
+        items: [
+            { id: 'baked-classic', name: 'Классическая запечённая устрица', price: '70', weight: '1 шт', desc: 'Устрица с чесноком, сыром и зеленью.' },
+            { id: 'baked-truffle', name: 'Устрицы с трюфелем', price: '70', weight: '1 шт', desc: 'Устрица запечённая с трюфелем.' },
+            { id: 'baked-spicy', name: 'Устрица пикантная', price: '70', weight: '1 шт', desc: 'Запечённая устрица с пикантными нотками.' }
+        ]
     },
     {
-        name: 'Piper Heidsieck Cuvee Brut',
-        type: 'spark', region: 'Шампань, Франция',
-        desc: { ru: 'Фрукты, бrioшь, утончённость.', ro: 'Fructe, brioșă, rafinament.', en: 'Fruits, brioche, refinement.' },
-        pairs: ['gold', 'eleonore']
+        key: 'snacks',
+        label: { ru: 'Закуски', ro: 'Gustări', en: 'Snacks' },
+        items: [
+            { id: 'olives', name: 'Оливки', price: '100', weight: '300 гр', desc: 'Прекрасная закуска к бокалу вина.' },
+            { id: 'snack-mix', name: 'Микс закусок', price: '130', weight: '200 гр', desc: 'Пармезан, Прошутто, Оливки, Гриссини.' }
+        ]
     },
     {
-        name: 'Prosecco SERENA Superiore DOCG Brut',
-        type: 'spark', region: 'Тревизо, Италия',
-        desc: { ru: 'Виноград, лёгкость, свежесть.', ro: 'Struguri, ușurință, prospețime.', en: 'Grape, lightness, freshness.' },
-        pairs: ['royale', 'josephine', 'amulet']
-    },
-    {
-        name: 'CONTARINI Prosecco Superiore DOCG Brut',
-        type: 'spark', region: 'Вальдоббьадене, Италия',
-        desc: { ru: 'Цветочность, яблоко, тонкие пузырьки.', ro: 'Floritate, măr, bule fine.', en: 'Florality, apple, fine bubbles.' },
-        pairs: ['josephine', 'sentenelles']
-    },
-    {
-        name: 'Ruggeri Cartizze Valdobbiadene DOCG Brut',
-        type: 'spark', region: 'Вальдоббьадене, Италия',
-        desc: { ru: 'Гран-крю prosecco, миндаль, зрелость.', ro: 'Grand cru prosecco, migdale, maturitate.', en: 'Grand cru prosecco, almond, maturity.' },
-        pairs: ['gold', 'gillardeau']
-    },
-    {
-        name: 'MESTRO Prosecco Superiore DOCG Brut',
-        type: 'spark', region: 'Вальдоббьадене, Италия',
-        desc: { ru: 'Сбалансированное, свежие фрукты.', ro: 'Echilibrat, fructe proaspete.', en: 'Balanced, fresh fruits.' },
-        pairs: ['josephine', 'royale']
-    },
-    {
-        name: 'Pago de Tharsys Cava Brut',
-        type: 'spark', region: 'Каталония, Испания',
-        desc: { ru: 'Минералы, цитрус, игристость.', ro: 'Minerale, citrice, spumant.', en: 'Minerals, citrus, sparkling.' },
-        pairs: ['boudeuse', 'finedeclaire']
-    },
-    {
-        name: 'Veuve Clicquot Demi Sec',
-        type: 'spark', region: 'Шампань, Франция',
-        desc: { ru: 'Мёд, персик, мягкость.', ro: 'Miere, piersică, delicatețe.', en: 'Honey, peach, softness.' },
-        pairs: ['ostraregal', 'royale']
-    },
-    {
-        name: 'Purcari Cuvee Alb Brut',
-        type: 'spark', region: 'Молдова',
-        desc: { ru: 'Молдавское игристое, чистота.', ro: 'Spumant moldovenesc, puritate.', en: 'Moldovan sparkling, purity.' },
-        pairs: ['josephine', 'sentenelles', 'amulet']
-    },
-    {
-        name: 'Purcari Cuvee Rose Brut',
-        type: 'rose', region: 'Молдова',
-        desc: { ru: 'Ягодные ноты, деликатная пена.', ro: 'Note de fructe de pădure, spumă delicată.', en: 'Berry notes, delicate foam.' },
-        pairs: ['royale', 'ostraregal']
-    },
-    {
-        name: 'CRICOVA Elogiu Brut Natur',
-        type: 'spark', region: 'Молдова',
-        desc: { ru: 'Досек, чистый характер, минералы.', ro: 'Brut natur, caracter pur, minerale.', en: 'Brut nature, pure character, minerals.' },
-        pairs: ['tiamara', 'boudeuse']
-    },
-    {
-        name: 'Castel Mimi Sauvignon Blanc',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Цитрус, травы, яркая кислотность.', ro: 'Citrice, ierburi, aciditate vibrantă.', en: 'Citrus, herbs, vibrant acidity.' },
-        pairs: ['tiamara', 'finedeclaire', 'boudeuse']
-    },
-    {
-        name: 'Vinum Estate Riesling 2021',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Минеральный, цитрус, точность.', ro: 'Mineral, citric, precizie.', en: 'Mineral, citrus, precision.' },
-        pairs: ['tiamara', 'boudeuse']
-    },
-    {
-        name: 'BAHU Riesling 2023',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Свежий, цветочный, минеральный.', ro: 'Proaspăt, floral, mineral.', en: 'Fresh, floral, mineral.' },
-        pairs: ['finedeclaire', 'boudeuse']
-    },
-    {
-        name: 'Casa Garcia Vinho Verde',
-        type: 'white', region: 'Португалия',
-        desc: { ru: 'Лёгкость, цитрус, освежающий.', ro: 'Ușurință, citrice, răcoritor.', en: 'Lightness, citrus, refreshing.' },
-        pairs: ['tiamara', 'finedeclaire']
-    },
-    {
-        name: 'Vinum Selection Chardonnay 2021',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Сливочность, яблоко, округлость.', ro: 'Cremozitate, măr, rotunjime.', en: 'Creaminess, apple, roundness.' },
-        pairs: ['josephine', 'gillardeau', 'sentenelles']
-    },
-    {
-        name: 'TE WA Wines Chardonnay',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Спелые фрукты, бочковая нота.', ro: 'Fructe coapte, notă de butoi.', en: 'Ripe fruits, barrel note.' },
-        pairs: ['gillardeau', 'speciale']
-    },
-    {
-        name: 'Vinaria Nobila Chardonnay Barrique',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Дубовая выдержка, ваниль, орех.', ro: 'Maturare în stejar, vanilie, nuci.', en: 'Oak aged, vanilla, nut.' },
-        pairs: ['gillardeau', 'speciale', 'eleonore']
-    },
-    {
-        name: 'Novak Alb de Onitcani Clasique',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Элегантный, минеральный, чистый.', ro: 'Elegant, mineral, pur.', en: 'Elegant, mineral, pure.' },
-        pairs: ['josephine', 'royale']
-    },
-    {
-        name: 'Carpe Diem Feteasca Regala',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Цветы, экзотика, свежесть.', ro: 'Flori, exotic, prospețime.', en: 'Flowers, exotic, freshness.' },
-        pairs: ['royale', 'josephine']
-    },
-    {
-        name: 'Minis Terrios Alba Imparatesa',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Нежность, медовые тона, деликат.', ro: 'Delicatețe, tonuri de miere, fin.', en: 'Tenderness, honey tones, delicate.' },
-        pairs: ['josephine', 'sentenelles']
-    },
-    {
-        name: 'Divus Winery Pinot Noir',
-        type: 'red', region: 'Молдова',
-        desc: { ru: 'Лёгкий, ягодный, бархат.', ro: 'Ușor, fructat, catifelat.', en: 'Light, fruity, velvety.' },
-        pairs: ['ostraregal', 'sentenelles']
-    },
-    {
-        name: 'Chateau Cristi Pinot Noir',
-        type: 'red', region: 'Молдова',
-        desc: { ru: 'Классика, вишня, специи.', ro: 'Clasic, cireșe, condimente.', en: 'Classic, cherry, spices.' },
-        pairs: ['ostraregal', 'gillardeau']
-    },
-    {
-        name: 'Nocturne Purcari Rose Sec',
-        type: 'rose', region: 'Молдова',
-        desc: { ru: 'Ночные тона, ягоды, элегантность.', ro: 'Tonuri nocturne, fructe, eleganță.', en: 'Night tones, berries, elegance.' },
-        pairs: ['royale', 'sentenelles']
-    },
-    {
-        name: 'MIMI 9 MUSES Merlot Rose',
-        type: 'rose', region: 'Молдова',
-        desc: { ru: 'Мерло розе, нежность, фрукты.', ro: 'Merlot roz, delicatețe, fructe.', en: 'Merlot rosé, tenderness, fruits.' },
-        pairs: ['ostraregal', 'amulet']
-    },
-    {
-        name: 'Minis Terrios Rose',
-        type: 'rose', region: 'Молдова',
-        desc: { ru: 'Игривое, ягодное, освежающее.', ro: 'Jucăuș, fructat, răcoritor.', en: 'Playful, fruity, refreshing.' },
-        pairs: ['sentenelles', 'royale']
-    },
-    {
-        name: 'Castel Mimi Rara Neagra Rose',
-        type: 'rose', region: 'Молдова',
-        desc: { ru: 'Авторский, необычный, свежий.', ro: 'Artizanal, neobișnuit, proaspăt.', en: 'Artisanal, unusual, fresh.' },
-        pairs: ['royale', 'sentenelles', 'amulet']
-    },
-    {
-        name: 'Vinum Estate Feteasca Regala 2022',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Экзотика, цветы, лёгкость.', ro: 'Exotic, flori, ușurință.', en: 'Exotic, flowers, lightness.' },
-        pairs: ['josephine', 'royale', 'amulet']
-    },
-    {
-        name: 'Gitana Winery Riesling',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Чистый рислинг, камень, цитрус.', ro: 'Riesling pur, piatră, citrice.', en: 'Pure riesling, stone, citrus.' },
-        pairs: ['tiamara', 'boudeuse', 'finedeclaire']
-    },
-    {
-        name: 'Domeniile Vorniceni Viorica',
-        type: 'white', region: 'Молдова',
-        desc: { ru: 'Местный сорт, цветы, мед.', ro: 'Soi local, flori, miere.', en: 'Local variety, flowers, honey.' },
-        pairs: ['josephine', 'sentenelles']
-    },
-    {
-        name: 'Bott Prosecco Gold',
-        type: 'spark', region: 'Тревизо, Италия',
-        desc: { ru: 'Золотое имя, фрукты, элегантность.', ro: 'Nume de aur, fructe, eleganță.', en: 'Golden name, fruits, elegance.' },
-        pairs: ['gold', 'josephine']
-    },
-    {
-        name: 'Vinum Spumant de calitate Brut Natur 2021',
-        type: 'spark', region: 'Молдова',
-        desc: { ru: 'Досек, чистый характер, свежесть.', ro: 'Brut natur, caracter pur, prospețime.', en: 'Brut nature, pure character, freshness.' },
-        pairs: ['tiamara', 'boudeuse', 'finedeclaire']
+        key: 'desserts',
+        label: { ru: 'Десерты', ro: 'Deserturi', en: 'Desserts' },
+        items: [
+            { id: 'icecream-caviar', name: 'Мороженное с чёрной икрой', price: '120', weight: '200 г', desc: 'Сливочный пломбир посыпанный сухой чёрной икрой русского осетра.' }
+        ]
     }
 ];
 
 let currentLang = localStorage.getItem('oyster_lang') || 'ru';
 let currentSection = 'oysters';
-let currentWineFilter = 'white';
+let currentFoodCategory = 'tacos';
 const ICONS = {
     oyster: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2"/></svg>',
     wine: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l-1 9a5 5 0 01-3 4.5M12 15.5V22M8 22h8"/><path d="M7.5 6h9"/></svg>',
+    menu: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
     target: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
     scale: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M1 7l5 6 5-6"/><path d="M13 7l5 6 5-6"/><circle cx="6" cy="13" r="2"/><circle cx="18" cy="13" r="2"/></svg>',
     champagne: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2l-2 10a6 6 0 0012 0L16 2"/><path d="M12 12v6"/><path d="M9 18h6"/><path d="M12 2v-0"/></svg>',
@@ -1531,7 +1505,8 @@ const ICONS = {
     wave: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12c2-2 4-2 6 0s4 2 6 0 4-2 6 0"/></svg>',
     close: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
     result_oyster: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2"/></svg>',
-    empty_wine: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l-1 9a5 5 0 01-3 4.5M12 15.5V22M8 22h8"/><path d="M7.5 6h9"/></svg>'
+    empty_wine: '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2h8l-1 9a5 5 0 01-3 4.5M12 15.5V22M8 22h8"/><path d="M7.5 6h9"/></svg>',
+    plate: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M3 9h18M3 15h18"/></svg>'
 };
 
 let quizStep = 0;
@@ -1630,62 +1605,6 @@ function renderCards() {
             </div>
         </div>
     `).join('');
-}
-
-function renderWineFilters() {
-    const t = UI[currentLang];
-    const filters = [
-        { key: 'white', label: t.white },
-        { key: 'rose', label: t.rose },
-        { key: 'spark', label: t.sparkling }
-    ];
-    document.getElementById('wine-filters').innerHTML = filters.map(f => `
-        <button class="filter-chip ${f.key === currentWineFilter ? 'active' : ''}" data-filter="${f.key}">${f.label}</button>
-    `).join('');
-}
-
-function renderWines() {
-    const t = UI[currentLang];
-    const filtered = WINES.filter(w => w.type === currentWineFilter);
-
-    const grid = document.getElementById('wine-grid');
-
-    if (filtered.length === 0) {
-        grid.innerHTML = `<div class="empty-state"><div class="empty-icon">${ICONS.empty_wine}</div><div class="empty-text">Нет вин в этой категории</div></div>`;
-        return;
-    }
-
-    const typeLabels = {
-        white: { ru: 'Белое', ro: 'Alb', en: 'White' },
-        rose: { ru: 'Розе', ro: 'Rosé', en: 'Rosé' },
-        spark: { ru: 'Игристое', ro: 'Spumant', en: 'Sparkling' }
-    };
-
-    grid.innerHTML = filtered.map(w => {
-        const pairOysters = w.pairs.map(pid => OYSTERS.find(o => o.id === pid)).filter(Boolean);
-        return `
-            <div class="wine-card">
-                <div class="wine-top">
-                    <div class="wine-name">${w.name}</div>
-                    <span class="wine-type-badge ${w.type}">${typeLabels[w.type][currentLang]}</span>
-                </div>
-                <div class="wine-region">${w.region}</div>
-                <div class="wine-desc">${w.desc[currentLang]}</div>
-                <div class="wine-oysters">
-                    ${pairOysters.map(o => `
-                        <span class="wine-oyster-tag" data-oyster="${o.id}">${o.name}</span>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    }).join('');
-
-    grid.querySelectorAll('.wine-oyster-tag').forEach(tag => {
-        tag.addEventListener('click', () => {
-            switchSection('oysters');
-            setTimeout(() => showOyster(tag.dataset.oyster), 100);
-        });
-    });
 }
 
 function activateBars(cardEl) {
@@ -1906,6 +1825,45 @@ function showOyster(id) {
     activateBars(card);
 }
 
+function renderFoodTabs() {
+    const tabsEl = document.getElementById('food-tabs');
+    tabsEl.innerHTML = FOOD_CATEGORIES.map(c => `
+        <button class="tab ${c.key === currentFoodCategory ? 'active' : ''}" data-cat="${c.key}">${c.label[currentLang]}</button>
+    `).join('');
+}
+
+function renderFoodCards() {
+    const cat = FOOD_CATEGORIES.find(c => c.key === currentFoodCategory);
+    const container = document.getElementById('food-cards-container');
+    container.innerHTML = `
+        <div class="wine-grid">
+            ${cat.items.map(item => `
+                <div class="wine-card">
+                    <div class="wine-card-inner">
+                        <div class="dish-thumb" data-id="${item.id}">${ICONS.plate}</div>
+                        <div class="wine-content">
+                            <div class="wine-top">
+                                <div class="wine-name">${item.name}</div>
+                                <div class="wine-type-badge white">${item.price} MDL</div>
+                            </div>
+                            ${item.weight ? `<div class="wine-region">${item.weight}</div>` : ''}
+                            <div class="wine-desc">${item.desc}</div>
+                        </div>
+                    </div>
+                </div>
+            `).join('')}
+        </div>
+    `;
+}
+
+function openPhotoLightbox(item) {
+    document.getElementById('photoLightboxImage').innerHTML = ICONS.plate;
+    document.getElementById('photoLightboxName').textContent = item.name;
+    document.getElementById('photoLightboxPrice').textContent = item.price + ' MDL' + (item.weight ? ' · ' + item.weight : '');
+    document.getElementById('photoLightboxDesc').textContent = item.desc;
+    document.getElementById('photoLightbox').classList.add('active');
+}
+
 function handleHash() {
     const hash = window.location.hash.replace('#', '').toLowerCase();
     const valid = OYSTERS.find(o => o.id === hash);
@@ -1918,10 +1876,13 @@ function switchSection(section) {
         btn.classList.toggle('active', btn.dataset.section === section);
     });
     document.getElementById('section-oysters').style.display = section === 'oysters' ? '' : 'none';
-    document.getElementById('section-wines').style.display = section === 'wines' ? '' : 'none';
+    document.getElementById('section-food').style.display = section === 'food' ? '' : 'none';
 
     if (section === 'oysters') handleHash();
-    if (section === 'wines') { renderWineFilters(); renderWines(); }
+    if (section === 'food') {
+        renderFoodTabs();
+        renderFoodCards();
+    }
 }
 
 function setLanguage(lang) {
@@ -1942,7 +1903,7 @@ function setLanguage(lang) {
 
 document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('navIconOysters').innerHTML = ICONS.oyster;
-    document.getElementById('navIconWines').innerHTML = ICONS.wine;
+    document.getElementById('navIconFood').innerHTML = ICONS.menu;
     document.getElementById('compareClose').innerHTML = ICONS.close;
     document.getElementById('quizTriggerIcon').innerHTML = ICONS.target;
     document.getElementById('compareTriggerIcon').innerHTML = ICONS.scale;
@@ -1960,12 +1921,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (btn) showOyster(btn.dataset.target);
     });
 
-    document.getElementById('wine-filters').addEventListener('click', e => {
-        const chip = e.target.closest('.filter-chip');
-        if (chip) {
-            currentWineFilter = chip.dataset.filter;
-            renderWineFilters();
-            renderWines();
+    document.getElementById('food-tabs').addEventListener('click', e => {
+        const btn = e.target.closest('.tab');
+        if (btn) {
+            currentFoodCategory = btn.dataset.cat;
+            renderFoodTabs();
+            renderFoodCards();
         }
     });
 
@@ -1998,6 +1959,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     document.getElementById('compareBtn').addEventListener('click', runCompare);
+
+    document.getElementById('photoLightboxClose').innerHTML = ICONS.close;
+    document.getElementById('photoLightboxClose').addEventListener('click', () => {
+        document.getElementById('photoLightbox').classList.remove('active');
+    });
+    document.getElementById('photoLightbox').addEventListener('click', e => {
+        if (e.target === e.currentTarget) {
+            e.currentTarget.classList.remove('active');
+        }
+    });
+    document.getElementById('food-cards-container').addEventListener('click', e => {
+        const thumb = e.target.closest('.dish-thumb');
+        if (!thumb) return;
+        const cat = FOOD_CATEGORIES.find(c => c.key === currentFoodCategory);
+        const item = cat && cat.items.find(i => i.id === thumb.dataset.id);
+        if (item) openPhotoLightbox(item);
+    });
 
     renderCompareSelects();
     setLanguage(currentLang);
