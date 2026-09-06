@@ -539,6 +539,15 @@ let FOOD_CATEGORIES = [];
 const SUPABASE_URL = 'https://lgtgzazoqzenedgzbzmf.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxndGd6YXpvcXplbmVkZ3piem1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTYyMjksImV4cCI6MjEwNDI3MjIyOX0.9eH14E5PbaM2PTkW9o7m2f9pCzFYdVF0NXVxZ-X57AQ';
 
+// Безопасно достаём локализованный текст: поддерживает и объект {ru,ro,en}, и обычную строку (на случай старых данных)
+function loc(value, lang) {
+    if (value == null) return '';
+    if (typeof value === 'object') {
+        return value[lang] || value.ru || value.en || value.ro || '';
+    }
+    return value;
+}
+
 // ==================== ЗАГРУЗКА ДАННЫХ ====================
 async function loadData() {
     try {
@@ -853,7 +862,7 @@ function showOyster(id) {
 function renderFoodTabs() {
     const tabsEl = document.getElementById('food-tabs');
     tabsEl.innerHTML = FOOD_CATEGORIES.map(c => `
-        <button class="tab ${c.key === currentFoodCategory ? 'active' : ''}" data-cat="${c.key}" role="tab">${c.label[currentLang]}</button>
+        <button class="tab ${c.key === currentFoodCategory ? 'active' : ''}" data-cat="${c.key}" role="tab">${loc(c.label, currentLang)}</button>
     `).join('');
 }
 
@@ -873,37 +882,43 @@ function renderFoodCards() {
     }
     container.innerHTML = `
         <div class="wine-grid">
-            ${cat.items.map(item => `
+            ${cat.items.map(item => {
+                const name = loc(item.name, currentLang);
+                const desc = loc(item.desc, currentLang);
+                return `
                 <div class="wine-card animate-in" style="animation-delay: ${Math.random() * 0.2}s">
                     <div class="wine-card-inner">
-                        <div class="dish-thumb" data-id="${item.id}" role="button" tabindex="0" aria-label="${item.name}">
-                            ${item.image_url ? `<img src="${item.image_url}" alt="${item.name}" loading="lazy">` : ICONS.plate}
+                        <div class="dish-thumb" data-id="${item.id}" role="button" tabindex="0" aria-label="${name}">
+                            ${item.image_url ? `<img src="${item.image_url}" alt="${name}" loading="lazy">` : ICONS.plate}
                         </div>
                         <div class="wine-content">
                             <div class="wine-top">
-                                <div class="wine-name">${item.name}</div>
+                                <div class="wine-name">${name}</div>
                                 <div class="wine-type-badge white">${item.price} MDL</div>
                             </div>
                             ${item.weight ? `<div class="wine-region">${item.weight}</div>` : ''}
-                            <div class="wine-desc">${item.desc}</div>
+                            <div class="wine-desc">${desc}</div>
                         </div>
                     </div>
                 </div>
-            `).join('')}
+            `;
+            }).join('')}
         </div>
     `;
 }
 
 function openPhotoLightbox(item) {
+    const name = loc(item.name, currentLang);
+    const desc = loc(item.desc, currentLang);
     const imgContainer = document.getElementById('photoLightboxImage');
     if (item.image_url) {
-        imgContainer.innerHTML = `<img src="${item.image_url}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm)">`;
+        imgContainer.innerHTML = `<img src="${item.image_url}" alt="${name}" style="width:100%;height:100%;object-fit:cover;border-radius:var(--radius-sm)">`;
     } else {
         imgContainer.innerHTML = ICONS.plate;
     }
-    document.getElementById('photoLightboxName').textContent = item.name;
+    document.getElementById('photoLightboxName').textContent = name;
     document.getElementById('photoLightboxPrice').textContent = item.price + ' MDL' + (item.weight ? ' · ' + item.weight : '');
-    document.getElementById('photoLightboxDesc').textContent = item.desc;
+    document.getElementById('photoLightboxDesc').textContent = desc;
     document.getElementById('photoLightbox').classList.add('active');
 }
 
