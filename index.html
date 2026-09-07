@@ -181,10 +181,23 @@
         .nav-btn[aria-current="page"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
         .nav-icon { font-size: var(--fs-base); display: inline-flex; }
 
-        /* ─── OYSTER TABS ─── */
-        .tabs-wrapper { position: relative; }
+        /* ─── OYSTER / FOOD TABS ─── */
+        /* Sticky under the header: switching oysters or dish categories while
+           reading a long description no longer requires scrolling back up.
+           --header-h is measured by JS (updateHeaderHeightVar) because the
+           header's real height depends on env(safe-area-inset-top) and can't
+           be hardcoded reliably in CSS alone. */
+        .tabs-wrapper {
+            position: sticky;
+            top: var(--header-h, 118px);
+            z-index: 90;
+            background: rgba(6,10,16,0.92);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid var(--faint);
+        }
         .tabs-wrapper::after {
-            content: ''; position: absolute; right: 0; top: 0; bottom: 0; width: 44px;
+            content: ''; position: absolute; right: 0; top: 0; bottom: 1px; width: 44px;
             background: linear-gradient(90deg, transparent, var(--bg)); pointer-events: none;
         }
         .tabs { display: flex; overflow-x: auto; padding: 12px 20px; gap: 8px; scroll-behavior: smooth; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
@@ -267,8 +280,20 @@
         .dish-grid { padding: 0 20px 80px; display: flex; flex-direction: column; gap: 12px; }
         .dish-card { background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 18px; transition: border-color 0.25s ease; }
         .dish-card:hover { border-color: var(--gold-line); }
-        .dish-card-inner { display: flex; gap: 14px; align-items: flex-start; }
-        .dish-thumb { width: 84px; height: 84px; flex-shrink: 0; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.7; cursor: pointer; }
+        .dish-card-inner { display: flex; gap: 16px; align-items: flex-start; }
+        /* Bigger than the original 84px so the photo actually helps the "order
+           or not" decision, but kept as a side-thumb (not a full-width hero
+           image) so scanning a long category list doesn't cost extra scrolling —
+           tapping still opens the full-size photo in the lightbox. */
+        .dish-thumb { width: 108px; height: 108px; flex-shrink: 0; position: relative; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.7; cursor: pointer; }
+        /* Optional attention badge ("Хит" / "Новинка") — renders only when the
+           dish has item.badge set; otherwise nothing is added to the layout. */
+        .dish-badge {
+            position: absolute; top: -6px; left: -6px; z-index: 1;
+            background: var(--gold); color: #0c0f14; font-size: 0.625rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.35); pointer-events: none; white-space: nowrap;
+        }
         .dish-thumb svg { width: 30px; height: 30px; }
         .dish-thumb:hover, .dish-thumb:active { border-color: var(--gold); opacity: 0.95; }
         .dish-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
@@ -598,6 +623,14 @@ function loc(value, lang) {
     if (value == null) return '';
     if (typeof value === 'object') return value[lang] || value.ru || value.en || value.ro || '';
     return value;
+}
+
+// Keeps the sticky tabs bar positioned exactly below the header. The header's
+// real height depends on env(safe-area-inset-top) and the language currently
+// shown, so it's measured in JS rather than hardcoded in CSS.
+function updateHeaderHeightVar() {
+    const header = document.querySelector('header');
+    if (header) document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
 }
 
 // ==================== LOADING / ERROR / EMPTY STATES ====================
@@ -993,6 +1026,7 @@ function renderFoodCards() {
                 <div class="dish-card animate-in" style="animation-delay: ${delay}s">
                     <div class="dish-card-inner">
                         <div class="dish-thumb" data-id="${item.id}" role="button" tabindex="0" aria-label="${t.view_photo}: ${name}">
+                            ${item.badge ? `<span class="dish-badge">${loc(item.badge, currentLang)}</span>` : ''}
                             ${item.image_url ? `<img src="${item.image_url}" alt="${name}" loading="lazy">` : ICONS.plate}
                         </div>
                         <div class="dish-content">
@@ -1089,6 +1123,7 @@ function setLanguage(lang) {
     renderCards();
     renderCompareSelects();
     switchSection(currentSection);
+    updateHeaderHeightVar();
 }
 
 // ==================== ИНИЦИАЛИЗАЦИЯ ====================
@@ -1098,6 +1133,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('compareClose').innerHTML = ICONS.close;
     document.getElementById('quizTriggerIcon').innerHTML = ICONS.target;
     document.getElementById('compareTriggerIcon').innerHTML = ICONS.scale;
+
+    updateHeaderHeightVar();
+    window.addEventListener('resize', updateHeaderHeightVar);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateHeaderHeightVar);
 
     document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
     document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => switchSection(btn.dataset.section)));
