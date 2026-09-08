@@ -1,871 +1,994 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#060a10">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Oyster's LAB — Гастрономический Гид</title>
-    <meta name="description" content="Гастрономический гид по устрицам и винам Oyster's LAB.">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#060a10">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Oyster's LAB — Админ-панель</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700&display=swap');
 
-        :root {
-            --bg:        #060a10;
-            --bg-card:   #0c1118;
-            --surface:   #111820;
-            --surface-2: #171f2a;
-            --surface-3: #1f2b3a;
-            --gold:      #d4b062;
-            --gold-light:#e8cc8a;
-            --gold-dim:  rgba(212,176,98,0.08);
-            --gold-line: rgba(212,176,98,0.18);
-            --gold-glow: rgba(212,176,98,0.04);
-            --text:      #f0ece4;
-            --text-sec:  #c8c0b4;
-            /* --muted was rgba(138,159,186,0.4) on lang-btn (~2:1 contrast, fails WCAG 1.4.3).
-               --muted itself is #7a8fa3 solid, which measures ~6.45:1 on --bg — keep this,
-               drop the low-alpha variant everywhere text needs to be read. */
-            --muted:     #7a8fa3;
-            --faint:     #1a222e;
-            --header-brand: #6ba39f;
-            --body-text: #b8c4d0;
-            --radius:    20px;
-            --radius-sm: 14px;
-            --radius-xs: 10px;
-            --green:     #6bcf8e;
-            --danger:    #e0847a;
-            --fs-xs:     0.75rem;
-            --fs-sm:     0.875rem;
-            --fs-base:   1rem;
-            --fs-md:     1.25rem;
-            --fs-lg:     1.563rem;
-            /* Fluid type: locks the hero name to the viewport so long EN/RO names
-               (e.g. "Special Gillardeau No.2") never overflow a 320–360px screen. */
-            --fs-xl:     clamp(2.25rem, 8vw, 3.15rem);
-            --tap-min:   44px; /* comfortable mobile touch target */
-        }
+:root {
+    --bg: #060a10;
+    --bg-card: #0c1118;
+    --surface: #111820;
+    --surface-2: #171f2a;
+    --gold: #d4b062;
+    --gold-light: #e8cc8a;
+    --gold-dim: rgba(212,176,98,0.08);
+    --gold-line: rgba(212,176,98,0.18);
+    --text: #f0ece4;
+    --text-sec: #c8c0b4;
+    --muted: #7a8fa3;
+    --faint: #1a222e;
+    --danger: #e05a5a;
+    --danger-dim: rgba(224,90,90,0.1);
+    --danger-line: rgba(224,90,90,0.25);
+    --green: #6bcf8e;
+    --green-dim: rgba(107,207,142,0.1);
+    --radius: 20px;
+    --radius-sm: 14px;
+    --radius-xs: 10px;
+    --fs-xs: 0.75rem;
+    --fs-sm: 0.875rem;
+    --fs-base: 1rem;
+    --fs-md: 1.25rem;
+    --fs-lg: 1.563rem;
+}
 
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; background: var(--bg) !important; height: 100%; }
-        select, input, textarea, button { font-family: inherit; color-scheme: dark; }
-        select option { background: var(--bg-card); color: var(--text); }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { background: var(--bg); height: 100%; }
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: var(--fs-base);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+}
+select, input, textarea, button { font-family: inherit; color-scheme: dark; }
+select option { background: var(--bg-card); color: var(--text); }
+button { cursor: pointer; }
+h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; color: var(--text); }
 
-        body {
-            background: var(--bg) !important;
-            color: var(--text);
-            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: var(--fs-base);
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            line-height: 1.5;
-        }
+.shell { width: 100%; max-width: 560px; min-height: 100vh; min-height: 100dvh; position: relative; padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
 
-        /* Visually hidden but screen-reader accessible — used for labels that
-           would clutter the visual layout (e.g. select labels). */
-        .sr-only {
-            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-            overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-        }
+/* ─── LOGIN ─── */
+.login-wrap { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+.login-card { width: 100%; max-width: 360px; background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 36px 28px; text-align: center; }
+.login-icon { width: 56px; height: 56px; margin: 0 auto 18px; border-radius: 16px; background: var(--gold-dim); border: 1px solid var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); }
+.login-card h1 { font-size: var(--fs-lg); letter-spacing: 1px; margin-bottom: 4px; }
+.login-sub { font-size: var(--fs-sm); color: var(--muted); margin-bottom: 28px; letter-spacing: 0.04em; text-transform: uppercase; }
+.field-wrap { position: relative; margin-bottom: 14px; }
+.field-wrap input { width: 100%; padding: 13px 44px 13px 16px; background: var(--surface); border: 1px solid var(--faint); border-radius: var(--radius-sm); color: var(--text); font-size: var(--fs-base); transition: border-color .2s; }
+.field-wrap input:focus { outline: none; border-color: var(--gold-line); }
+.field-toggle { position: absolute; right: 6px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
+.field-toggle:hover { color: var(--text); }
+.btn-primary { width: 100%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-light); font-weight: 700; font-size: var(--fs-base); padding: 14px; border-radius: var(--radius-sm); transition: all .2s; }
+.btn-primary:hover { background: var(--gold-line); color: var(--text); }
+.btn-primary:disabled { opacity: .5; cursor: not-allowed; }
+.login-error { color: var(--danger); font-size: var(--fs-sm); margin-top: 14px; min-height: 18px; }
 
-        /* Skip link: lets keyboard users jump past the repeated header/nav,
-           which sits at the top of every screen in this single-page app. */
-        .skip-link {
-            position: absolute; top: -60px; left: 12px; z-index: 1000;
-            background: var(--gold); color: #0c0f14; font-weight: 700;
-            padding: 12px 18px; border-radius: var(--radius-xs); text-decoration: none;
-            transition: top 0.2s ease;
-        }
-        .skip-link:focus { top: 12px; }
+/* ─── HEADER ─── */
+header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sticky; top: 0; z-index: 50; background: rgba(6,10,16,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--faint); }
+.header-row { display: flex; justify-content: space-between; align-items: center; }
+.brand h1 { font-size: var(--fs-md); letter-spacing: 3px; text-transform: uppercase; }
+.brand p { font-size: 0.65rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; margin-top: 2px; }
+.icon-btn { width: 38px; height: 38px; border-radius: var(--radius-xs); background: var(--surface); border: 1px solid var(--faint); color: var(--muted); display: flex; align-items: center; justify-content: center; transition: all .2s; flex-shrink: 0; }
+.icon-btn:hover { border-color: var(--gold-line); color: var(--text); }
+.icon-btn.danger-hover:hover { border-color: var(--danger-line); color: var(--danger); }
 
-        /* Consistent, visible focus ring across the whole app instead of relying
-           on (or worse, suppressing) the browser default outline. */
-        :focus { outline: none; }
-        :focus-visible {
-            outline: 2px solid var(--gold-light);
-            outline-offset: 2px;
-            border-radius: 6px;
-        }
+/* ─── NAV TABS ─── */
+.nav-tabs { display: flex; gap: 8px; padding: 14px 20px 0; }
+.nav-tab { flex: 1; background: var(--surface); border: 1px solid var(--faint); color: var(--muted); font-size: var(--fs-sm); font-weight: 600; padding: 11px 6px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; gap: 6px; transition: all .2s; }
+.nav-tab.active { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
+.nav-tab .count { font-size: 0.7rem; opacity: 0.7; }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
+/* ─── SEARCH ─── */
+.search-wrap { padding: 14px 20px 0; position: relative; }
+.search-wrap svg { position: absolute; left: 34px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
+.search-wrap input { width: 100%; padding: 11px 14px 11px 40px; background: var(--surface); border: 1px solid var(--faint); border-radius: var(--radius-sm); color: var(--text); font-size: var(--fs-sm); }
+.search-wrap input:focus { outline: none; border-color: var(--gold-line); }
 
-        .shell {
-            width: 100%;
-            max-width: 480px;
-            min-height: 100vh;
-            min-height: 100dvh;
-            position: relative;
-            overflow-x: clip;
-            padding-bottom: env(safe-area-inset-bottom);
-            background: var(--bg);
-        }
+/* ─── LIST ─── */
+.list { padding: 14px 20px 20px; display: flex; flex-direction: column; gap: 10px; }
+.item-card { display: flex; gap: 12px; align-items: center; background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 12px; }
+.item-thumb { width: 56px; height: 56px; flex-shrink: 0; border-radius: var(--radius-xs); background: var(--surface-2); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.8; overflow: hidden; }
+.item-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.item-info { flex: 1; min-width: 0; }
+.item-name { font-weight: 700; font-size: var(--fs-base); color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item-sub { font-size: var(--fs-xs); color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.item-actions .icon-btn { width: 34px; height: 34px; }
 
-        .shell::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 50%;
-            transform: translateX(-50%);
-            width: 480px; height: 100vh;
-            background: radial-gradient(ellipse at 50% 0%, rgba(212,176,98,0.03) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
-        }
+.empty-state { text-align: center; padding: 60px 24px; color: var(--muted); }
+.empty-state svg { opacity: 0.35; margin-bottom: 14px; }
+.empty-state p { font-size: var(--fs-sm); line-height: 1.6; }
 
-        /* ─── HEADER ─── */
-        header {
-            padding: calc(22px + env(safe-area-inset-top)) 20px 16px;
-            border-bottom: 1px solid var(--faint);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(6,10,16,0.92);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            will-change: transform;
-        }
+.skeleton { padding: 14px 20px; display: flex; flex-direction: column; gap: 10px; }
+.skel-card { height: 80px; border-radius: var(--radius); background: linear-gradient(90deg, var(--bg-card) 25%, var(--surface) 50%, var(--bg-card) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-        .brand { display: flex; flex-direction: column; }
-        .brand h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: var(--fs-lg);
-            font-weight: 600;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--text);
-        }
-        .brand p {
-            font-size: var(--fs-xs);
-            color: var(--header-brand);
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            margin-top: 2px;
-        }
+/* ─── FAB ─── */
+.fab { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); right: 50%; transform: translateX(calc(280px - 24px - 56px)); width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--gold-light), var(--gold)); border: none; display: flex; align-items: center; justify-content: center; color: var(--bg); box-shadow: 0 8px 24px rgba(212,176,98,0.35); z-index: 60; transition: transform .2s; }
+.fab:active { transform: translateX(calc(280px - 24px - 56px)) scale(0.94); }
+@media (max-width: 560px) {
+    .fab { right: 24px; transform: none; }
+    .fab:active { transform: scale(0.94); }
+}
 
-        .lang-switch { display: inline-flex; gap: 3px; background: var(--surface); padding: 4px; border-radius: 24px; border: 1px solid var(--faint); }
-        .lang-btn {
-            background: transparent; border: 1px solid transparent;
-            /* Was rgba(138,159,186,0.4) → ~2:1 contrast on this bg. Fixed to the
-               solid --muted token (~6.45:1), which passes WCAG AA comfortably. */
-            color: var(--muted);
-            font-size: var(--fs-xs); font-weight: 700;
-            cursor: pointer; width: var(--tap-min); height: var(--tap-min); border-radius: 22px;
-            display: flex; align-items: center; justify-content: center;
-            text-transform: uppercase; transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
-        }
-        .lang-btn:hover:not(.active) { color: var(--text); }
-        .lang-btn.active { background: var(--gold-dim); color: var(--gold); border-color: var(--gold-line); }
+/* ─── TOASTS ─── */
+.toast-stack { position: fixed; bottom: calc(20px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%); z-index: 400; display: flex; flex-direction: column-reverse; gap: 8px; width: calc(100% - 40px); max-width: 400px; align-items: center; }
+.toast { display: flex; align-items: center; gap: 10px; background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius-sm); padding: 12px 16px; font-size: var(--fs-sm); color: var(--text); box-shadow: 0 8px 24px rgba(0,0,0,0.4); animation: toastIn .25s ease; max-width: 100%; }
+.toast.success { border-color: rgba(107,207,142,0.3); }
+.toast.error { border-color: var(--danger-line); }
+.toast svg { flex-shrink: 0; }
+.toast.success svg { color: var(--green); }
+.toast.error svg { color: var(--danger); }
+@keyframes toastIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.toast.leaving { animation: toastOut .2s ease forwards; }
+@keyframes toastOut { to { opacity: 0; transform: translateY(6px); } }
 
-        /* ─── NAV TABS ─── */
-        .main-nav { display: flex; gap: 8px; }
-        .nav-btn {
-            flex: 1; background: var(--surface); border: 1px solid var(--faint);
-            color: var(--muted); font-size: var(--fs-sm); font-weight: 600;
-            padding: 13px 8px; min-height: var(--tap-min); border-radius: var(--radius-sm); cursor: pointer;
-            transition: all 0.25s ease; display: flex; align-items: center;
-            justify-content: center; gap: 7px; letter-spacing: 0.02em;
-        }
-        .nav-btn:hover { border-color: var(--gold-line); color: var(--text); }
-        .nav-btn.active { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
-        .nav-btn[aria-current="page"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
-        .nav-icon { font-size: var(--fs-base); display: inline-flex; }
+/* ─── SHEET (МОДАЛКА) ─── */
+.sheet-overlay { position: fixed; inset: 0; background: rgba(6,10,16,0.75); backdrop-filter: blur(8px); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
+.sheet-overlay.active { display: flex; }
+.sheet { width: 100%; max-width: 560px; max-height: 92vh; background: var(--bg-card); border-radius: 24px 24px 0 0; display: flex; flex-direction: column; animation: sheetUp .3s cubic-bezier(0.22,1,0.36,1); }
+@keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.sheet-handle { width: 36px; height: 4px; background: var(--faint); border-radius: 2px; margin: 10px auto 4px; flex-shrink: 0; }
+.sheet-header { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px 16px; flex-shrink: 0; border-bottom: 1px solid var(--faint); }
+.sheet-header h2 { font-size: var(--fs-md); }
+.sheet-body { padding: 18px 20px; overflow-y: auto; flex: 1; }
+.sheet-footer { display: flex; gap: 10px; padding: 14px 20px calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid var(--faint); flex-shrink: 0; }
+.sheet-footer .btn-primary { flex: 1; }
+.btn-ghost { flex: 1; background: var(--surface); border: 1px solid var(--faint); color: var(--muted); font-weight: 600; font-size: var(--fs-base); padding: 14px; border-radius: var(--radius-sm); transition: all .2s; }
+.btn-ghost:hover { border-color: var(--gold-line); color: var(--text); }
 
-        /* ─── OYSTER / FOOD TABS ─── */
-        /* Sticky under the header: switching oysters or dish categories while
-           reading a long description no longer requires scrolling back up.
-           --header-h is measured by JS (updateHeaderHeightVar) because the
-           header's real height depends on env(safe-area-inset-top) and can't
-           be hardcoded reliably in CSS alone. */
-        .tabs-wrapper {
-            position: sticky;
-            top: var(--header-h, 118px);
-            z-index: 90;
-            background: rgba(6,10,16,0.92);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border-bottom: 1px solid var(--faint);
-        }
-        .tabs-wrapper::after {
-            content: ''; position: absolute; right: 0; top: 0; bottom: 1px; width: 44px;
-            background: linear-gradient(90deg, transparent, var(--bg)); pointer-events: none;
-        }
-        .tabs { display: flex; overflow-x: auto; padding: 12px 20px; gap: 8px; scroll-behavior: smooth; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
-        .tabs::-webkit-scrollbar { display: none; }
-        .tab {
-            background: var(--surface); color: var(--muted); border: 1px solid var(--faint);
-            padding: 10px 20px; min-height: var(--tap-min); border-radius: 20px; white-space: nowrap; font-size: var(--fs-sm);
-            font-weight: 600; cursor: pointer; transition: all 0.25s ease; flex-shrink: 0;
-            user-select: none; letter-spacing: 0.02em; scroll-snap-align: center;
-        }
-        .tab:hover { border-color: var(--gold-line); color: var(--text); }
-        .tab[aria-selected="true"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
+/* ─── ФОРМА ─── */
+.form-group { margin-bottom: 16px; }
+.form-label { display: block; font-size: var(--fs-xs); font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 7px; }
+.form-input, .form-select, .form-textarea { width: 100%; padding: 12px 14px; background: var(--surface); border: 1px solid var(--faint); border-radius: var(--radius-xs); color: var(--text); font-size: var(--fs-base); transition: border-color .2s; }
+.form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--gold-line); }
+.form-input[readonly] { opacity: 0.55; }
+.form-textarea { min-height: 84px; resize: vertical; line-height: 1.5; }
+.form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
+.form-hint { font-size: var(--fs-xs); color: var(--muted); margin-top: 6px; }
+.form-error-text { font-size: var(--fs-xs); color: var(--danger); margin-top: 6px; }
 
-        /* ─── CARDS ─── */
-        .card { display: none; padding: 0 20px 80px; animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
-        .card.active { display: block; }
-        .card .info-block { position: relative; z-index: 1; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.section-divider { display: flex; align-items: center; gap: 10px; margin: 22px 0 16px; }
+.section-divider span { font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
+.section-divider::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold-line), transparent); }
 
-        .hero { text-align: center; padding: 28px 0 20px; position: relative; z-index: 1; }
-        .badge {
-            display: inline-block; background: linear-gradient(135deg, rgba(212,176,98,0.12), rgba(212,176,98,0.06));
-            color: var(--gold-light); border: 1px solid rgba(212,176,98,0.25);
-            padding: 7px 18px; border-radius: 20px; font-size: var(--fs-xs); font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 16px;
-        }
-        .oyster-name {
-            font-family: 'Cormorant Garamond', serif; font-size: var(--fs-xl); font-weight: 600;
-            letter-spacing: 1px; line-height: 1.1; margin-bottom: 16px; color: var(--text);
-        }
-        .oyster-photo {
-            width: 100%; aspect-ratio: 16 / 10; border-radius: var(--radius);
-            background: linear-gradient(135deg, var(--surface), var(--surface-2));
-            border: 1px solid var(--faint); overflow: hidden; margin-bottom: 18px;
-            display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.75;
-        }
-        .oyster-photo img { width: 100%; height: 100%; object-fit: cover; }
-        .price-tag {
-            display: inline-flex; align-items: baseline; gap: 6px; margin-bottom: 14px;
-            background: var(--gold-dim); padding: 10px 24px; border-radius: 24px; border: 1px solid var(--gold-line);
-        }
-        .price-amount { font-size: var(--fs-lg); font-weight: 800; color: var(--gold-light); }
-        .price-unit { font-size: var(--fs-sm); color: var(--muted); font-weight: 500; }
-        .terroir { font-size: var(--fs-sm); color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.02em; }
-        .terroir-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.5; }
+/* Переключатель языка внутри формы */
+.lang-tabs { display: inline-flex; gap: 3px; background: var(--surface); padding: 3px; border-radius: 20px; border: 1px solid var(--faint); margin-bottom: 16px; }
+.lang-tab { background: transparent; border: none; color: var(--muted); font-size: var(--fs-xs); font-weight: 700; padding: 8px 16px; border-radius: 16px; text-transform: uppercase; transition: all .2s; }
+.lang-tab.active { background: var(--gold-dim); color: var(--gold-light); }
+.lang-tab .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--danger); margin-left: 5px; opacity: 0; transition: opacity .2s; position: relative; top: -5px; }
+.lang-tab .dot.show { opacity: 1; }
+.lang-field { display: none; }
+.lang-field.active { display: block; }
 
-        .info-block { background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
-        .block-label {
-            font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--gold); margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
-        }
-        .block-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold-line), transparent); }
+/* Слайдеры вкуса */
+.taste-slider { margin-bottom: 16px; }
+.taste-slider-top { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: var(--fs-sm); }
+.taste-slider-top .label { color: var(--text-sec); font-weight: 600; }
+.taste-slider-top .val { color: var(--gold-light); font-weight: 700; }
+.taste-slider input[type=range] { width: 100%; -webkit-appearance: none; height: 6px; border-radius: 3px; background: var(--faint); outline: none; }
+.taste-slider input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--gold); border: 3px solid var(--bg-card); box-shadow: 0 0 0 1px var(--gold-line); cursor: pointer; }
+.taste-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
 
-        .taste-row { margin-bottom: 18px; }
-        .taste-meta { display: flex; justify-content: space-between; font-size: var(--fs-base); margin-bottom: 8px; }
-        .taste-label { font-weight: 600; color: var(--text-sec); }
-        .taste-score { color: var(--gold-light); font-weight: 700; font-variant-numeric: tabular-nums; }
-        .bar-track { height: 7px; background: rgba(255,255,255,0.04); border-radius: 4px; overflow: hidden; }
-        .bar-fill { height: 100%; background: linear-gradient(90deg, rgba(212,176,98,0.4), var(--gold)); border-radius: 4px; width: 0%; transition: width 0.8s cubic-bezier(0.22,1,0.36,1); }
-        .scale-hint { display: flex; justify-content: space-between; font-size: var(--fs-xs); font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 8px; }
+.facts-fields { display: flex; flex-direction: column; gap: 8px; }
 
-        .desc { font-size: var(--fs-md); line-height: 1.75; color: var(--body-text); margin-bottom: 18px; font-weight: 400; letter-spacing: 0.01em; padding: 6px 0; }
-        .desc strong { color: var(--text); font-weight: 700; }
+/* Загрузка изображения */
+.image-uploader { display: flex; gap: 14px; align-items: center; }
+.image-preview-box { width: 84px; height: 84px; border-radius: var(--radius-sm); background: var(--surface); border: 1.5px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); position: relative; overflow: hidden; flex-shrink: 0; }
+.image-preview-box img { width: 100%; height: 100%; object-fit: cover; }
+.image-preview-box .remove-img { position: absolute; top: 2px; right: 2px; width: 20px; height: 20px; background: rgba(6,10,16,0.85); border-radius: 50%; display: none; align-items: center; justify-content: center; color: var(--text); }
+.image-preview-box.has-img .remove-img { display: flex; }
+.image-uploader-actions { flex: 1; }
+.upload-btn { display: inline-flex; align-items: center; gap: 8px; background: var(--surface); border: 1px solid var(--faint); color: var(--text-sec); font-size: var(--fs-sm); font-weight: 600; padding: 10px 16px; border-radius: var(--radius-sm); position: relative; overflow: hidden; }
+.upload-btn:hover { border-color: var(--gold-line); }
+.upload-btn input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.upload-status { font-size: var(--fs-xs); margin-top: 8px; }
+.upload-status.error { color: var(--danger); }
+.upload-status.loading { color: var(--muted); display: flex; align-items: center; gap: 6px; }
+.spin { animation: spin 0.8s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
 
-        .origin-map-line { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--faint); }
-        .origin-flag { font-size: 28px; flex-shrink: 0; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); border-radius: 12px; }
-        .origin-place { font-size: var(--fs-base); font-weight: 700; color: var(--text); line-height: 1.3; }
-        .origin-region { font-size: var(--fs-sm); color: var(--muted); margin-top: 3px; letter-spacing: 0.02em; }
-        .origin-text { font-size: var(--fs-base); line-height: 1.75; color: var(--body-text); font-weight: 400; }
-        .origin-text strong { color: var(--text); font-weight: 600; }
+/* ─── CONFIRM MODAL ─── */
+.confirm-overlay { position: fixed; inset: 0; background: rgba(6,10,16,0.75); backdrop-filter: blur(8px); z-index: 300; display: none; align-items: center; justify-content: center; padding: 24px; }
+.confirm-overlay.active { display: flex; }
+.confirm-card { width: 100%; max-width: 340px; background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 26px 22px; text-align: center; animation: sheetUp .25s ease; }
+.confirm-icon { width: 48px; height: 48px; margin: 0 auto 14px; border-radius: 14px; background: var(--danger-dim); border: 1px solid var(--danger-line); color: var(--danger); display: flex; align-items: center; justify-content: center; }
+.confirm-card h3 { font-size: var(--fs-md); margin-bottom: 8px; }
+.confirm-card p { font-size: var(--fs-sm); color: var(--muted); line-height: 1.5; margin-bottom: 22px; }
+.confirm-actions { display: flex; gap: 10px; }
+.btn-danger { flex: 1; background: var(--danger-dim); border: 1px solid var(--danger-line); color: var(--danger); font-weight: 700; font-size: var(--fs-base); padding: 13px; border-radius: var(--radius-sm); }
+.btn-danger:hover { background: var(--danger); color: var(--text); }
 
-        .facts-list { display: flex; flex-direction: column; gap: 10px; }
-        .fact-item { display: flex; gap: 12px; align-items: flex-start; background: var(--surface-2); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--radius-xs); padding: 14px 16px; }
-        .fact-num { width: 26px; height: 26px; border-radius: 50%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-light); font-size: var(--fs-xs); font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-        .fact-text { font-size: var(--fs-base); line-height: 1.65; color: var(--body-text); }
-        .fact-text strong { color: var(--text); font-weight: 600; }
-
-        /* ─── FOOD MENU ─── */
-        .section-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-lg); font-weight: 600; padding: 24px 20px 12px; color: var(--text); letter-spacing: 0.5px; }
-        .dish-grid { padding: 0 20px 80px; display: flex; flex-direction: column; gap: 12px; }
-        .dish-card { background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 18px; transition: border-color 0.25s ease; }
-        .dish-card:hover { border-color: var(--gold-line); }
-        .dish-card-inner { display: flex; gap: 16px; align-items: flex-start; }
-        /* Bigger than the original 84px so the photo actually helps the "order
-           or not" decision, but kept as a side-thumb (not a full-width hero
-           image) so scanning a long category list doesn't cost extra scrolling —
-           tapping still opens the full-size photo in the lightbox. */
-        .dish-thumb { width: 108px; height: 108px; flex-shrink: 0; position: relative; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.7; cursor: pointer; }
-        /* Optional attention badge ("Хит" / "Новинка") — renders only when the
-           dish has item.badge set; otherwise nothing is added to the layout. */
-        .dish-badge {
-            position: absolute; top: -6px; left: -6px; z-index: 1;
-            background: var(--gold); color: #0c0f14; font-size: 0.625rem; font-weight: 800;
-            text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.35); pointer-events: none; white-space: nowrap;
-        }
-        .dish-thumb svg { width: 30px; height: 30px; }
-        .dish-thumb:hover, .dish-thumb:active { border-color: var(--gold); opacity: 0.95; }
-        .dish-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
-        .dish-content { flex: 1; min-width: 0; }
-        .dish-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
-        .dish-name { font-size: var(--fs-base); font-weight: 700; color: var(--text); line-height: 1.35; }
-        .dish-price-chip { font-size: var(--fs-xs); font-weight: 700; padding: 5px 12px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.06em; flex-shrink: 0; margin-left: 8px; background: rgba(255,235,160,0.10); color: var(--gold-light); white-space: nowrap; }
-        .dish-weight { font-size: var(--fs-sm); color: var(--muted); margin-bottom: 10px; letter-spacing: 0.02em; }
-        .dish-desc { font-size: var(--fs-sm); color: var(--body-text); line-height: 1.65; font-weight: 400; }
-
-        /* photo lightbox */
-        .photo-lightbox { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(6,10,16,0.94); z-index: 300; display: none; justify-content: center; align-items: center; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 20px; }
-        .photo-lightbox.active { display: flex; }
-        .photo-lightbox-panel { width: 100%; max-width: 400px; background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 20px; position: relative; animation: slideUp 0.3s cubic-bezier(0.22,1,0.36,1) forwards; }
-        .photo-lightbox-close { position: absolute; top: 16px; right: 16px; background: var(--surface); border: 1px solid var(--faint); color: var(--muted); width: var(--tap-min); height: var(--tap-min); border-radius: var(--radius-xs); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s ease; z-index: 2; }
-        .photo-lightbox-close:hover { border-color: var(--gold-line); color: var(--text); }
-        .photo-lightbox-image { width: 100%; aspect-ratio: 1 / 1; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.75; margin-bottom: 18px; overflow: hidden; }
-        .photo-lightbox-image svg { width: 88px; height: 88px; }
-        .photo-lightbox-image img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
-        .photo-lightbox-name { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-lg); font-weight: 600; color: var(--text); text-align: center; margin-bottom: 6px; }
-        .photo-lightbox-price { font-size: var(--fs-md); color: var(--gold-light); font-weight: 800; text-align: center; margin-bottom: 12px; }
-        .photo-lightbox-desc { font-size: var(--fs-sm); color: var(--body-text); line-height: 1.65; text-align: center; }
-
-        /* ─── SKELETON LOADING STATE ─── */
-        /* Shown while Supabase data is in flight, instead of a blank screen. */
-        .skeleton { background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 37%, var(--surface) 63%); background-size: 400px 100%; animation: shimmer 1.4s ease infinite; border-radius: var(--radius-sm); }
-        @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
-        .skeleton-wrap { padding: 0 20px; }
-
-        /* ─── ERROR / EMPTY STATES ─── */
-        .state-block { text-align: center; padding: 64px 28px; }
-        .state-icon { color: var(--gold); opacity: 0.6; margin-bottom: 16px; display: flex; justify-content: center; }
-        .state-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-md); font-weight: 600; color: var(--text); margin-bottom: 8px; }
-        .state-text { font-size: var(--fs-sm); color: var(--muted); line-height: 1.6; margin-bottom: 22px; }
-        /* Shared button style also used by the retry button in the error state above (not quiz-specific). */
-        .quiz-btn { width: 100%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-light); font-size: var(--fs-sm); font-weight: 700; padding: 14px; min-height: var(--tap-min); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.08em; }
-        .quiz-btn:hover { background: var(--gold-line); color: var(--text); }
-        .state-block .quiz-btn { max-width: 220px; margin: 0 auto; }
-
-        /* ─── RESPONSIVE ─── */
-        @media (min-width: 481px) {
-            body { padding: 20px 0; }
-            .shell { border-radius: 28px; border: 1px solid var(--faint); overflow: hidden; box-shadow: 0 20px 80px rgba(0,0,0,0.4); }
-            header { border-radius: 28px 28px 0 0; }
-        }
-
-        ::-webkit-scrollbar { width: 0; height: 0; }
-
-        @keyframes slideUpFood { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-        .dish-card.animate-in { animation: slideUpFood 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
-    </style>
+.hidden { display: none !important; }
+::-webkit-scrollbar { width: 0; height: 0; }
+</style>
 </head>
 <body>
-<a class="skip-link" href="#main-content" data-t="skip_link">Перейти к содержимому</a>
-<div class="shell">
 
-    <header>
-        <div class="header-top">
-            <div class="brand">
-                <h1>Oyster's LAB</h1>
-                <p>from the seabed</p>
-            </div>
-            <div class="lang-switch" id="langSwitch" role="group" aria-label="Язык / Language">
-                <button class="lang-btn active" data-lang="ru" aria-pressed="true">RU</button>
-                <button class="lang-btn" data-lang="ro" aria-pressed="false">RO</button>
-                <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
-            </div>
+<!-- ЭКРАН ВХОДА -->
+<div class="login-wrap" id="loginScreen">
+    <div class="login-card">
+        <div class="login-icon" id="loginIcon"></div>
+        <h1>Oyster's LAB</h1>
+        <p class="login-sub">Панель управления</p>
+        <div class="field-wrap">
+            <input type="password" id="passwordInput" placeholder="Пароль">
+            <button class="field-toggle" id="togglePassword"></button>
         </div>
-        <nav class="main-nav" aria-label="Разделы">
-            <button class="nav-btn active" data-section="oysters" aria-current="page"><span class="nav-icon" id="navIconOysters" aria-hidden="true"></span> <span data-t="nav_oysters">Устрицы</span></button>
-            <button class="nav-btn" data-section="food"><span class="nav-icon" id="navIconFood" aria-hidden="true"></span> <span data-t="nav_food">Меню</span></button>
-        </nav>
-    </header>
-
-    <main id="main-content">
-        <div id="section-oysters">
-            <div class="tabs-wrapper">
-                <div class="tabs" id="tabs" role="tablist" aria-label="Список устриц"></div>
-            </div>
-            <div id="cards-container"></div>
-        </div>
-
-        <div id="section-food" style="display:none;">
-            <div class="tabs-wrapper">
-                <div class="tabs" id="food-tabs" role="tablist" aria-label="Категории меню"></div>
-            </div>
-            <div id="food-cards-container"></div>
-        </div>
-    </main>
-
-</div>
-
-<div class="photo-lightbox" id="photoLightbox" role="dialog" aria-modal="true" aria-labelledby="photoLightboxName">
-    <div class="photo-lightbox-panel">
-        <button class="photo-lightbox-close" id="photoLightboxClose" aria-label="Закрыть"></button>
-        <div class="photo-lightbox-image" id="photoLightboxImage"></div>
-        <div class="photo-lightbox-name" id="photoLightboxName"></div>
-        <div class="photo-lightbox-price" id="photoLightboxPrice"></div>
-        <div class="photo-lightbox-desc" id="photoLightboxDesc"></div>
+        <button class="btn-primary" id="loginBtn">Войти</button>
+        <div class="login-error" id="loginError"></div>
     </div>
 </div>
 
+<!-- ОСНОВНОЙ ИНТЕРФЕЙС -->
+<div class="shell hidden" id="app">
+    <header>
+        <div class="header-row">
+            <div class="brand">
+                <h1>Oyster's LAB</h1>
+                <p>Админ-панель</p>
+            </div>
+            <button class="icon-btn danger-hover" id="logoutBtn" title="Выйти"></button>
+        </div>
+    </header>
+
+    <div class="nav-tabs">
+        <button class="nav-tab active" data-tab="oysters">Устрицы <span class="count" id="countOysters"></span></button>
+        <button class="nav-tab" data-tab="categories">Категории <span class="count" id="countCategories"></span></button>
+        <button class="nav-tab" data-tab="items">Блюда <span class="count" id="countItems"></span></button>
+    </div>
+
+    <div class="search-wrap">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
+        <input type="text" id="searchInput" placeholder="Поиск...">
+    </div>
+
+    <div id="listContainer"></div>
+</div>
+
+<button class="fab hidden" id="fabAdd"></button>
+
+<!-- BOTTOM SHEET (форма) -->
+<div class="sheet-overlay" id="sheetOverlay">
+    <div class="sheet">
+        <div class="sheet-handle"></div>
+        <div class="sheet-header">
+            <h2 id="sheetTitle"></h2>
+            <button class="icon-btn" id="sheetClose"></button>
+        </div>
+        <div class="sheet-body" id="sheetBody"></div>
+        <div class="sheet-footer">
+            <button class="btn-ghost" id="sheetCancel">Отмена</button>
+            <button class="btn-primary" id="sheetSave">Сохранить</button>
+        </div>
+    </div>
+</div>
+
+<!-- ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ -->
+<div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-card">
+        <div class="confirm-icon" id="confirmIcon"></div>
+        <h3>Удалить?</h3>
+        <p id="confirmText"></p>
+        <div class="confirm-actions">
+            <button class="btn-ghost" id="confirmCancel">Отмена</button>
+            <button class="btn-danger" id="confirmOk">Удалить</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast-stack" id="toastStack"></div>
+
 <script>
-// ==================== UI TEXTS ====================
-const UI = {
-    ru: {
-        taste: 'Вкусовой профиль', origin: 'Происхождение', pairing: 'Идеальные напитки',
-        facts: 'Интересные факты', low: '− слабо', high: 'интенсивно +', unit: '/ шт.',
-        sal: 'Солёность', iod: 'Йодистость', sw: 'Сладость', meat: 'Мясистость',
-        nav_oysters: 'Устрицы', nav_food: 'Меню',
-        skip_link: 'Перейти к содержимому',
-        composition: 'Состав',
-        loading: 'Загружаем меню…',
-        error_title: 'Не удалось загрузить данные',
-        error_text: 'Проверьте соединение с интернетом и попробуйте ещё раз.',
-        retry: 'Повторить',
-        empty_category_title: 'Пока пусто',
-        empty_category_text: 'В этой категории скоро появятся блюда.',
-        view_photo: 'Смотреть фото',
-    },
-    ro: {
-        taste: 'Profil Gustativ', origin: 'Origine', pairing: 'Băuturi Ideale',
-        facts: 'Fapte Interesante', low: '− slab', high: 'intens +', unit: '/ buc.',
-        sal: 'Salinitate', iod: 'Iod', sw: 'Dulceață', meat: 'Cărnozitate',
-        nav_oysters: 'Stridii', nav_food: 'Meniu',
-        skip_link: 'Sari la conținut',
-        composition: 'Compoziție',
-        loading: 'Se încarcă meniul…',
-        error_title: 'Datele nu au putut fi încărcate',
-        error_text: 'Verificați conexiunea la internet și încercați din nou.',
-        retry: 'Reîncearcă',
-        empty_category_title: 'Momentan gol',
-        empty_category_text: 'Preparatele din această categorie vor apărea în curând.',
-        view_photo: 'Vezi foto',
-    },
-    en: {
-        taste: 'Taste Profile', origin: 'Origin', pairing: 'Perfect Pairings',
-        facts: 'Interesting Facts', low: '− mild', high: 'intense +', unit: '/ pc.',
-        sal: 'Salinity', iod: 'Iodine', sw: 'Sweetness', meat: 'Meatiness',
-        nav_oysters: 'Oysters', nav_food: 'Menu',
-        skip_link: 'Skip to content',
-        composition: 'Composition',
-        loading: 'Loading the menu…',
-        error_title: 'Couldn\'t load the menu',
-        error_text: 'Check your connection and try again.',
-        retry: 'Retry',
-        empty_category_title: 'Nothing here yet',
-        empty_category_text: 'Dishes in this category are coming soon.',
-        view_photo: 'View photo',
-    }
-};
-
-// ==================== ICONS ====================
-const ICONS = {
-    oyster: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2"/></svg>',
-    menu: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
+// ==================== ИКОНКИ ====================
+const ICON = {
+    oyster: '<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2"/></svg>',
+    eye: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+    eyeOff: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0112 19c-7 0-11-7-11-7a19.6 19.6 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 7 11 7a19.6 19.6 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><path d="M1 1l22 22"/></svg>',
+    logout: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>',
+    plus: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+    edit: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 013 3L7 19l-4 1 1-4z"/></svg>',
+    trash: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 012-2h4a2 2 0 012 2v2m3 0l-1 14a2 2 0 01-2 2H7a2 2 0 01-2-2L4 6"/></svg>',
     close: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
-    plate: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M3 9h18M3 15h18"/></svg>',
-    warning: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>',
-    tray: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 3h6l1 5H8l1-5z"/></svg>'
+    plate: '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M3 9h18M3 15h18"/></svg>',
+    camera: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>',
+    spinner: '<svg class="spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M21 12a9 9 0 11-6.219-8.56"/></svg>',
+    check: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>',
+    warn: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L14.71 3.86a2 2 0 00-3.42 0z"/></svg>',
+    fish: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 12c.94-3.46 4.94-6 8.5-6 3.56 0 6 2 6 2s-1.5 2-1.5 4-1 4 1.5 6c0 0-2.44 2-6 2-3.56 0-7.56-2.54-8.5-6"/><path d="M6.5 12L2 8l1 4-1 4z"/><circle cx="16" cy="10" r=".8" fill="currentColor" stroke="none"/></svg>'
 };
 
-// ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
-// Note: language choice is kept in memory only (not localStorage) so this preview
-// behaves consistently wherever it's rendered. When you deploy this file to your
-// own hosting, you can restore `localStorage.getItem('oyster_lang')` /
-// `localStorage.setItem(...)` in setLanguage() to persist the choice across visits.
-let currentLang = 'ru';
-let currentSection = 'oysters';
-let currentFoodCategory = null;
-let lastFocusedEl = null;
+// ==================== СОСТОЯНИЕ ====================
+let authToken = localStorage.getItem('admin_token') || '';
+let currentTab = 'oysters';
+let oystersData = [], categoriesData = [], itemsData = [];
+let searchQuery = '';
+let editingId = null, editingType = '';
+let formLang = 'ru';
+let deleteAction = null;
 
-let OYSTERS = [];
-let FOOD_CATEGORIES = [];
+const TAB_META = {
+    oysters:    { label: 'устрицу',   labelGen: 'устрицы',  addLabel: 'Новая устрица' },
+    categories: { label: 'категорию', labelGen: 'категории', addLabel: 'Новая категория' },
+    items:      { label: 'блюдо',     labelGen: 'блюда',    addLabel: 'Новое блюдо' }
+};
 
-const SUPABASE_URL = 'https://lgtgzazoqzenedgzbzmf.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxndGd6YXpvcXplbmVkZ3piem1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTYyMjksImV4cCI6MjEwNDI3MjIyOX0.9eH14E5PbaM2PTkW9o7m2f9pCzFYdVF0NXVxZ-X57AQ';
+// ==================== ТОСТЫ ====================
+function toast(message, type = 'success') {
+    const stack = document.getElementById('toastStack');
+    const el = document.createElement('div');
+    el.className = `toast ${type}`;
+    el.innerHTML = `${type === 'success' ? ICON.check : ICON.warn}<span>${escapeHtml(message)}</span>`;
+    stack.appendChild(el);
+    setTimeout(() => {
+        el.classList.add('leaving');
+        setTimeout(() => el.remove(), 200);
+    }, 3200);
+}
 
+// ==================== УТИЛИТЫ ====================
+function escapeHtml(str) {
+    if (str === null || str === undefined) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+}
 function loc(value, lang) {
     if (value == null) return '';
-    if (typeof value === 'object') return value[lang] || value.ru || value.en || value.ro || '';
+    if (typeof value === 'object') return value[lang] || value.ru || '';
     return value;
 }
-
-// Keeps the sticky tabs bar positioned exactly below the header. The header's
-// real height depends on env(safe-area-inset-top) and the language currently
-// shown, so it's measured in JS rather than hardcoded in CSS.
-function updateHeaderHeightVar() {
-    const header = document.querySelector('header');
-    if (header) document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+function ensureLangObj(value) {
+    if (value && typeof value === 'object') return { ru: value.ru || '', ro: value.ro || '', en: value.en || '' };
+    if (typeof value === 'string') return { ru: value, ro: '', en: '' };
+    return { ru: '', ro: '', en: '' };
 }
 
-// ==================== LOADING / ERROR / EMPTY STATES ====================
-function renderSkeleton() {
-    const t = UI[currentLang];
-    document.getElementById('tabs').innerHTML = '';
-    document.getElementById('cards-container').innerHTML = `
-        <div class="skeleton-wrap" role="status" aria-label="${t.loading}">
-            <div class="skeleton" style="height:26px;width:55%;margin:24px auto 16px;border-radius:16px;"></div>
-            <div class="skeleton" style="height:44px;width:45%;margin:0 auto 24px;border-radius:24px;"></div>
-            <div class="skeleton" style="height:180px;margin-bottom:14px;"></div>
-            <div class="skeleton" style="height:140px;margin-bottom:14px;"></div>
-            <div class="skeleton" style="height:100px;"></div>
-        </div>`;
+// ==================== СЕТЕВОЙ СЛОЙ ====================
+async function apiFetch(url, options = {}) {
+    let res;
+    try {
+        res = await fetch(url, { ...options, headers: { ...(options.headers||{}), 'Authorization': `Bearer ${authToken}` } });
+    } catch {
+        toast('Ошибка сети', 'error');
+        throw new Error('network');
+    }
+    if (res.status === 401) {
+        authToken = '';
+        localStorage.removeItem('admin_token');
+        document.getElementById('app').classList.add('hidden');
+        document.getElementById('loginScreen').classList.remove('hidden');
+        document.getElementById('loginError').textContent = 'Сессия истекла, войдите снова';
+        throw new Error('unauthorized');
+    }
+    if (!res.ok) {
+        let msg = 'Ошибка запроса';
+        try { const d = await res.clone().json(); msg = d.error || msg; } catch {}
+        toast(msg, 'error');
+        throw new Error(msg);
+    }
+    return res;
 }
 
-function renderErrorState(onRetry) {
-    const t = UI[currentLang];
-    document.getElementById('cards-container').innerHTML = `
-        <div class="state-block" role="alert">
-            <div class="state-icon">${ICONS.warning}</div>
-            <div class="state-title">${t.error_title}</div>
-            <p class="state-text">${t.error_text}</p>
-            <button class="quiz-btn" id="retryBtn">${t.retry}</button>
-        </div>`;
-    document.getElementById('retryBtn').addEventListener('click', onRetry);
+// ==================== ВХОД ====================
+document.getElementById('loginIcon').innerHTML = ICON.oyster;
+document.getElementById('logoutBtn').innerHTML = ICON.logout;
+document.getElementById('togglePassword').innerHTML = ICON.eye;
+document.getElementById('sheetClose').innerHTML = ICON.close;
+document.getElementById('confirmIcon').innerHTML = ICON.warn;
+
+let pwVisible = false;
+document.getElementById('togglePassword').addEventListener('click', () => {
+    pwVisible = !pwVisible;
+    const input = document.getElementById('passwordInput');
+    input.type = pwVisible ? 'text' : 'password';
+    document.getElementById('togglePassword').innerHTML = pwVisible ? ICON.eyeOff : ICON.eye;
+});
+
+async function doLogin() {
+    const password = document.getElementById('passwordInput').value;
+    const btn = document.getElementById('loginBtn');
+    const err = document.getElementById('loginError');
+    err.textContent = '';
+    if (!password) { err.textContent = 'Введите пароль'; return; }
+    btn.disabled = true;
+    try {
+        const res = await fetch('/api/auth', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ password }) });
+        const data = await res.json();
+        if (data.token) {
+            authToken = data.token;
+            localStorage.setItem('admin_token', authToken);
+            showApp();
+        } else {
+            err.textContent = data.error || 'Ошибка входа';
+        }
+    } catch {
+        err.textContent = 'Ошибка сети';
+    } finally {
+        btn.disabled = false;
+    }
 }
+document.getElementById('loginBtn').addEventListener('click', doLogin);
+document.getElementById('passwordInput').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+document.getElementById('logoutBtn').addEventListener('click', () => {
+    authToken = '';
+    localStorage.removeItem('admin_token');
+    document.getElementById('app').classList.add('hidden');
+    document.getElementById('loginScreen').classList.remove('hidden');
+});
+
+function showApp() {
+    document.getElementById('loginScreen').classList.add('hidden');
+    document.getElementById('app').classList.remove('hidden');
+    document.getElementById('fabAdd').classList.remove('hidden');
+    loadAllData();
+}
+if (authToken) showApp();
+
+// ==================== НАВИГАЦИЯ / ПОИСК ====================
+document.querySelectorAll('.nav-tab').forEach(btn => {
+    btn.addEventListener('click', () => {
+        currentTab = btn.dataset.tab;
+        document.querySelectorAll('.nav-tab').forEach(b => b.classList.toggle('active', b === btn));
+        document.getElementById('searchInput').value = '';
+        searchQuery = '';
+        renderList();
+    });
+});
+document.getElementById('searchInput').addEventListener('input', e => {
+    searchQuery = e.target.value.trim().toLowerCase();
+    renderList();
+});
 
 // ==================== ЗАГРУЗКА ДАННЫХ ====================
-async function loadData() {
+function renderSkeleton() {
+    document.getElementById('listContainer').innerHTML = `
+        <div class="skeleton">
+            <div class="skel-card"></div><div class="skel-card"></div><div class="skel-card"></div>
+        </div>`;
+}
+
+async function loadAllData() {
     renderSkeleton();
     try {
-        const headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
-
-        // Fetch all three endpoints in parallel instead of sequentially —
-        // cuts perceived load time roughly to the slowest single request
-        // instead of the sum of all three.
-        const [oystersRes, catRes, itemsRes] = await Promise.all([
-            fetch(`${SUPABASE_URL}/rest/v1/oysters?select=*`, { headers }),
-            fetch(`${SUPABASE_URL}/rest/v1/food_categories?select=*&order=sort_order.asc`, { headers }),
-            fetch(`${SUPABASE_URL}/rest/v1/food_items?select=*&order=sort_order.asc`, { headers })
-        ]);
-        if (!oystersRes.ok || !catRes.ok || !itemsRes.ok) throw new Error('Ошибка загрузки данных');
-
-        const [oystersRaw, categoriesRaw, itemsRaw] = await Promise.all([
-            oystersRes.json(), catRes.json(), itemsRes.json()
-        ]);
-
-        OYSTERS = oystersRaw.map(o => ({ ...o, desc: o.description, regionGroup: o.region_group }));
-
-        FOOD_CATEGORIES = categoriesRaw.map(cat => ({
-            key: cat.id,
-            label: cat.label,
-            subtitle: cat.subtitle,
-            items: itemsRaw.filter(item => item.category_id === cat.id).map(item => ({ ...item, desc: item.description }))
-        }));
-
-        if (!currentFoodCategory && FOOD_CATEGORIES.length) currentFoodCategory = FOOD_CATEGORIES[0].key;
-
-        renderTabs();
-        renderCards();
-        if (currentSection === 'food') {
-            renderFoodTabs();
-            renderFoodCards();
-            scrollActiveFoodTabIntoView();
-        }
-        handleHash();
-
-    } catch (error) {
-        console.error('Не удалось загрузить данные:', error);
-        renderErrorState(loadData);
-    }
+        await Promise.all([loadOysters(false), loadCategories(false), loadItems(false)]);
+    } catch {}
+    renderList();
 }
 
-// ==================== ФУНКЦИИ РЕНДЕРИНГА ====================
-function renderTabs() {
-    const tabsEl = document.getElementById('tabs');
-    tabsEl.innerHTML = OYSTERS.map(o => `
-        <button class="tab" data-target="${o.id}" role="tab" id="tab-${o.id}" aria-selected="false" aria-controls="card-${o.id}">${o.name}</button>
-    `).join('');
+async function loadOysters(rerender = true) {
+    const res = await apiFetch('/api/oysters');
+    oystersData = await res.json();
+    document.getElementById('countOysters').textContent = oystersData.length || '';
+    if (rerender) renderList();
+}
+async function loadCategories(rerender = true) {
+    const res = await apiFetch('/api/food-categories');
+    categoriesData = await res.json();
+    document.getElementById('countCategories').textContent = categoriesData.length || '';
+    if (rerender) renderList();
+}
+async function loadItems(rerender = true) {
+    const res = await apiFetch('/api/food-items');
+    itemsData = await res.json();
+    document.getElementById('countItems').textContent = itemsData.length || '';
+    if (rerender) renderList();
 }
 
-function renderCards() {
-    const t = UI[currentLang];
-    const TASTE_LABELS = [
-        { key: 'sal',  name: t.sal },
-        { key: 'iod',  name: t.iod },
-        { key: 'sw',   name: t.sw },
-        { key: 'meat', name: t.meat }
-    ];
-    const container = document.getElementById('cards-container');
+// ==================== РЕНДЕР СПИСКА ====================
+function renderList() {
+    const container = document.getElementById('listContainer');
+    let data, cardsHtml;
 
-    if (!OYSTERS.length) {
-        container.innerHTML = `
-            <div class="state-block">
-                <div class="state-icon">${ICONS.tray}</div>
-                <div class="state-title">${t.empty_category_title}</div>
-                <p class="state-text">${t.empty_category_text}</p>
-            </div>`;
-        return;
-    }
-
-    container.innerHTML = OYSTERS.map((o) => `
-        <div id="card-${o.id}" class="card" role="tabpanel" aria-labelledby="tab-${o.id}" tabindex="0">
-            <div class="hero">
-                <span class="badge">${o.badge}</span>
-                <h2 class="oyster-name">${o.name}</h2>
-                ${o.image_url ? `<div class="oyster-photo"><img src="${o.image_url}" alt="${o.name}" loading="lazy"></div>` : ''}
-                <div class="price-tag">
-                    <span class="price-amount">${o.price} MDL</span>
-                    <span class="price-unit">${t.unit}</span>
+    if (currentTab === 'oysters') {
+        data = oystersData.filter(o => !searchQuery || (o.name||'').toLowerCase().includes(searchQuery));
+        if (!data.length) return renderEmpty(container, oystersData.length ? 'Ничего не найдено' : 'Пока нет устриц. Добавьте первую.');
+        cardsHtml = data.map(o => `
+            <div class="item-card">
+                <div class="item-thumb">${o.image_url ? `<img src="${escapeHtml(o.image_url)}">` : ICON.oyster}</div>
+                <div class="item-info">
+                    <div class="item-name">${escapeHtml(o.name)}</div>
+                    <div class="item-sub">${escapeHtml(o.badge||'')} · ${o.price ?? 0} MDL</div>
                 </div>
-                <p class="terroir">
-                    <span class="terroir-dot" aria-hidden="true"></span>
-                    ${o.terroir[currentLang]}
-                </p>
-            </div>
-
-            <div class="info-block">
-                <div class="block-label">${t.taste}</div>
-                ${TASTE_LABELS.map(lb => `
-                    <div class="taste-row" style="margin-bottom:10px">
-                        <div class="taste-meta" style="font-size:var(--fs-sm)">
-                            <span class="taste-label">${lb.name}</span>
-                            <span class="taste-score">${o[lb.key]}/10</span>
-                        </div>
-                        <div class="bar-track" style="height:4px" role="img" aria-label="${lb.name}: ${o[lb.key]} из 10">
-                            <div class="bar-fill" data-val="${o[lb.key] * 10}"></div>
-                        </div>
-                    </div>
-                `).join('')}
-                <div class="scale-hint" aria-hidden="true"><span>${t.low}</span><span>${t.high}</span></div>
-            </div>
-
-            <p class="desc">${o.desc[currentLang]}</p>
-
-            <div class="info-block">
-                <div class="block-label">${t.origin}</div>
-                <div class="origin-map-line">
-                    <span class="origin-flag" aria-hidden="true">${ICONS[o.origin.flag] || o.origin.flag}</span>
-                    <div>
-                        <div class="origin-place">${o.origin.place[currentLang]}</div>
-                        <div class="origin-region">${o.origin.region[currentLang]}</div>
-                    </div>
+                <div class="item-actions">
+                    <button class="icon-btn" onclick="openEditModal('oysters','${o.id}')">${ICON.edit}</button>
+                    <button class="icon-btn danger-hover" onclick="askDelete('oysters','${o.id}','${escapeHtml(o.name)}')">${ICON.trash}</button>
                 </div>
-                <p class="origin-text">${o.origin.text[currentLang]}</p>
-            </div>
-
-            <div class="info-block">
-                <div class="block-label">${t.facts}</div>
-                <div class="facts-list">
-                    ${o.facts[currentLang].map((f, fi) => `
-                        <div class="fact-item">
-                            <div class="fact-num" aria-hidden="true">${fi + 1}</div>
-                            <p class="fact-text">${f}</p>
-                        </div>
-                    `).join('')}
+            </div>`).join('');
+    } else if (currentTab === 'categories') {
+        data = categoriesData.filter(c => !searchQuery || (c.label?.ru||c.id||'').toLowerCase().includes(searchQuery));
+        if (!data.length) return renderEmpty(container, categoriesData.length ? 'Ничего не найдено' : 'Пока нет категорий. Добавьте первую.');
+        cardsHtml = data.map(c => `
+            <div class="item-card">
+                <div class="item-thumb">${ICON.plate}</div>
+                <div class="item-info">
+                    <div class="item-name">${escapeHtml(c.label?.ru || c.id)}</div>
+                    <div class="item-sub">${c.sort_order ? 'Порядок: ' + c.sort_order : c.id}</div>
                 </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-function activateBars(cardEl) {
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            cardEl.querySelectorAll('.bar-fill').forEach(b => {
-                b.style.width = b.getAttribute('data-val') + '%';
-            });
+                <div class="item-actions">
+                    <button class="icon-btn" onclick="openEditModal('categories','${c.id}')">${ICON.edit}</button>
+                    <button class="icon-btn danger-hover" onclick="askDelete('categories','${c.id}','${escapeHtml(c.label?.ru || c.id)}')">${ICON.trash}</button>
+                </div>
+            </div>`).join('');
+    } else {
+        data = itemsData.filter(i => {
+            const n = (i.name && typeof i.name === 'object') ? (i.name.ru||'') : (i.name||'');
+            return !searchQuery || n.toLowerCase().includes(searchQuery);
         });
-    });
-}
-
-function showOyster(id) {
-    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('#tabs .tab').forEach(t => t.setAttribute('aria-selected', 'false'));
-    const card = document.getElementById('card-' + id);
-    const tab  = document.querySelector(`#tabs .tab[data-target="${id}"]`);
-    if (!card || !tab) return;
-    card.classList.add('active');
-    tab.setAttribute('aria-selected', 'true');
-    tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    activateBars(card);
-}
-
-function renderFoodTabs() {
-    const tabsEl = document.getElementById('food-tabs');
-    tabsEl.innerHTML = FOOD_CATEGORIES.map(c => `
-        <button class="tab" data-cat="${c.key}" role="tab" id="food-tab-${c.key}" aria-selected="${c.key === currentFoodCategory}" aria-controls="food-panel-${c.key}">${loc(c.label, currentLang)}</button>
-    `).join('');
-}
-
-function scrollActiveFoodTabIntoView() {
-    const activeTab = document.querySelector('#food-tabs .tab[aria-selected="true"]');
-    if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-}
-
-function renderFoodCards() {
-    const t = UI[currentLang];
-    const cat = FOOD_CATEGORIES.find(c => c.key === currentFoodCategory);
-    const container = document.getElementById('food-cards-container');
-    if (!cat) {
-        container.innerHTML = `
-            <div class="state-block">
-                <div class="state-icon">${ICONS.tray}</div>
-                <div class="state-title">${t.empty_category_title}</div>
-                <p class="state-text">${t.empty_category_text}</p>
+        if (!data.length) return renderEmpty(container, itemsData.length ? 'Ничего не найдено' : 'Пока нет блюд. Добавьте первое.');
+        cardsHtml = data.map(item => {
+            const name = (item.name && typeof item.name === 'object') ? (item.name.ru || item.name.en || '') : (item.name || '');
+            const cat = categoriesData.find(c => c.id === item.category_id);
+            return `
+            <div class="item-card">
+                <div class="item-thumb">${item.image_url ? `<img src="${escapeHtml(item.image_url)}">` : ICON.plate}</div>
+                <div class="item-info">
+                    <div class="item-name">${escapeHtml(name)}</div>
+                    <div class="item-sub">${escapeHtml(cat?.label?.ru || item.category_id || '')} · ${item.price ?? 0} MDL</div>
+                </div>
+                <div class="item-actions">
+                    <button class="icon-btn" onclick="openEditModal('items','${item.id}')">${ICON.edit}</button>
+                    <button class="icon-btn danger-hover" onclick="askDelete('items','${item.id}','${escapeHtml(name)}')">${ICON.trash}</button>
+                </div>
             </div>`;
+        }).join('');
+    }
+
+    container.innerHTML = `<div class="list">${cardsHtml}</div>`;
+}
+
+function renderEmpty(container, message) {
+    container.innerHTML = `<div class="empty-state">${ICON.fish}<p>${escapeHtml(message)}</p></div>`;
+}
+
+// ==================== FAB ====================
+document.getElementById('fabAdd').innerHTML = ICON.plus;
+document.getElementById('fabAdd').addEventListener('click', () => {
+    if (currentTab === 'items' && !categoriesData.length) {
+        toast('Сначала создайте хотя бы одну категорию', 'error');
         return;
     }
-    if (!cat.items.length) {
-        container.innerHTML = `
-            <div class="state-block" id="food-panel-${cat.key}" role="tabpanel" aria-labelledby="food-tab-${cat.key}">
-                <div class="state-icon">${ICONS.tray}</div>
-                <div class="state-title">${t.empty_category_title}</div>
-                <p class="state-text">${t.empty_category_text}</p>
-            </div>`;
-        return;
+    openAddModal(currentTab);
+});
+
+// ==================== BOTTOM SHEET (ФОРМА) ====================
+function openSheet(title) {
+    document.getElementById('sheetTitle').textContent = title;
+    document.getElementById('sheetOverlay').classList.add('active');
+}
+function closeSheet() {
+    document.getElementById('sheetOverlay').classList.remove('active');
+}
+document.getElementById('sheetClose').addEventListener('click', closeSheet);
+document.getElementById('sheetCancel').addEventListener('click', closeSheet);
+document.getElementById('sheetOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeSheet(); });
+
+function setFormLang(lang) {
+    formLang = lang;
+    document.querySelectorAll('.lang-tab').forEach(t => t.classList.toggle('active', t.dataset.lang === lang));
+    document.querySelectorAll('.lang-field').forEach(f => f.classList.toggle('active', f.dataset.lang === lang));
+}
+
+function langTabsHtml(fieldsForDot) {
+    // fieldsForDot: функция(lang) => bool, заполнено ли хоть что-то — для точки-индикатора пропуска перевода
+    return `
+        <div class="lang-tabs" id="langTabs">
+            ${['ru','ro','en'].map(l => `<button type="button" class="lang-tab ${l==='ru'?'active':''}" data-lang="${l}" onclick="setFormLang('${l}')">${l}<span class="dot ${fieldsForDot && !fieldsForDot(l) ? 'show' : ''}"></span></button>`).join('')}
+        </div>`;
+}
+
+// ==================== ДОБАВЛЕНИЕ / РЕДАКТИРОВАНИЕ ====================
+function openAddModal(type) {
+    editingId = null;
+    editingType = type;
+    formLang = 'ru';
+    if (type === 'oysters') { openSheet(TAB_META.oysters.addLabel); document.getElementById('sheetBody').innerHTML = oysterFormHtml(null); }
+    if (type === 'categories') { openSheet(TAB_META.categories.addLabel); document.getElementById('sheetBody').innerHTML = categoryFormHtml(null); }
+    if (type === 'items') { openSheet(TAB_META.items.addLabel); document.getElementById('sheetBody').innerHTML = itemFormHtml(null); }
+    bindImageUploaders();
+}
+window.openAddModal = openAddModal;
+
+function openEditModal(type, id) {
+    editingId = id;
+    editingType = type;
+    formLang = 'ru';
+    if (type === 'oysters') {
+        const o = oystersData.find(x => x.id === id);
+        openSheet('Устрица');
+        document.getElementById('sheetBody').innerHTML = oysterFormHtml(o);
     }
-    container.innerHTML = `
-        <div class="dish-grid" id="food-panel-${cat.key}" role="tabpanel" aria-labelledby="food-tab-${cat.key}">
-            ${cat.items.map((item, idx) => {
-                const name = loc(item.name, currentLang);
-                const desc = loc(item.desc, currentLang);
-                // Deterministic, capped stagger instead of Math.random() — keeps
-                // the reveal orderly and avoids a different, jumpy animation
-                // sequence every single time the category is re-rendered.
-                const delay = Math.min(idx * 0.05, 0.3).toFixed(2);
-                return `
-                <div class="dish-card animate-in" style="animation-delay: ${delay}s">
-                    <div class="dish-card-inner">
-                        <div class="dish-thumb" data-id="${item.id}" role="button" tabindex="0" aria-label="${t.view_photo}: ${name}">
-                            ${item.badge ? `<span class="dish-badge">${loc(item.badge, currentLang)}</span>` : ''}
-                            ${item.image_url ? `<img src="${item.image_url}" alt="${name}" loading="lazy">` : ICONS.plate}
-                        </div>
-                        <div class="dish-content">
-                            <div class="dish-top">
-                                <div class="dish-name">${name}</div>
-                                <div class="dish-price-chip">${item.price} MDL</div>
-                            </div>
-                            ${item.weight ? `<div class="dish-weight">${item.weight}</div>` : ''}
-                            <div class="dish-desc">${desc}</div>
-                        </div>
+    if (type === 'categories') {
+        const c = categoriesData.find(x => x.id === id);
+        openSheet('Категория');
+        document.getElementById('sheetBody').innerHTML = categoryFormHtml(c);
+    }
+    if (type === 'items') {
+        const i = itemsData.find(x => x.id === id);
+        openSheet('Блюдо');
+        document.getElementById('sheetBody').innerHTML = itemFormHtml(i);
+    }
+    bindImageUploaders();
+}
+window.openEditModal = openEditModal;
+
+// ---------- Форма: УСТРИЦА ----------
+function oysterFormHtml(o) {
+    const d = o || { id:'', name:'', badge:'', price:0, sal:5, iod:5, sw:5, meat:5, region_group:'france',
+        terroir:{ru:'',ro:'',en:''}, description:{ru:'',ro:'',en:''},
+        origin:{flag:'🇫🇷', place:{ru:'',ro:'',en:''}, region:{ru:'',ro:'',en:''}, text:{ru:'',ro:'',en:''}},
+        facts:{ru:['','',''],ro:['','',''],en:['','','']}, image_url:'' };
+    const terroir = ensureLangObj(d.terroir);
+    const desc = ensureLangObj(d.description);
+    const origin = d.origin || {};
+    const place = ensureLangObj(origin.place);
+    const region = ensureLangObj(origin.region);
+    const text = ensureLangObj(origin.text);
+    const facts = d.facts || { ru:['','',''], ro:['','',''], en:['','',''] };
+
+    return `
+        <div class="form-group">
+            <label class="form-label">ID (латиницей, без пробелов)</label>
+            <input class="form-input" id="f_id" value="${escapeHtml(d.id)}" ${editingId ? 'readonly' : ''}>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Название</label>
+            <input class="form-input" id="f_name" value="${escapeHtml(d.name)}" placeholder="Fine de Claire">
+        </div>
+        <div class="form-row" style="margin-bottom:16px">
+            <div>
+                <label class="form-label">Бейдж</label>
+                <input class="form-input" id="f_badge" value="${escapeHtml(d.badge)}" placeholder="Premium Choice">
+            </div>
+            <div>
+                <label class="form-label">Цена, MDL</label>
+                <input class="form-input" type="number" id="f_price" value="${d.price ?? 0}">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Регион</label>
+            <select class="form-select" id="f_region_group">
+                <option value="france" ${d.region_group==='france'?'selected':''}>Франция</option>
+                <option value="ireland" ${d.region_group==='ireland'?'selected':''}>Ирландия</option>
+                <option value="other" ${d.region_group==='other'?'selected':''}>Другое</option>
+            </select>
+        </div>
+
+        <div class="section-divider"><span>Вкусовой профиль</span></div>
+        <div class="taste-grid">
+            ${[['sal','Солёность'],['iod','Йодистость'],['sw','Сладость'],['meat','Мясистость']].map(([key,label]) => `
+                <div class="taste-slider">
+                    <div class="taste-slider-top"><span class="label">${label}</span><span class="val" id="val_${key}">${d[key] ?? 5}</span></div>
+                    <input type="range" min="0" max="10" id="f_${key}" value="${d[key] ?? 5}" oninput="document.getElementById('val_${key}').textContent=this.value">
+                </div>
+            `).join('')}
+        </div>
+
+        <div class="section-divider"><span>Тексты по языкам</span></div>
+        ${langTabsHtml(l => terroir[l] && desc[l] && place[l] && region[l] && text[l] && facts[l]?.[0])}
+
+        ${['ru','ro','en'].map(l => `
+            <div class="lang-field ${l==='ru'?'active':''}" data-lang="${l}">
+                <div class="form-group">
+                    <label class="form-label">Терруар</label>
+                    <input class="form-input" id="f_terroir_${l}" value="${escapeHtml(terroir[l])}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Описание</label>
+                    <textarea class="form-textarea" id="f_desc_${l}">${escapeHtml(desc[l])}</textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Место происхождения</label>
+                    <input class="form-input" id="f_place_${l}" value="${escapeHtml(place[l])}" style="margin-bottom:8px">
+                    <input class="form-input" id="f_region_${l}" value="${escapeHtml(region[l])}" placeholder="Регион">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Текст о происхождении</label>
+                    <textarea class="form-textarea" id="f_origintext_${l}">${escapeHtml(text[l])}</textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Факты (3 шт.)</label>
+                    <div class="facts-fields">
+                        <input class="form-input" id="f_fact_${l}_0" value="${escapeHtml(facts[l]?.[0]||'')}">
+                        <input class="form-input" id="f_fact_${l}_1" value="${escapeHtml(facts[l]?.[1]||'')}">
+                        <input class="form-input" id="f_fact_${l}_2" value="${escapeHtml(facts[l]?.[2]||'')}">
                     </div>
                 </div>
-            `;
-            }).join('')}
+            </div>
+        `).join('')}
+
+        <div class="section-divider"><span>Флаг происхождения</span></div>
+        <div class="form-group">
+            <input class="form-input" id="f_origin_flag" value="${escapeHtml(origin.flag||'')}" placeholder="🇫🇷">
         </div>
+
+        <div class="section-divider"><span>Фотография</span></div>
+        ${imageUploaderHtml(d.image_url)}
     `;
 }
 
-function openPhotoLightbox(item, triggerEl) {
-    lastFocusedEl = triggerEl || document.activeElement;
-    const name = loc(item.name, currentLang);
-    const desc = loc(item.desc, currentLang);
-    const imgContainer = document.getElementById('photoLightboxImage');
-    imgContainer.innerHTML = item.image_url
-        ? `<img src="${item.image_url}" alt="${name}">`
-        : ICONS.plate;
-    document.getElementById('photoLightboxName').textContent = name;
-    document.getElementById('photoLightboxPrice').textContent = item.price + ' MDL' + (item.weight ? ' · ' + item.weight : '');
-    document.getElementById('photoLightboxDesc').textContent = desc;
-    document.getElementById('photoLightbox').classList.add('active');
-    document.addEventListener('keydown', handleOverlayKeydown);
-    document.getElementById('photoLightboxClose').focus();
+// ---------- Форма: КАТЕГОРИЯ ----------
+function categoryFormHtml(c) {
+    const d = c || { id:'', label:{ru:'',ro:'',en:''}, subtitle:{ru:'',ro:'',en:''}, sort_order:0 };
+    const label = ensureLangObj(d.label);
+    const subtitle = ensureLangObj(d.subtitle);
+    return `
+        <div class="form-group">
+            <label class="form-label">ID (латиницей, без пробелов)</label>
+            <input class="form-input" id="f_id" value="${escapeHtml(d.id)}" ${editingId ? 'readonly' : ''}>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Порядок отображения</label>
+            <input class="form-input" type="number" id="f_sort_order" value="${d.sort_order ?? 0}">
+        </div>
+
+        <div class="section-divider"><span>Тексты по языкам</span></div>
+        ${langTabsHtml(l => label[l])}
+        ${['ru','ro','en'].map(l => `
+            <div class="lang-field ${l==='ru'?'active':''}" data-lang="${l}">
+                <div class="form-group">
+                    <label class="form-label">Название</label>
+                    <input class="form-input" id="f_label_${l}" value="${escapeHtml(label[l])}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Подзаголовок</label>
+                    <input class="form-input" id="f_subtitle_${l}" value="${escapeHtml(subtitle[l])}">
+                </div>
+            </div>
+        `).join('')}
+    `;
 }
 
-function closePhotoLightbox() {
-    document.getElementById('photoLightbox').classList.remove('active');
-    document.removeEventListener('keydown', handleOverlayKeydown);
-    if (lastFocusedEl) lastFocusedEl.focus();
+// ---------- Форма: БЛЮДО ----------
+function itemFormHtml(item) {
+    const d = item || { id:'', category_id: categoriesData[0]?.id || '', name:{ru:'',ro:'',en:''}, price:0, weight:'', description:{ru:'',ro:'',en:''}, image_url:'', sort_order:0 };
+    const name = ensureLangObj(d.name);
+    const desc = ensureLangObj(d.description);
+    const catOptions = categoriesData.map(c => `<option value="${escapeHtml(c.id)}" ${d.category_id===c.id?'selected':''}>${escapeHtml(c.label?.ru || c.id)}</option>`).join('');
+
+    return `
+        <div class="form-group">
+            <label class="form-label">ID (латиницей, без пробелов)</label>
+            <input class="form-input" id="f_id" value="${escapeHtml(d.id)}" ${editingId ? 'readonly' : ''}>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Категория</label>
+            <select class="form-select" id="f_category_id">${catOptions}</select>
+        </div>
+        <div class="form-row" style="margin-bottom:16px">
+            <div>
+                <label class="form-label">Цена, MDL</label>
+                <input class="form-input" type="number" id="f_price" value="${d.price ?? 0}">
+            </div>
+            <div>
+                <label class="form-label">Вес / порция</label>
+                <input class="form-input" id="f_weight" value="${escapeHtml(d.weight||'')}" placeholder="200 г">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Порядок отображения</label>
+            <input class="form-input" type="number" id="f_sort_order" value="${d.sort_order ?? 0}">
+        </div>
+
+        <div class="section-divider"><span>Тексты по языкам</span></div>
+        ${langTabsHtml(l => name[l] && desc[l])}
+        ${['ru','ro','en'].map(l => `
+            <div class="lang-field ${l==='ru'?'active':''}" data-lang="${l}">
+                <div class="form-group">
+                    <label class="form-label">Название</label>
+                    <input class="form-input" id="f_name_${l}" value="${escapeHtml(name[l])}">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Описание</label>
+                    <textarea class="form-textarea" id="f_description_${l}">${escapeHtml(desc[l])}</textarea>
+                </div>
+            </div>
+        `).join('')}
+
+        <div class="section-divider"><span>Фотография</span></div>
+        ${imageUploaderHtml(d.image_url)}
+    `;
 }
 
-// Shared Escape-to-close + focus-trap handler for the photo lightbox overlay,
-// so keyboard users can never tab out of it or get stuck with no way to
-// dismiss it.
-function handleOverlayKeydown(e) {
-    const activeOverlay = document.querySelector('.photo-lightbox.active');
-    if (!activeOverlay) return;
-    if (e.key === 'Escape') {
-        closePhotoLightbox();
-        return;
-    }
-    if (e.key !== 'Tab') return;
-    const focusable = Array.from(activeOverlay.querySelectorAll('button, [href], select, input, [tabindex]:not([tabindex="-1"])'))
-        .filter(el => el.offsetParent !== null);
-    if (!focusable.length) return;
-    const first = focusable[0], last = focusable[focusable.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+// ---------- Общий блок загрузки фото ----------
+function imageUploaderHtml(imageUrl) {
+    return `
+        <div class="image-uploader">
+            <div class="image-preview-box ${imageUrl ? 'has-img' : ''}" id="imagePreviewBox">
+                ${imageUrl ? `<img src="${escapeHtml(imageUrl)}">` : ICON.camera}
+                <button type="button" class="remove-img" id="removeImageBtn">${ICON.close}</button>
+            </div>
+            <div class="image-uploader-actions">
+                <label class="upload-btn">${ICON.camera} <span id="uploadBtnLabel">${imageUrl ? 'Заменить фото' : 'Загрузить фото'}</span>
+                    <input type="file" accept="image/*" id="imageFileInput">
+                </label>
+                <div class="upload-status hidden" id="uploadStatus"></div>
+            </div>
+        </div>
+        <input type="hidden" id="f_image_url" value="${escapeHtml(imageUrl || '')}">
+    `;
 }
 
-function handleHash() {
-    const hash = window.location.hash.replace('#', '').toLowerCase();
-    const valid = OYSTERS.find(o => o.id === hash);
-    if (OYSTERS.length) showOyster(valid ? hash : OYSTERS[0].id);
-}
+function bindImageUploaders() {
+    const fileInput = document.getElementById('imageFileInput');
+    const removeBtn = document.getElementById('removeImageBtn');
+    if (!fileInput) return;
 
-function switchSection(section) {
-    currentSection = section;
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        const isActive = btn.dataset.section === section;
-        btn.classList.toggle('active', isActive);
-        if (isActive) btn.setAttribute('aria-current', 'page'); else btn.removeAttribute('aria-current');
-    });
-    document.getElementById('section-oysters').style.display = section === 'oysters' ? '' : 'none';
-    document.getElementById('section-food').style.display = section === 'food' ? '' : 'none';
-    if (section === 'oysters') handleHash();
-    if (section === 'food') { renderFoodTabs(); renderFoodCards(); scrollActiveFoodTabIntoView(); }
-}
-
-function setLanguage(lang) {
-    currentLang = lang;
-    document.documentElement.lang = lang; // keeps screen readers announcing the right language
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        const isActive = btn.dataset.lang === lang;
-        btn.classList.toggle('active', isActive);
-        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    });
-    document.querySelectorAll('[data-t]').forEach(el => {
-        const key = el.getAttribute('data-t');
-        if (UI[lang][key]) el.textContent = UI[lang][key];
-    });
-    renderTabs();
-    renderCards();
-    switchSection(currentSection);
-    updateHeaderHeightVar();
-}
-
-// ==================== ИНИЦИАЛИЗАЦИЯ ====================
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('navIconOysters').innerHTML = ICONS.oyster;
-    document.getElementById('navIconFood').innerHTML = ICONS.menu;
-
-    updateHeaderHeightVar();
-    window.addEventListener('resize', updateHeaderHeightVar);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateHeaderHeightVar);
-
-    document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => switchSection(btn.dataset.section)));
-
-    document.getElementById('tabs').addEventListener('click', e => {
-        const btn = e.target.closest('.tab');
-        if (btn) {
-            showOyster(btn.dataset.target);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+    fileInput.addEventListener('change', async e => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const status = document.getElementById('uploadStatus');
+        const MAX = 5 * 1024 * 1024;
+        if (file.size > MAX) {
+            status.className = 'upload-status error';
+            status.textContent = 'Файл слишком большой (макс. 5 МБ)';
+            fileInput.value = '';
+            return;
         }
+        status.className = 'upload-status loading';
+        status.innerHTML = `${ICON.spinner} Загрузка...`;
+
+        const reader = new FileReader();
+        reader.onload = async () => {
+            try {
+                const base64 = reader.result.split(',')[1];
+                const fileName = `${Date.now()}_${file.name}`.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const res = await apiFetch('/api/upload-image', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ fileName, fileBase64: base64, contentType: file.type })
+                });
+                const data = await res.json();
+                if (data.url) {
+                    document.getElementById('f_image_url').value = data.url;
+                    const box = document.getElementById('imagePreviewBox');
+                    box.classList.add('has-img');
+                    box.innerHTML = `<img src="${data.url}"><button type="button" class="remove-img" id="removeImageBtn">${ICON.close}</button>`;
+                    document.getElementById('uploadBtnLabel').textContent = 'Заменить фото';
+                    document.getElementById('removeImageBtn').addEventListener('click', clearImage);
+                    status.className = 'upload-status hidden';
+                } else {
+                    status.className = 'upload-status error';
+                    status.textContent = data.error || 'Ошибка загрузки';
+                }
+            } catch {
+                status.className = 'upload-status error';
+                status.textContent = 'Ошибка загрузки изображения';
+            }
+        };
+        reader.readAsDataURL(file);
     });
 
-    document.getElementById('food-tabs').addEventListener('click', e => {
-        const btn = e.target.closest('.tab');
-        if (btn) { currentFoodCategory = btn.dataset.cat; renderFoodTabs(); renderFoodCards(); scrollActiveFoodTabIntoView(); }
-    });
+    if (removeBtn) removeBtn.addEventListener('click', clearImage);
+}
 
-    document.getElementById('photoLightboxClose').innerHTML = ICONS.close;
-    document.getElementById('photoLightboxClose').addEventListener('click', closePhotoLightbox);
-    document.getElementById('photoLightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closePhotoLightbox(); });
+function clearImage() {
+    document.getElementById('f_image_url').value = '';
+    const box = document.getElementById('imagePreviewBox');
+    box.classList.remove('has-img');
+    box.innerHTML = ICON.camera;
+    document.getElementById('uploadBtnLabel').textContent = 'Загрузить фото';
+}
 
-    // Delegated click + keyboard (Enter/Space) handling for dish photo thumbnails.
-    // The original markup had role="button" tabindex="0" but no keydown listener,
-    // so keyboard-only users had no way to open the photo lightbox.
-    const openThumb = (thumb) => {
-        const cat = FOOD_CATEGORIES.find(c => c.key === currentFoodCategory);
-        const item = cat && cat.items.find(i => i.id === thumb.dataset.id);
-        if (item) openPhotoLightbox(item, thumb);
-    };
-    document.getElementById('food-cards-container').addEventListener('click', e => {
-        const thumb = e.target.closest('.dish-thumb');
-        if (thumb) openThumb(thumb);
-    });
-    document.getElementById('food-cards-container').addEventListener('keydown', e => {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        const thumb = e.target.closest('.dish-thumb');
-        if (!thumb) return;
-        e.preventDefault();
-        openThumb(thumb);
-    });
+// ==================== СОХРАНЕНИЕ ====================
+document.getElementById('sheetSave').addEventListener('click', async () => {
+    const idInput = document.getElementById('f_id');
+    if (!idInput) return;
+    const idValue = idInput.value.trim();
+    if (!idValue) { toast('Заполните поле ID', 'error'); setFormLang('ru'); return; }
+    if (!/^[a-zA-Z0-9_-]+$/.test(idValue)) { toast('ID: только латиница, цифры, - и _', 'error'); return; }
 
-    loadData().then(() => setLanguage(currentLang));
+    const btn = document.getElementById('sheetSave');
+    btn.disabled = true;
+    try {
+        if (editingType === 'oysters') {
+            const g = id => document.getElementById(id)?.value || '';
+            const payload = {
+                id: idValue,
+                name: g('f_name'),
+                badge: g('f_badge'),
+                price: parseFloat(g('f_price')) || 0,
+                sal: parseInt(g('f_sal')) || 0,
+                iod: parseInt(g('f_iod')) || 0,
+                sw: parseInt(g('f_sw')) || 0,
+                meat: parseInt(g('f_meat')) || 0,
+                region_group: g('f_region_group'),
+                terroir: { ru: g('f_terroir_ru'), ro: g('f_terroir_ro'), en: g('f_terroir_en') },
+                description: { ru: g('f_desc_ru'), ro: g('f_desc_ro'), en: g('f_desc_en') },
+                origin: {
+                    flag: g('f_origin_flag'),
+                    place: { ru: g('f_place_ru'), ro: g('f_place_ro'), en: g('f_place_en') },
+                    region: { ru: g('f_region_ru'), ro: g('f_region_ro'), en: g('f_region_en') },
+                    text: { ru: g('f_origintext_ru'), ro: g('f_origintext_ro'), en: g('f_origintext_en') }
+                },
+                facts: {
+                    ru: [0,1,2].map(i => g(`f_fact_ru_${i}`)),
+                    ro: [0,1,2].map(i => g(`f_fact_ro_${i}`)),
+                    en: [0,1,2].map(i => g(`f_fact_en_${i}`))
+                },
+                image_url: g('f_image_url')
+            };
+            await apiFetch('/api/oysters', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+            await loadOysters();
+            toast(editingId ? 'Устрица обновлена' : 'Устрица добавлена');
+        } else if (editingType === 'categories') {
+            const g = id => document.getElementById(id)?.value || '';
+            const payload = {
+                id: idValue,
+                label: { ru: g('f_label_ru'), ro: g('f_label_ro'), en: g('f_label_en') },
+                subtitle: { ru: g('f_subtitle_ru'), ro: g('f_subtitle_ro'), en: g('f_subtitle_en') },
+                sort_order: parseInt(g('f_sort_order')) || 0
+            };
+            await apiFetch('/api/food-categories', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+            await loadCategories();
+            toast(editingId ? 'Категория обновлена' : 'Категория добавлена');
+        } else if (editingType === 'items') {
+            const g = id => document.getElementById(id)?.value || '';
+            const payload = {
+                id: idValue,
+                category_id: g('f_category_id'),
+                name: { ru: g('f_name_ru'), ro: g('f_name_ro'), en: g('f_name_en') },
+                price: parseFloat(g('f_price')) || 0,
+                weight: g('f_weight'),
+                description: { ru: g('f_description_ru'), ro: g('f_description_ro'), en: g('f_description_en') },
+                image_url: g('f_image_url'),
+                sort_order: parseInt(g('f_sort_order')) || 0
+            };
+            await apiFetch('/api/food-items', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+            await loadItems();
+            toast(editingId ? 'Блюдо обновлено' : 'Блюдо добавлено');
+        }
+        closeSheet();
+        renderList();
+    } catch {
+        // ошибка уже показана тостом
+    } finally {
+        btn.disabled = false;
+    }
 });
 
-window.addEventListener('hashchange', handleHash);
+// ==================== УДАЛЕНИЕ ====================
+function askDelete(type, id, name) {
+    deleteAction = { type, id };
+    document.getElementById('confirmText').textContent = `«${name}» будет удалено без возможности восстановления.`;
+    document.getElementById('confirmOverlay').classList.add('active');
+}
+window.askDelete = askDelete;
+
+document.getElementById('confirmCancel').addEventListener('click', () => {
+    document.getElementById('confirmOverlay').classList.remove('active');
+    deleteAction = null;
+});
+document.getElementById('confirmOverlay').addEventListener('click', e => {
+    if (e.target === e.currentTarget) { e.currentTarget.classList.remove('active'); deleteAction = null; }
+});
+document.getElementById('confirmOk').addEventListener('click', async () => {
+    if (!deleteAction) return;
+    const { type, id } = deleteAction;
+    const endpoint = type === 'oysters' ? '/api/oysters' : type === 'categories' ? '/api/food-categories' : '/api/food-items';
+    try {
+        await apiFetch(`${endpoint}?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
+        if (type === 'oysters') await loadOysters();
+        if (type === 'categories') { await loadCategories(); await loadItems(); }
+        if (type === 'items') await loadItems();
+        toast('Удалено');
+        renderList();
+    } catch {
+        // ошибка уже показана тостом
+    } finally {
+        document.getElementById('confirmOverlay').classList.remove('active');
+        deleteAction = null;
+    }
+});
 </script>
 </body>
 </html>
