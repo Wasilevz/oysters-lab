@@ -9,49 +9,49 @@
     <title>Oyster's LAB — Гастрономический Гид</title>
     <meta name="description" content="Гастрономический гид по устрицам и винам Oyster's LAB.">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Cormorant+Garamond:ital,wght@0,400;0,0,500;0,0,600;0,0,700;1,0,400;1,0,500&display=swap');
         :root {
-            --bg:        #060a10;
-            --bg-card:   #0c1118;
-            --surface:   #111820;
+            --bg: #060a10;
+            --bg-card: #0c1118;
+            --surface: #111820;
             --surface-2: #171f2a;
             --surface-3: #1f2b3a;
-            --gold:      #d4b062;
-            --gold-light:#e8cc8a;
-            --gold-dim:  rgba(212,176,98,0.08);
+            --gold: #d4b062;
+            --gold-light: #e8cc8a;
+            --gold-dim: rgba(212,176,98,0.08);
             --gold-line: rgba(212,176,98,0.18);
-            --gold-glow: rgba(212,176,98,0.04);
-            --text:      #f0ece4;
-            --text-sec:  #c8c0b4;
-            /* --muted was rgba(138,159,186,0.4) on lang-btn (~2:1 contrast, fails WCAG 1.4.3).
-               --muted itself is #7a8fa3 solid, which measures ~6.45:1 on --bg — keep this,
-               drop the low-alpha variant everywhere text needs to be read. */
-            --muted:     #7a8fa3;
-            --faint:     #1a222e;
+            --text: #f0ece4;
+            --text-sec: #c8c0b4;
+            --muted: #7a8fa3;
+            --faint: #1a222e;
             --header-brand: #6ba39f;
             --body-text: #b8c4d0;
-            --radius:    20px;
+            --radius: 20px;
             --radius-sm: 14px;
             --radius-xs: 10px;
-            --green:     #6bcf8e;
-            --danger:    #e0847a;
-            --fs-xs:     0.75rem;
-            --fs-sm:     0.875rem;
-            --fs-base:   1rem;
-            --fs-md:     1.25rem;
-            --fs-lg:     1.563rem;
-            /* Fluid type: locks the hero name to the viewport so long EN/RO names
-               (e.g. "Special Gillardeau No.2") never overflow a 320–360px screen. */
-            --fs-xl:     clamp(2.25rem, 8vw, 3.15rem);
-            --tap-min:   44px; /* comfortable mobile touch target */
+            --green: #6bcf8e;
+            --danger: #e0847a;
+            --fs-xs: 0.75rem;
+            --fs-sm: 0.875rem;
+            --fs-base: 1rem;
+            --fs-md: 1.25rem;
+            --fs-lg: 1.563rem;
+            --fs-xl: clamp(2.25rem, 8vw, 3.15rem);
+            --tap-min: 44px;
+            --header-h: 118px;
         }
-
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; background: var(--bg) !important; height: 100%; }
-        select, input, textarea, button { font-family: inherit; color-scheme: dark; }
-        select option { background: var(--bg-card); color: var(--text); }
-
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        html {
+            scroll-behavior: smooth;
+            background: var(--bg) !important;
+            height: 100%;
+        }
         body {
             background: var(--bg) !important;
             color: var(--text);
@@ -64,42 +64,65 @@
             -moz-osx-font-smoothing: grayscale;
             line-height: 1.5;
         }
-
-        /* Visually hidden but screen-reader accessible — used for labels that
-           would clutter the visual layout (e.g. select labels). */
-        .sr-only {
-            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-            overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+        select,
+        input,
+        textarea,
+        button {
+            font-family: inherit;
+            color-scheme: dark;
         }
-
-        /* Skip link: lets keyboard users jump past the repeated header/nav,
-           which sits at the top of every screen in this single-page app. */
+        select option {
+            background: var(--bg-card);
+            color: var(--text);
+        }
+        button {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0,0,0,0);
+            white-space: nowrap;
+            border: 0;
+        }
         .skip-link {
-            position: absolute; top: -60px; left: 12px; z-index: 1000;
-            background: var(--gold); color: #0c0f14; font-weight: 700;
-            padding: 12px 18px; border-radius: var(--radius-xs); text-decoration: none;
+            position: absolute;
+            top: -60px;
+            left: 12px;
+            z-index: 1000;
+            background: var(--gold);
+            color: #0c0f14;
+            font-weight: 700;
+            padding: 12px 18px;
+            border-radius: var(--radius-xs);
+            text-decoration: none;
             transition: top 0.2s ease;
         }
-        .skip-link:focus { top: 12px; }
-
-        /* Consistent, visible focus ring across the whole app instead of relying
-           on (or worse, suppressing) the browser default outline. */
-        :focus { outline: none; }
+        .skip-link:focus {
+            top: 12px;
+        }
+        :focus {
+            outline: none;
+        }
         :focus-visible {
             outline: 2px solid var(--gold-light);
             outline-offset: 2px;
             border-radius: 6px;
         }
-
         @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
+            *,
+            *::before,
+            *::after {
                 animation-duration: 0.01ms !important;
                 animation-iteration-count: 1 !important;
                 transition-duration: 0.01ms !important;
                 scroll-behavior: auto !important;
             }
         }
-
         .shell {
             width: 100%;
             max-width: 480px;
@@ -110,19 +133,24 @@
             padding-bottom: env(safe-area-inset-bottom);
             background: var(--bg);
         }
-
         .shell::before {
             content: '';
             position: fixed;
-            top: 0; left: 50%;
+            top: 0;
+            left: 50%;
             transform: translateX(-50%);
-            width: 480px; height: 100vh;
-            background: radial-gradient(ellipse at 50% 0%, rgba(212,176,98,0.03) 0%, transparent 60%);
+            width: 480px;
+            height: 100vh;
+            background:
+                radial-gradient(
+                    ellipse at 50% 0%,
+                    rgba(212,176,98,0.03) 0%,
+                    transparent 60%
+                );
             pointer-events: none;
             z-index: 0;
         }
-
-        /* ─── HEADER ─── */
+        /* ==================== HEADER ==================== */
         header {
             padding: calc(22px + env(safe-area-inset-top)) 20px 16px;
             border-bottom: 1px solid var(--faint);
@@ -134,9 +162,16 @@
             -webkit-backdrop-filter: blur(24px);
             will-change: transform;
         }
-
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-        .brand { display: flex; flex-direction: column; }
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .brand {
+            display: flex;
+            flex-direction: column;
+        }
         .brand h1 {
             font-family: 'Cormorant Garamond', serif;
             font-size: var(--fs-lg);
@@ -152,727 +187,2646 @@
             text-transform: uppercase;
             margin-top: 2px;
         }
-
-        .lang-switch { display: inline-flex; gap: 3px; background: var(--surface); padding: 4px; border-radius: 24px; border: 1px solid var(--faint); }
+        .lang-switch {
+            display: inline-flex;
+            gap: 3px;
+            background: var(--surface);
+            padding: 4px;
+            border-radius: 24px;
+            border: 1px solid var(--faint);
+        }
         .lang-btn {
-            background: transparent; border: 1px solid transparent;
-            /* Was rgba(138,159,186,0.4) → ~2:1 contrast on this bg. Fixed to the
-               solid --muted token (~6.45:1), which passes WCAG AA comfortably. */
+            background: transparent;
+            border: 1px solid transparent;
             color: var(--muted);
-            font-size: var(--fs-xs); font-weight: 700;
-            cursor: pointer; width: var(--tap-min); height: var(--tap-min); border-radius: 22px;
-            display: flex; align-items: center; justify-content: center;
-            text-transform: uppercase; transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            cursor: pointer;
+            width: var(--tap-min);
+            height: var(--tap-min);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+            transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
         }
-        .lang-btn:hover:not(.active) { color: var(--text); }
-        .lang-btn.active { background: var(--gold-dim); color: var(--gold); border-color: var(--gold-line); }
-
-        /* ─── NAV TABS ─── */
-        .main-nav { display: flex; gap: 8px; }
+        .lang-btn:hover:not(.active) {
+            color: var(--text);
+        }
+        .lang-btn.active {
+            background: var(--gold-dim);
+            color: var(--gold);
+            border-color: var(--gold-line);
+        }
+        /* ==================== MAIN NAV ==================== */
+        .main-nav {
+            display: flex;
+            gap: 8px;
+        }
         .nav-btn {
-            flex: 1; background: var(--surface); border: 1px solid var(--faint);
-            color: var(--muted); font-size: var(--fs-sm); font-weight: 600;
-            padding: 13px 8px; min-height: var(--tap-min); border-radius: var(--radius-sm); cursor: pointer;
-            transition: all 0.25s ease; display: flex; align-items: center;
-            justify-content: center; gap: 7px; letter-spacing: 0.02em;
+            flex: 1;
+            background: var(--surface);
+            border: 1px solid var(--faint);
+            color: var(--muted);
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            padding: 13px 8px;
+            min-height: var(--tap-min);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.25s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            letter-spacing: 0.02em;
         }
-        .nav-btn:hover { border-color: var(--gold-line); color: var(--text); }
-        .nav-btn.active { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
-        .nav-btn[aria-current="page"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
-        .nav-icon { font-size: var(--fs-base); display: inline-flex; }
-
-        /* ─── OYSTER / FOOD TABS ─── */
-        /* Sticky under the header: switching oysters or dish categories while
-           reading a long description no longer requires scrolling back up.
-           --header-h is measured by JS (updateHeaderHeightVar) because the
-           header's real height depends on env(safe-area-inset-top) and can't
-           be hardcoded reliably in CSS alone. */
+        .nav-btn:hover {
+            border-color: var(--gold-line);
+            color: var(--text);
+        }
+        .nav-btn.active,
+        .nav-btn[aria-current="page"] {
+            background: var(--gold-dim);
+            color: var(--gold-light);
+            border-color: var(--gold-line);
+        }
+        .nav-icon {
+            font-size: var(--fs-base);
+            display: inline-flex;
+        }
+        /* ==================== CATEGORY TABS ==================== */
         .tabs-wrapper {
             position: sticky;
             top: var(--header-h, 118px);
             z-index: 90;
-            background: rgba(6,10,16,0.92);
+            background: rgba(6,10,16,0.94);
             backdrop-filter: blur(24px);
             -webkit-backdrop-filter: blur(24px);
             border-bottom: 1px solid var(--faint);
         }
         .tabs-wrapper::after {
-            content: ''; position: absolute; right: 0; top: 0; bottom: 1px; width: 44px;
-            background: linear-gradient(90deg, transparent, var(--bg)); pointer-events: none;
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 1px;
+            width: 44px;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                var(--bg)
+            );
+            pointer-events: none;
         }
-        .tabs { display: flex; overflow-x: auto; padding: 12px 20px; gap: 8px; scroll-behavior: smooth; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
-        .tabs::-webkit-scrollbar { display: none; }
+        .tabs {
+            display: flex;
+            overflow-x: auto;
+            padding: 12px 20px;
+            gap: 8px;
+            scroll-behavior: smooth;
+            scroll-snap-type: x proximity;
+            -webkit-overflow-scrolling: touch;
+        }
+        .tabs::-webkit-scrollbar {
+            display: none;
+        }
         .tab {
-            background: var(--surface); color: var(--muted); border: 1px solid var(--faint);
-            padding: 10px 20px; min-height: var(--tap-min); border-radius: 20px; white-space: nowrap; font-size: var(--fs-sm);
-            font-weight: 600; cursor: pointer; transition: all 0.25s ease; flex-shrink: 0;
-            user-select: none; letter-spacing: 0.02em; scroll-snap-align: center;
+            background: var(--surface);
+            color: var(--muted);
+            border: 1px solid var(--faint);
+            padding: 10px 20px;
+            min-height: var(--tap-min);
+            border-radius: 20px;
+            white-space: nowrap;
+            font-size: var(--fs-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+            user-select: none;
+            letter-spacing: 0.02em;
+            scroll-snap-align: center;
         }
-        .tab:hover { border-color: var(--gold-line); color: var(--text); }
-        .tab[aria-selected="true"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
-
-        /* ─── CARDS ─── */
-        .card { display: none; padding: 0 20px 80px; animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
-        .card.active { display: block; }
-        .card .info-block { position: relative; z-index: 1; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-        .hero { text-align: center; padding: 28px 0 20px; position: relative; z-index: 1; }
+        .tab:hover {
+            border-color: var(--gold-line);
+            color: var(--text);
+        }
+        .tab[aria-selected="true"] {
+            background: var(--gold-dim);
+            color: var(--gold-light);
+            border-color: var(--gold-line);
+        }
+        /* ==================== OYSTERS ==================== */
+        .card {
+            display: none;
+            padding: 0 20px 80px;
+            animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards;
+        }
+        .card.active {
+            display: block;
+        }
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .hero {
+            text-align: center;
+            padding: 28px 0 20px;
+            position: relative;
+            z-index: 1;
+        }
         .badge {
-            display: inline-block; background: linear-gradient(135deg, rgba(212,176,98,0.12), rgba(212,176,98,0.06));
-            color: var(--gold-light); border: 1px solid rgba(212,176,98,0.25);
-            padding: 7px 18px; border-radius: 20px; font-size: var(--fs-xs); font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 16px;
+            display: inline-block;
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(212,176,98,0.12),
+                    rgba(212,176,98,0.06)
+                );
+            color: var(--gold-light);
+            border: 1px solid rgba(212,176,98,0.25);
+            padding: 7px 18px;
+            border-radius: 20px;
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            margin-bottom: 16px;
         }
         .oyster-name {
-            font-family: 'Cormorant Garamond', serif; font-size: var(--fs-xl); font-weight: 600;
-            letter-spacing: 1px; line-height: 1.1; margin-bottom: 16px; color: var(--text);
+            font-family: 'Cormorant Garamond', serif;
+            font-size: var(--fs-xl);
+            font-weight: 600;
+            letter-spacing: 1px;
+            line-height: 1.1;
+            margin-bottom: 16px;
+            color: var(--text);
         }
         .oyster-photo {
-            width: 100%; aspect-ratio: 16 / 10; border-radius: var(--radius);
-            background: linear-gradient(135deg, var(--surface), var(--surface-2));
-            border: 1px solid var(--faint); overflow: hidden; margin-bottom: 18px;
-            display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.75;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            border-radius: var(--radius);
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--surface),
+                    var(--surface-2)
+                );
+            border: 1px solid var(--faint);
+            overflow: hidden;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            opacity: 0.75;
         }
-        .oyster-photo img { width: 100%; height: 100%; object-fit: cover; }
+        .oyster-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
         .price-tag {
-            display: inline-flex; align-items: baseline; gap: 6px; margin-bottom: 14px;
-            background: var(--gold-dim); padding: 10px 24px; border-radius: 24px; border: 1px solid var(--gold-line);
+            display: inline-flex;
+            align-items: baseline;
+            gap: 6px;
+            margin-bottom: 14px;
+            background: var(--gold-dim);
+            padding: 10px 24px;
+            border-radius: 24px;
+            border: 1px solid var(--gold-line);
         }
-        .price-amount { font-size: var(--fs-lg); font-weight: 800; color: var(--gold-light); }
-        .price-unit { font-size: var(--fs-sm); color: var(--muted); font-weight: 500; }
-        .terroir { font-size: var(--fs-sm); color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.02em; }
-        .terroir-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.5; }
-
-        .info-block { background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
+        .price-amount {
+            font-size: var(--fs-lg);
+            font-weight: 800;
+            color: var(--gold-light);
+        }
+        .price-unit {
+            font-size: var(--fs-sm);
+            color: var(--muted);
+            font-weight: 500;
+        }
+        .terroir {
+            font-size: var(--fs-sm);
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            letter-spacing: 0.02em;
+        }
+        .terroir-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background: var(--gold);
+            opacity: 0.5;
+        }
+        .info-block {
+            background: var(--bg-card);
+            border: 1px solid var(--faint);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 14px;
+        }
         .block-label {
-            font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--gold); margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .block-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold-line), transparent); }
-
-        .taste-row { margin-bottom: 18px; }
-        .taste-meta { display: flex; justify-content: space-between; font-size: var(--fs-base); margin-bottom: 8px; }
-        .taste-label { font-weight: 600; color: var(--text-sec); }
-        .taste-score { color: var(--gold-light); font-weight: 700; font-variant-numeric: tabular-nums; }
-        .bar-track { height: 7px; background: rgba(255,255,255,0.04); border-radius: 4px; overflow: hidden; }
-        .bar-fill { height: 100%; background: linear-gradient(90deg, rgba(212,176,98,0.4), var(--gold)); border-radius: 4px; width: 0%; transition: width 0.8s cubic-bezier(0.22,1,0.36,1); }
-        .scale-hint { display: flex; justify-content: space-between; font-size: var(--fs-xs); font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 8px; }
-
-        .desc { font-size: var(--fs-md); line-height: 1.75; color: var(--body-text); margin-bottom: 18px; font-weight: 400; letter-spacing: 0.01em; padding: 6px 0; }
-        .desc strong { color: var(--text); font-weight: 700; }
-
-        .origin-map-line { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--faint); }
-        .origin-flag { font-size: 28px; flex-shrink: 0; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); border-radius: 12px; }
-        .origin-place { font-size: var(--fs-base); font-weight: 700; color: var(--text); line-height: 1.3; }
-        .origin-region { font-size: var(--fs-sm); color: var(--muted); margin-top: 3px; letter-spacing: 0.02em; }
-        .origin-text { font-size: var(--fs-base); line-height: 1.75; color: var(--body-text); font-weight: 400; }
-        .origin-text strong { color: var(--text); font-weight: 600; }
-
-        .facts-list { display: flex; flex-direction: column; gap: 10px; }
-        .fact-item { display: flex; gap: 12px; align-items: flex-start; background: var(--surface-2); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--radius-xs); padding: 14px 16px; }
-        .fact-num { width: 26px; height: 26px; border-radius: 50%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-light); font-size: var(--fs-xs); font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
-        .fact-text { font-size: var(--fs-base); line-height: 1.65; color: var(--body-text); }
-        .fact-text strong { color: var(--text); font-weight: 600; }
-
-        /* ─── FOOD MENU ─── */
-        .section-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-lg); font-weight: 600; padding: 24px 20px 12px; color: var(--text); letter-spacing: 0.5px; }
-        .dish-grid { padding: 0 20px 80px; display: flex; flex-direction: column; gap: 12px; }
-        .dish-card { background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 18px; transition: border-color 0.25s ease; cursor: pointer; }
-        .dish-card:hover { border-color: var(--gold-line); }
-        .dish-card-inner { display: flex; gap: 16px; align-items: flex-start; }
-        /* Bigger than the original 84px so the photo actually helps the "order
-           or not" decision, but kept as a side-thumb (not a full-width hero
-           image) so scanning a long category list doesn't cost extra scrolling —
-           tapping still opens the full-size photo in the lightbox. */
-        .dish-thumb { width: 108px; height: 108px; flex-shrink: 0; position: relative; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.7; cursor: pointer; }
-        /* Optional attention badge ("Хит" / "Новинка") — renders only when the
-           dish has item.badge set; otherwise nothing is added to the layout. */
+        .block-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--gold-line),
+                    transparent
+                );
+        }
+        .taste-row {
+            margin-bottom: 18px;
+        }
+        .taste-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: var(--fs-base);
+            margin-bottom: 8px;
+        }
+        .taste-label {
+            font-weight: 600;
+            color: var(--text-sec);
+        }
+        .taste-score {
+            color: var(--gold-light);
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+        .bar-track {
+            height: 7px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            background:
+                linear-gradient(
+                    90deg,
+                    rgba(212,176,98,0.4),
+                    var(--gold)
+                );
+            border-radius: 4px;
+            width: 0%;
+            transition:
+                width 0.8s cubic-bezier(0.22,1,0.36,1);
+        }
+        .scale-hint {
+            display: flex;
+            justify-content: space-between;
+            font-size: var(--fs-xs);
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            margin-top: 8px;
+        }
+        .desc {
+            font-size: var(--fs-md);
+            line-height: 1.75;
+            color: var(--body-text);
+            margin-bottom: 18px;
+            font-weight: 400;
+            letter-spacing: 0.01em;
+            padding: 6px 0;
+        }
+        .desc strong {
+            color: var(--text);
+            font-weight: 700;
+        }
+        .origin-map-line {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid var(--faint);
+        }
+        .origin-flag {
+            font-size: 28px;
+            flex-shrink: 0;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--surface-2);
+            border-radius: 12px;
+        }
+        .origin-place {
+            font-size: var(--fs-base);
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.3;
+        }
+        .origin-region {
+            font-size: var(--fs-sm);
+            color: var(--muted);
+            margin-top: 3px;
+            letter-spacing: 0.02em;
+        }
+        .origin-text {
+            font-size: var(--fs-base);
+            line-height: 1.75;
+            color: var(--body-text);
+            font-weight: 400;
+        }
+        .origin-text strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+        .facts-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .fact-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+            background: var(--surface-2);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: var(--radius-xs);
+            padding: 14px 16px;
+        }
+        .fact-num {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--gold-dim);
+            border: 1px solid var(--gold-line);
+            color: var(--gold-light);
+            font-size: var(--fs-xs);
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .fact-text {
+            font-size: var(--fs-base);
+            line-height: 1.65;
+            color: var(--body-text);
+        }
+        .fact-text strong {
+            color: var(--text);
+            font-weight: 600;
+        }
+        /* ==================== FOOD MENU ==================== */
+        .food-category-section {
+            scroll-margin-top: calc(var(--header-h) + 68px);
+            padding-top: 8px;
+        }
+        .food-category-section + .food-category-section {
+            margin-top: 8px;
+        }
+        .food-category-header {
+            padding: 18px 20px 8px;
+        }
+        .section-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: var(--fs-lg);
+            font-weight: 600;
+            color: var(--text);
+            letter-spacing: 0.5px;
+            padding: 0;
+        }
+        .food-category-subtitle {
+            font-size: var(--fs-sm);
+            color: var(--muted);
+            line-height: 1.5;
+            margin-top: 3px;
+        }
+        .dish-grid {
+            padding: 0 20px 34px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .dish-card {
+            background: var(--bg-card);
+            border: 1px solid var(--faint);
+            border-radius: var(--radius);
+            padding: 18px;
+            transition:
+                border-color 0.25s ease,
+                transform 0.25s ease;
+            cursor: pointer;
+        }
+        .dish-card:hover {
+            border-color: var(--gold-line);
+        }
+        .dish-card-inner {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        .dish-thumb {
+            width: 108px;
+            height: 108px;
+            flex-shrink: 0;
+            position: relative;
+            border-radius: var(--radius-sm);
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--surface),
+                    var(--surface-2)
+                );
+            border: 1px dashed var(--gold-line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            opacity: 0.7;
+            cursor: pointer;
+        }
         .dish-badge {
-            position: absolute; top: -6px; left: -6px; z-index: 1;
-            background: var(--gold); color: #0c0f14; font-size: 0.625rem; font-weight: 800;
-            text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.35); pointer-events: none; white-space: nowrap;
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            z-index: 1;
+            background: var(--gold);
+            color: #0c0f14;
+            font-size: 0.625rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 3px 8px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.35);
+            pointer-events: none;
+            white-space: nowrap;
         }
-        .dish-thumb svg { width: 30px; height: 30px; }
-        .dish-thumb:hover, .dish-thumb:active { border-color: var(--gold); opacity: 0.95; }
-        .dish-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
-        .dish-content { flex: 1; min-width: 0; }
-        .dish-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
-        .dish-name { font-size: var(--fs-base); font-weight: 700; color: var(--text); line-height: 1.35; flex: 1; min-width: 0; }
-        .dish-price-chip { font-size: var(--fs-xs); font-weight: 700; padding: 5px 12px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.06em; flex-shrink: 0; margin-left: 8px; background: rgba(255,235,160,0.10); color: var(--gold-light); white-space: nowrap; }
-        .dish-weight { font-size: var(--fs-sm); color: var(--muted); margin-bottom: 10px; letter-spacing: 0.02em; }
-        .dish-desc { font-size: var(--fs-sm); color: var(--body-text); line-height: 1.65; font-weight: 400; }
-
-        /* photo lightbox */
-        .photo-lightbox { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(6,10,16,0.94); z-index: 300; display: none; justify-content: center; align-items: center; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 20px; }
-        .photo-lightbox.active { display: flex; }
-        .photo-lightbox-panel { width: 100%; max-width: 400px; background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 20px; position: relative; animation: slideUp 0.3s cubic-bezier(0.22,1,0.36,1) forwards; }
-        .photo-lightbox-close { position: absolute; top: 16px; right: 16px; background: var(--surface); border: 1px solid var(--faint); color: var(--muted); width: var(--tap-min); height: var(--tap-min); border-radius: var(--radius-xs); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s ease; z-index: 2; }
-        .photo-lightbox-close:hover { border-color: var(--gold-line); color: var(--text); }
-        .photo-lightbox-image { width: 100%; aspect-ratio: 1 / 1; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.75; margin-bottom: 18px; overflow: hidden; }
-        .photo-lightbox-image svg { width: 88px; height: 88px; }
-        .photo-lightbox-image img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
-        .photo-lightbox-name { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-lg); font-weight: 600; color: var(--text); text-align: center; margin-bottom: 6px; }
-        .photo-lightbox-price { font-size: var(--fs-md); color: var(--gold-light); font-weight: 800; text-align: center; margin-bottom: 12px; }
-        .photo-lightbox-desc { font-size: var(--fs-sm); color: var(--body-text); line-height: 1.65; text-align: center; }
-
-        /* ─── SKELETON LOADING STATE ─── */
-        /* Shown while Supabase data is in flight, instead of a blank screen. */
-        .skeleton { background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 37%, var(--surface) 63%); background-size: 400px 100%; animation: shimmer 1.4s ease infinite; border-radius: var(--radius-sm); }
-        @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
-        .skeleton-wrap { padding: 0 20px; }
-
-        /* ─── ERROR / EMPTY STATES ─── */
-        .state-block { text-align: center; padding: 64px 28px; }
-        .state-icon { color: var(--gold); opacity: 0.6; margin-bottom: 16px; display: flex; justify-content: center; }
-        .state-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-md); font-weight: 600; color: var(--text); margin-bottom: 8px; }
-        .state-text { font-size: var(--fs-sm); color: var(--muted); line-height: 1.6; margin-bottom: 22px; }
-        /* Shared button style also used by the retry button in the error state above (not quiz-specific). */
-        .quiz-btn { width: 100%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-light); font-size: var(--fs-sm); font-weight: 700; padding: 14px; min-height: var(--tap-min); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.08em; }
-        .quiz-btn:hover { background: var(--gold-line); color: var(--text); }
-        .state-block .quiz-btn { max-width: 220px; margin: 0 auto; }
-
-        /* ─── RESPONSIVE ─── */
+        .dish-thumb svg {
+            width: 30px;
+            height: 30px;
+        }
+        .dish-thumb:hover,
+        .dish-thumb:active {
+            border-color: var(--gold);
+            opacity: 0.95;
+        }
+        .dish-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+        }
+        .dish-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .dish-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            gap: 8px;
+        }
+        .dish-name {
+            font-size: var(--fs-base);
+            font-weight: 700;
+            color: var(--text);
+            line-height: 1.35;
+            flex: 1;
+            min-width: 0;
+        }
+        .dish-price-chip {
+            font-size: var(--fs-xs);
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            flex-shrink: 0;
+            margin-left: 8px;
+            background: rgba(255,235,160,0.10);
+            color: var(--gold-light);
+            white-space: nowrap;
+        }
+        .dish-weight {
+            font-size: var(--fs-sm);
+            color: var(--muted);
+            margin-bottom: 10px;
+            letter-spacing: 0.02em;
+        }
+        .dish-desc {
+            font-size: var(--fs-sm);
+            color: var(--body-text);
+            line-height: 1.65;
+            font-weight: 400;
+        }
+        .food-category-section:not(:last-child) {
+            border-bottom: 1px solid var(--faint);
+            margin-bottom: 10px;
+        }
+        /* ==================== FOOD ANIMATION ==================== */
+        @keyframes slideUpFood {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .dish-card.animate-in {
+            animation:
+                slideUpFood
+                0.4s
+                cubic-bezier(0.22,1,0.36,1)
+                both;
+        }
+        /* ==================== PHOTO LIGHTBOX ==================== */
+        .photo-lightbox {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(6,10,16,0.94);
+            z-index: 300;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 20px;
+        }
+        .photo-lightbox.active {
+            display: flex;
+        }
+        .photo-lightbox-panel {
+            width: 100%;
+            max-width: 400px;
+            background: var(--bg-card);
+            border: 1px solid var(--faint);
+            border-radius: var(--radius);
+            padding: 20px;
+            position: relative;
+            animation:
+                slideUp
+                0.3s
+                cubic-bezier(0.22,1,0.36,1)
+                forwards;
+        }
+        .photo-lightbox-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: var(--surface);
+            border: 1px solid var(--faint);
+            color: var(--muted);
+            width: var(--tap-min);
+            height: var(--tap-min);
+            border-radius: var(--radius-xs);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            z-index: 2;
+        }
+        .photo-lightbox-close:hover {
+            border-color: var(--gold-line);
+            color: var(--text);
+        }
+        .photo-lightbox-image {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            border-radius: var(--radius-sm);
+            background:
+                linear-gradient(
+                    135deg,
+                    var(--surface),
+                    var(--surface-2)
+                );
+            border: 1px dashed var(--gold-line);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gold);
+            opacity: 0.75;
+            margin-bottom: 18px;
+            overflow: hidden;
+        }
+        .photo-lightbox-image svg {
+            width: 88px;
+            height: 88px;
+        }
+        .photo-lightbox-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+        }
+        .photo-lightbox-name {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: var(--fs-lg);
+            font-weight: 600;
+            color: var(--text);
+            text-align: center;
+            margin-bottom: 6px;
+        }
+        .photo-lightbox-price {
+            font-size: var(--fs-md);
+            color: var(--gold-light);
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 12px;
+        }
+        .photo-lightbox-desc {
+            font-size: var(--fs-sm);
+            color: var(--body-text);
+            line-height: 1.65;
+            text-align: center;
+        }
+        /* ==================== SKELETON ==================== */
+        .skeleton {
+            background:
+                linear-gradient(
+                    90deg,
+                    var(--surface) 25%,
+                    var(--surface-2) 37%,
+                    var(--surface) 63%
+                );
+            background-size: 400px 100%;
+            animation: shimmer 1.4s ease infinite;
+            border-radius: var(--radius-sm);
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -400px 0;
+            }
+            100% {
+                background-position: 400px 0;
+            }
+        }
+        .skeleton-wrap {
+            padding: 0 20px;
+        }
+        /* ==================== ERROR / EMPTY ==================== */
+        .state-block {
+            text-align: center;
+            padding: 64px 28px;
+        }
+        .state-icon {
+            color: var(--gold);
+            opacity: 0.6;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: center;
+        }
+        .state-title {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: var(--fs-md);
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+        .state-text {
+            font-size: var(--fs-sm);
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 22px;
+        }
+        .quiz-btn {
+            width: 100%;
+            background: var(--gold-dim);
+            border: 1px solid var(--gold-line);
+            color: var(--gold-light);
+            font-size: var(--fs-sm);
+            font-weight: 700;
+            padding: 14px;
+            min-height: var(--tap-min);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+        .quiz-btn:hover {
+            background: var(--gold-line);
+            color: var(--text);
+        }
+        .state-block .quiz-btn {
+            max-width: 220px;
+            margin: 0 auto;
+        }
+        /* ==================== RESPONSIVE ==================== */
         @media (min-width: 481px) {
-            body { padding: 20px 0; }
-            .shell { border-radius: 28px; border: 1px solid var(--faint); overflow: hidden; box-shadow: 0 20px 80px rgba(0,0,0,0.4); }
-            header { border-radius: 28px 28px 0 0; }
+            body {
+                padding: 20px 0;
+            }
+            .shell {
+                border-radius: 28px;
+                border: 1px solid var(--faint);
+                overflow: hidden;
+                box-shadow: 0 20px 80px rgba(0,0,0,0.4);
+            }
+            header {
+                border-radius: 28px 28px 0 0;
+            }
         }
-
-        ::-webkit-scrollbar { width: 0; height: 0; }
-
-        @keyframes slideUpFood { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-        .dish-card.animate-in { animation: slideUpFood 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+        /* ==================== SMALL SCREEN FOOD CARDS ==================== */
+        @media (max-width: 360px) {
+            .dish-thumb {
+                width: 92px;
+                height: 92px;
+            }
+            .dish-card {
+                padding: 14px;
+            }
+            .dish-card-inner {
+                gap: 12px;
+            }
+            .dish-price-chip {
+                padding: 4px 8px;
+            }
+        }
     </style>
 </head>
 <body>
-<a class="skip-link" href="#main-content" data-t="skip_link">Перейти к содержимому</a>
+<a
+    class="skip-link"
+    href="#main-content"
+    data-t="skip_link"
+>
+    Перейти к содержимому
+</a>
 <div class="shell">
-
+    <!-- ==================== HEADER ==================== -->
     <header>
         <div class="header-top">
             <div class="brand">
                 <h1>Oyster's LAB</h1>
                 <p>from the seabed</p>
             </div>
-            <div class="lang-switch" id="langSwitch" role="group" aria-label="Язык / Language">
-                <button class="lang-btn active" data-lang="ru" aria-pressed="true">RU</button>
-                <button class="lang-btn" data-lang="ro" aria-pressed="false">RO</button>
-                <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+            <div
+                class="lang-switch"
+                id="langSwitch"
+                role="group"
+                aria-label="Язык / Language"
+            >
+                <button
+                    class="lang-btn active"
+                    data-lang="ru"
+                    aria-pressed="true"
+                >
+                    RU
+                </button>
+                <button
+                    class="lang-btn"
+                    data-lang="ro"
+                    aria-pressed="false"
+                >
+                    RO
+                </button>
+                <button
+                    class="lang-btn"
+                    data-lang="en"
+                    aria-pressed="false"
+                >
+                    EN
+                </button>
             </div>
         </div>
-        <nav class="main-nav" aria-label="Разделы">
-            <button class="nav-btn active" data-section="oysters" aria-current="page"><span class="nav-icon" id="navIconOysters" aria-hidden="true"></span> <span data-t="nav_oysters">Устрицы</span></button>
-            <button class="nav-btn" data-section="food"><span class="nav-icon" id="navIconFood" aria-hidden="true"></span> <span data-t="nav_food">Меню</span></button>
+        <nav
+            class="main-nav"
+            aria-label="Разделы"
+        >
+            <button
+                class="nav-btn"
+                data-section="oysters"
+            >
+                <span
+                    class="nav-icon"
+                    id="navIconOysters"
+                    aria-hidden="true"
+                ></span>
+                <span data-t="nav_oysters">
+                    Устрицы
+                </span>
+            </button>
+            <button
+                class="nav-btn active"
+                data-section="food"
+                aria-current="page"
+            >
+                <span
+                    class="nav-icon"
+                    id="navIconFood"
+                    aria-hidden="true"
+                ></span>
+                <span data-t="nav_food">
+                    Меню
+                </span>
+            </button>
         </nav>
     </header>
-
+    <!-- ==================== MAIN ==================== -->
     <main id="main-content">
-        <div id="section-oysters">
+        <!-- ==================== OYSTERS ==================== -->
+        <div
+            id="section-oysters"
+            style="display:none;"
+        >
             <div class="tabs-wrapper">
-                <div class="tabs" id="tabs" role="tablist" aria-label="Список устриц"></div>
+                <div
+                    class="tabs"
+                    id="tabs"
+                    role="tablist"
+                    aria-label="Список устриц"
+                ></div>
             </div>
             <div id="cards-container"></div>
         </div>
-
-        <div id="section-food" style="display:none;">
+        <!-- ==================== FOOD ==================== -->
+        <div id="section-food">
             <div class="tabs-wrapper">
-                <div class="tabs" id="food-tabs" role="tablist" aria-label="Категории меню"></div>
+                <div
+                    class="tabs"
+                    id="food-tabs"
+                    role="tablist"
+                    aria-label="Категории меню"
+                ></div>
             </div>
             <div id="food-cards-container"></div>
         </div>
     </main>
-
 </div>
-
-<div class="photo-lightbox" id="photoLightbox" role="dialog" aria-modal="true" aria-labelledby="photoLightboxName">
+<!-- ==================== PHOTO LIGHTBOX ==================== -->
+<div
+    class="photo-lightbox"
+    id="photoLightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="photoLightboxName"
+>
     <div class="photo-lightbox-panel">
-        <button class="photo-lightbox-close" id="photoLightboxClose" aria-label="Закрыть"></button>
-        <div class="photo-lightbox-image" id="photoLightboxImage"></div>
-        <div class="photo-lightbox-name" id="photoLightboxName"></div>
-        <div class="photo-lightbox-price" id="photoLightboxPrice"></div>
-        <div class="photo-lightbox-desc" id="photoLightboxDesc"></div>
+        <button
+            class="photo-lightbox-close"
+            id="photoLightboxClose"
+            aria-label="Закрыть"
+        ></button>
+        <div
+            class="photo-lightbox-image"
+            id="photoLightboxImage"
+        ></div>
+        <div
+            class="photo-lightbox-name"
+            id="photoLightboxName"
+        ></div>
+        <div
+            class="photo-lightbox-price"
+            id="photoLightboxPrice"
+        ></div>
+        <div
+            class="photo-lightbox-desc"
+            id="photoLightboxDesc"
+        ></div>
     </div>
 </div>
-
 <script>
-// ==================== UI TEXTS ====================
+/* ============================================================
+   UI TEXTS
+============================================================ */
 const UI = {
     ru: {
-        taste: 'Вкусовой профиль', origin: 'Происхождение', pairing: 'Идеальные напитки',
-        facts: 'Интересные факты', low: '− слабо', high: 'интенсивно +', unit: '/ шт.',
-        sal: 'Солёность', iod: 'Йодистость', sw: 'Сладость', meat: 'Мясистость',
-        nav_oysters: 'Устрицы', nav_food: 'Меню',
+        taste: 'Вкусовой профиль',
+        origin: 'Происхождение',
+        pairing: 'Идеальные напитки',
+        facts: 'Интересные факты',
+        low: '− слабо',
+        high: 'интенсивно +',
+        unit: '/ шт.',
+        sal: 'Солёность',
+        iod: 'Йодистость',
+        sw: 'Сладость',
+        meat: 'Мясистость',
+        nav_oysters: 'Устрицы',
+        nav_food: 'Меню',
         skip_link: 'Перейти к содержимому',
         composition: 'Состав',
         loading: 'Загружаем меню…',
         error_title: 'Не удалось загрузить данные',
-        error_text: 'Проверьте соединение с интернетом и попробуйте ещё раз.',
+        error_text:
+            'Проверьте соединение с интернетом и попробуйте ещё раз.',
         retry: 'Повторить',
         empty_category_title: 'Пока пусто',
-        empty_category_text: 'В этой категории скоро появятся блюда.',
-        view_photo: 'Смотреть фото',
+        empty_category_text:
+            'В этой категории скоро появятся блюда.',
+        view_photo: 'Смотреть фото'
     },
     ro: {
-        taste: 'Profil Gustativ', origin: 'Origine', pairing: 'Băuturi Ideale',
-        facts: 'Fapte Interesante', low: '− slab', high: 'intens +', unit: '/ buc.',
-        sal: 'Salinitate', iod: 'Iod', sw: 'Dulceață', meat: 'Cărnozitate',
-        nav_oysters: 'Stridii', nav_food: 'Meniu',
+        taste: 'Profil Gustativ',
+        origin: 'Origine',
+        pairing: 'Băuturi Ideale',
+        facts: 'Fapte Interesante',
+        low: '− slab',
+        high: 'intens +',
+        unit: '/ buc.',
+        sal: 'Salinitate',
+        iod: 'Iod',
+        sw: 'Dulceață',
+        meat: 'Cărnozitate',
+        nav_oysters: 'Stridii',
+        nav_food: 'Meniu',
         skip_link: 'Sari la conținut',
         composition: 'Compoziție',
         loading: 'Se încarcă meniul…',
-        error_title: 'Datele nu au putut fi încărcate',
-        error_text: 'Verificați conexiunea la internet și încercați din nou.',
+        error_title:
+            'Datele nu au putut fi încărcate',
+        error_text:
+            'Verificați conexiunea la internet și încercați din nou.',
         retry: 'Reîncearcă',
-        empty_category_title: 'Momentan gol',
-        empty_category_text: 'Preparatele din această categorie vor apărea în curând.',
-        view_photo: 'Vezi foto',
+        empty_category_title:
+            'Momentan gol',
+        empty_category_text:
+            'Preparatele din această categorie vor apărea în curând.',
+        view_photo: 'Vezi foto'
     },
     en: {
-        taste: 'Taste Profile', origin: 'Origin', pairing: 'Perfect Pairings',
-        facts: 'Interesting Facts', low: '− mild', high: 'intense +', unit: '/ pc.',
-        sal: 'Salinity', iod: 'Iodine', sw: 'Sweetness', meat: 'Meatiness',
-        nav_oysters: 'Oysters', nav_food: 'Menu',
+        taste: 'Taste Profile',
+        origin: 'Origin',
+        pairing: 'Perfect Pairings',
+        facts: 'Interesting Facts',
+        low: '− mild',
+        high: 'intense +',
+        unit: '/ pc.',
+        sal: 'Salinity',
+        iod: 'Iodine',
+        sw: 'Sweetness',
+        meat: 'Meatiness',
+        nav_oysters: 'Oysters',
+        nav_food: 'Menu',
         skip_link: 'Skip to content',
         composition: 'Composition',
         loading: 'Loading the menu…',
-        error_title: 'Couldn\'t load the menu',
-        error_text: 'Check your connection and try again.',
+        error_title:
+            'Couldn\'t load the menu',
+        error_text:
+            'Check your connection and try again.',
         retry: 'Retry',
-        empty_category_title: 'Nothing here yet',
-        empty_category_text: 'Dishes in this category are coming soon.',
-        view_photo: 'View photo',
+        empty_category_title:
+            'Nothing here yet',
+        empty_category_text:
+            'Dishes in this category are coming soon.',
+        view_photo: 'View photo'
     }
 };
-
-// ==================== ICONS ====================
+/* ============================================================
+   ICONS
+============================================================ */
 const ICONS = {
-    oyster: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2"/></svg>',
-    menu: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
-    close: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
-    plate: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M3 9h18M3 15h18"/></svg>',
-    warning: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>',
-    tray: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 3h6l1 5H8l1-5z"/></svg>'
+    oyster:
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/>' +
+        '<path d="M8 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/>' +
+        '<path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2"/>' +
+        '</svg>',
+    menu:
+        '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M4 6h16M4 12h16M4 18h16"/>' +
+        '</svg>',
+    close:
+        '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">' +
+        '<path d="M18 6L6 18M6 6l12 12"/>' +
+        '</svg>',
+    plate:
+        '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">' +
+        '<circle cx="12" cy="12" r="9"/>' +
+        '<circle cx="12" cy="12" r="4.5"/>' +
+        '<path d="M3 9h18M3 15h18"/>' +
+        '</svg>',
+    warning:
+        '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">' +
+        '<path d="M12 9v4M12 17h.01"/>' +
+        '<path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>' +
+        '</svg>',
+    tray:
+        '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">' +
+        '<rect x="3" y="8" width="18" height="4" rx="1"/>' +
+        '<path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/>' +
+        '<path d="M9 3h6l1 5H8l1-5z"/>' +
+        '</svg>'
 };
-
-// ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
-// Note: language choice is kept in memory only (not localStorage) so this preview
-// behaves consistently wherever it's rendered. When you deploy this file to your
-// own hosting, you can restore `localStorage.getItem('oyster_lang')` /
-// `localStorage.setItem(...)` in setLanguage() to persist the choice across visits.
+/* ============================================================
+   GLOBAL VARIABLES
+============================================================ */
+/*
+    IMPORTANT:
+    Menu is now the default section.
+*/
 let currentLang = 'ru';
-let currentSection = 'oysters';
+let currentSection = 'food';
 let currentFoodCategory = null;
 let lastFocusedEl = null;
-
+let foodCategoryObserver = null;
 let OYSTERS = [];
 let FOOD_CATEGORIES = [];
-
-const SUPABASE_URL = 'https://lgtgzazoqzenedgzbzmf.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxndGd6YXpvcXplbmVkZ3piem1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTYyMjksImV4cCI6MjEwNDI3MjIyOX0.9eH14E5PbaM2PTkW9o7m2f9pCzFYdVF0NXVxZ-X57AQ';
-
+/* ============================================================
+   SUPABASE
+============================================================ */
+const SUPABASE_URL =
+    'https://lgtgzazoqzenedgzbzmf.supabase.co';
+const SUPABASE_ANON_KEY =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFseXplbmVkZ3piem1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTYyMjksImV4cCI6MjEwNDI3MjIyOX0.9eH14E5PbaM2PTWk9o7m2f9pCzFYdVF0NXVxZ-X57AQ';
+/* ============================================================
+   LOCALIZATION HELPER
+============================================================ */
 function loc(value, lang) {
-    if (value == null) return '';
-    if (typeof value === 'object') return value[lang] || value.ru || value.en || value.ro || '';
+    if (value == null) {
+        return '';
+    }
+    if (typeof value === 'object') {
+        return (
+            value[lang] ||
+            value.ru ||
+            value.en ||
+            value.ro ||
+            ''
+        );
+    }
     return value;
 }
-
-// Keeps the sticky tabs bar positioned exactly below the header. The header's
-// real height depends on env(safe-area-inset-top) and the language currently
-// shown, so it's measured in JS rather than hardcoded in CSS.
+/* ============================================================
+   HEADER HEIGHT
+============================================================ */
 function updateHeaderHeightVar() {
-    const header = document.querySelector('header');
-    if (header) document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+    const header =
+        document.querySelector('header');
+    if (!header) {
+        return;
+    }
+    document.documentElement.style.setProperty(
+        '--header-h',
+        header.offsetHeight + 'px'
+    );
 }
-
-// ==================== LOADING / ERROR / EMPTY STATES ====================
+/* ============================================================
+   SKELETON
+============================================================ */
 function renderSkeleton() {
     const t = UI[currentLang];
-    document.getElementById('tabs').innerHTML = '';
-    document.getElementById('cards-container').innerHTML = `
-        <div class="skeleton-wrap" role="status" aria-label="${t.loading}">
-            <div class="skeleton" style="height:26px;width:55%;margin:24px auto 16px;border-radius:16px;"></div>
-            <div class="skeleton" style="height:44px;width:45%;margin:0 auto 24px;border-radius:24px;"></div>
-            <div class="skeleton" style="height:180px;margin-bottom:14px;"></div>
-            <div class="skeleton" style="height:140px;margin-bottom:14px;"></div>
-            <div class="skeleton" style="height:100px;"></div>
-        </div>`;
-}
-
-function renderErrorState(onRetry) {
-    const t = UI[currentLang];
-    document.getElementById('cards-container').innerHTML = `
-        <div class="state-block" role="alert">
-            <div class="state-icon">${ICONS.warning}</div>
-            <div class="state-title">${t.error_title}</div>
-            <p class="state-text">${t.error_text}</p>
-            <button class="quiz-btn" id="retryBtn">${t.retry}</button>
-        </div>`;
-    document.getElementById('retryBtn').addEventListener('click', onRetry);
-}
-
-// ==================== ЗАГРУЗКА ДАННЫХ ====================
-async function loadData() {
-    renderSkeleton();
-    try {
-        const headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
-
-        // Fetch all three endpoints in parallel instead of sequentially —
-        // cuts perceived load time roughly to the slowest single request
-        // instead of the sum of all three.
-        const [oystersRes, catRes, itemsRes] = await Promise.all([
-            fetch(`${SUPABASE_URL}/rest/v1/oysters?select=*`, { headers }),
-            fetch(`${SUPABASE_URL}/rest/v1/food_categories?select=*&order=sort_order.asc`, { headers }),
-            fetch(`${SUPABASE_URL}/rest/v1/food_items?select=*&order=sort_order.asc`, { headers })
-        ]);
-        if (!oystersRes.ok || !catRes.ok || !itemsRes.ok) throw new Error('Ошибка загрузки данных');
-
-        const [oystersRaw, categoriesRaw, itemsRaw] = await Promise.all([
-            oystersRes.json(), catRes.json(), itemsRes.json()
-        ]);
-
-        OYSTERS = oystersRaw.map(o => ({ ...o, desc: o.description, regionGroup: o.region_group }));
-
-        FOOD_CATEGORIES = categoriesRaw.map(cat => ({
-            key: cat.id,
-            label: cat.label,
-            subtitle: cat.subtitle,
-            items: itemsRaw.filter(item => item.category_id === cat.id).map(item => ({ ...item, desc: item.description }))
-        }));
-
-        if (!currentFoodCategory && FOOD_CATEGORIES.length) currentFoodCategory = FOOD_CATEGORIES[0].key;
-
-        renderTabs();
-        renderCards();
-        if (currentSection === 'food') {
-            renderFoodTabs();
-            renderFoodCards();
-            scrollActiveFoodTabIntoView();
-        }
-        handleHash();
-
-    } catch (error) {
-        console.error('Не удалось загрузить данные:', error);
-        renderErrorState(loadData);
-    }
-}
-
-// ==================== ФУНКЦИИ РЕНДЕРИНГА ====================
-function renderTabs() {
-    const tabsEl = document.getElementById('tabs');
-    tabsEl.innerHTML = OYSTERS.map(o => `
-        <button class="tab" data-target="${o.id}" role="tab" id="tab-${o.id}" aria-selected="false" aria-controls="card-${o.id}">${o.name}</button>
-    `).join('');
-}
-
-function renderCards() {
-    const t = UI[currentLang];
-    const TASTE_LABELS = [
-        { key: 'sal',  name: t.sal },
-        { key: 'iod',  name: t.iod },
-        { key: 'sw',   name: t.sw },
-        { key: 'meat', name: t.meat }
-    ];
-    const container = document.getElementById('cards-container');
-
-    if (!OYSTERS.length) {
-        container.innerHTML = `
-            <div class="state-block">
-                <div class="state-icon">${ICONS.tray}</div>
-                <div class="state-title">${t.empty_category_title}</div>
-                <p class="state-text">${t.empty_category_text}</p>
-            </div>`;
-        return;
-    }
-
-    container.innerHTML = OYSTERS.map((o) => `
-        <div id="card-${o.id}" class="card" role="tabpanel" aria-labelledby="tab-${o.id}" tabindex="0">
-            <div class="hero">
-                <span class="badge">${o.badge}</span>
-                <h2 class="oyster-name">${o.name}</h2>
-                ${o.image_url ? `<div class="oyster-photo"><img src="${o.image_url}" alt="${o.name}" loading="lazy"></div>` : ''}
-                <div class="price-tag">
-                    <span class="price-amount">${o.price} MDL</span>
-                    <span class="price-unit">${t.unit}</span>
-                </div>
-                <p class="terroir">
-                    <span class="terroir-dot" aria-hidden="true"></span>
-                    ${o.terroir[currentLang]}
-                </p>
-            </div>
-
-            <div class="info-block">
-                <div class="block-label">${t.taste}</div>
-                ${TASTE_LABELS.map(lb => `
-                    <div class="taste-row" style="margin-bottom:10px">
-                        <div class="taste-meta" style="font-size:var(--fs-sm)">
-                            <span class="taste-label">${lb.name}</span>
-                            <span class="taste-score">${o[lb.key]}/10</span>
-                        </div>
-                        <div class="bar-track" style="height:4px" role="img" aria-label="${lb.name}: ${o[lb.key]} из 10">
-                            <div class="bar-fill" data-val="${o[lb.key] * 10}"></div>
-                        </div>
-                    </div>
-                `).join('')}
-                <div class="scale-hint" aria-hidden="true"><span>${t.low}</span><span>${t.high}</span></div>
-            </div>
-
-            <p class="desc">${o.desc[currentLang]}</p>
-
-            <div class="info-block">
-                <div class="block-label">${t.origin}</div>
-                <div class="origin-map-line">
-                    <span class="origin-flag" aria-hidden="true">${ICONS[o.origin.flag] || o.origin.flag}</span>
-                    <div>
-                        <div class="origin-place">${o.origin.place[currentLang]}</div>
-                        <div class="origin-region">${o.origin.region[currentLang]}</div>
-                    </div>
-                </div>
-                <p class="origin-text">${o.origin.text[currentLang]}</p>
-            </div>
-
-            <div class="info-block">
-                <div class="block-label">${t.facts}</div>
-                <div class="facts-list">
-                    ${o.facts[currentLang].map((f, fi) => `
-                        <div class="fact-item">
-                            <div class="fact-num" aria-hidden="true">${fi + 1}</div>
-                            <p class="fact-text">${f}</p>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        </div>
-    `).join('');
-}
-
-function activateBars(cardEl) {
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            cardEl.querySelectorAll('.bar-fill').forEach(b => {
-                b.style.width = b.getAttribute('data-val') + '%';
-            });
-        });
-    });
-}
-
-function showOyster(id) {
-    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('#tabs .tab').forEach(t => t.setAttribute('aria-selected', 'false'));
-    const card = document.getElementById('card-' + id);
-    const tab  = document.querySelector(`#tabs .tab[data-target="${id}"]`);
-    if (!card || !tab) return;
-    card.classList.add('active');
-    tab.setAttribute('aria-selected', 'true');
-    tab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    activateBars(card);
-}
-
-function renderFoodTabs() {
-    const tabsEl = document.getElementById('food-tabs');
-    tabsEl.innerHTML = FOOD_CATEGORIES.map(c => `
-        <button class="tab" data-cat="${c.key}" role="tab" id="food-tab-${c.key}" aria-selected="${c.key === currentFoodCategory}" aria-controls="food-panel-${c.key}">${loc(c.label, currentLang)}</button>
-    `).join('');
-}
-
-function scrollActiveFoodTabIntoView() {
-    const activeTab = document.querySelector('#food-tabs .tab[aria-selected="true"]');
-    if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-}
-
-function renderFoodCards() {
-    const t = UI[currentLang];
-    const cat = FOOD_CATEGORIES.find(c => c.key === currentFoodCategory);
-    const container = document.getElementById('food-cards-container');
-    if (!cat) {
-        container.innerHTML = `
-            <div class="state-block">
-                <div class="state-icon">${ICONS.tray}</div>
-                <div class="state-title">${t.empty_category_title}</div>
-                <p class="state-text">${t.empty_category_text}</p>
-            </div>`;
-        return;
-    }
-    if (!cat.items.length) {
-        container.innerHTML = `
-            <div class="state-block" id="food-panel-${cat.key}" role="tabpanel" aria-labelledby="food-tab-${cat.key}">
-                <div class="state-icon">${ICONS.tray}</div>
-                <div class="state-title">${t.empty_category_title}</div>
-                <p class="state-text">${t.empty_category_text}</p>
-            </div>`;
-        return;
-    }
-    container.innerHTML = `
-        <div class="dish-grid" id="food-panel-${cat.key}" role="tabpanel" aria-labelledby="food-tab-${cat.key}">
-            ${cat.items.map((item, idx) => {
-                const name = loc(item.name, currentLang);
-                const desc = loc(item.desc, currentLang);
-                // Deterministic, capped stagger instead of Math.random() — keeps
-                // the reveal orderly and avoids a different, jumpy animation
-                // sequence every single time the category is re-rendered.
-                const delay = Math.min(idx * 0.05, 0.3).toFixed(2);
-                return `
-                <div class="dish-card animate-in" data-id="${item.id}" style="animation-delay: ${delay}s">
-                    <div class="dish-card-inner">
-                        <div class="dish-thumb" data-id="${item.id}" role="button" tabindex="0" aria-label="${t.view_photo}: ${name}">
-                            ${item.badge ? `<span class="dish-badge">${loc(item.badge, currentLang)}</span>` : ''}
-                            ${item.image_url ? `<img src="${item.image_url}" alt="${name}" loading="lazy">` : ICONS.plate}
-                        </div>
-                        <div class="dish-content">
-                            <div class="dish-top">
-                                <div class="dish-name">${name}</div>
-                                <div class="dish-price-chip">${item.price} MDL</div>
-                            </div>
-                            ${item.weight ? `<div class="dish-weight">${item.weight}</div>` : ''}
-                            <div class="dish-desc">${desc}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            }).join('')}
+    document.getElementById('food-tabs').innerHTML = '';
+    document.getElementById('food-cards-container').innerHTML = `
+        <div
+            class="skeleton-wrap"
+            role="status"
+            aria-label="${t.loading}"
+        >
+            <div
+                class="skeleton"
+                style="
+                    height:26px;
+                    width:55%;
+                    margin:24px auto 16px;
+                    border-radius:16px;
+                "
+            ></div>
+            <div
+                class="skeleton"
+                style="
+                    height:44px;
+                    width:45%;
+                    margin:0 auto 24px;
+                    border-radius:24px;
+                "
+            ></div>
+            <div
+                class="skeleton"
+                style="
+                    height:180px;
+                    margin-bottom:14px;
+                "
+            ></div>
+            <div
+                class="skeleton"
+                style="
+                    height:140px;
+                    margin-bottom:14px;
+                "
+            ></div>
+            <div
+                class="skeleton"
+                style="height:100px;"
+            ></div>
         </div>
     `;
 }
-
-function openPhotoLightbox(item, triggerEl) {
-    lastFocusedEl = triggerEl || document.activeElement;
-    const name = loc(item.name, currentLang);
-    const desc = loc(item.desc, currentLang);
-    const imgContainer = document.getElementById('photoLightboxImage');
-    imgContainer.innerHTML = item.image_url
-        ? `<img src="${item.image_url}" alt="${name}">`
+/* ============================================================
+   ERROR STATE
+============================================================ */
+function renderErrorState(onRetry) {
+    const t = UI[currentLang];
+    document.getElementById('food-cards-container').innerHTML = `
+        <div
+            class="state-block"
+            role="alert"
+        >
+            <div class="state-icon">
+                ${ICONS.warning}
+            </div>
+            <div class="state-title">
+                ${t.error_title}
+            </div>
+            <p class="state-text">
+                ${t.error_text}
+            </p>
+            <button
+                class="quiz-btn"
+                id="retryBtn"
+            >
+                ${t.retry}
+            </button>
+        </div>
+    `;
+    document
+        .getElementById('retryBtn')
+        .addEventListener('click', onRetry);
+}
+/* ============================================================
+   LOAD DATA
+============================================================ */
+async function loadData() {
+    renderSkeleton();
+    try {
+        const headers = {
+            'apikey': SUPABASE_ANON_KEY,
+            'Authorization':
+                `Bearer ${SUPABASE_ANON_KEY}`
+        };
+        const [
+            oystersRes,
+            catRes,
+            itemsRes
+        ] = await Promise.all([
+            fetch(
+                `${SUPABASE_URL}/rest/v1/oysters?select=*`,
+                { headers }
+            ),
+            fetch(
+                `${SUPABASE_URL}/rest/v1/food_categories?select=*&order=sort_order.asc`,
+                { headers }
+            ),
+            fetch(
+                `${SUPABASE_URL}/rest/v1/food_items?select=*&order=sort_order.asc`,
+                { headers }
+            )
+        ]);
+        if (
+            !oystersRes.ok ||
+            !catRes.ok ||
+            !itemsRes.ok
+        ) {
+            throw new Error(
+                'Ошибка загрузки данных'
+            );
+        }
+        const [
+            oystersRaw,
+            categoriesRaw,
+            itemsRaw
+        ] = await Promise.all([
+            oystersRes.json(),
+            catRes.json(),
+            itemsRes.json()
+        ]);
+        OYSTERS =
+            oystersRaw.map(o => ({
+                ...o,
+                desc: o.description,
+                regionGroup: o.region_group
+            }));
+        FOOD_CATEGORIES =
+            categoriesRaw.map(cat => ({
+                key: cat.id,
+                label: cat.label,
+                subtitle: cat.subtitle,
+                items:
+                    itemsRaw
+                        .filter(
+                            item =>
+                                item.category_id === cat.id
+                        )
+                        .map(item => ({
+                            ...item,
+                            desc: item.description
+                        }))
+            }));
+        if (
+            !currentFoodCategory &&
+            FOOD_CATEGORIES.length
+        ) {
+            currentFoodCategory =
+                FOOD_CATEGORIES[0].key;
+        }
+        renderTabs();
+        renderCards();
+        renderFoodTabs();
+        renderFoodCards();
+        /*
+            If URL contains #food-something,
+            open that category.
+        */
+        handleInitialHash();
+    } catch (error) {
+        console.error(
+            'Не удалось загрузить данные:',
+            error
+        );
+        renderErrorState(loadData);
+    }
+}
+/* ============================================================
+   OYSTER TABS
+============================================================ */
+function renderTabs() {
+    const tabsEl =
+        document.getElementById('tabs');
+    tabsEl.innerHTML =
+        OYSTERS.map(o => `
+            <button
+                class="tab"
+                data-target="${o.id}"
+                role="tab"
+                id="tab-${o.id}"
+                aria-selected="false"
+                aria-controls="card-${o.id}"
+            >
+                ${o.name}
+            </button>
+        `).join('');
+}
+/* ============================================================
+   OYSTER CARDS
+============================================================ */
+function renderCards() {
+    const t = UI[currentLang];
+    const TASTE_LABELS = [
+        {
+            key: 'sal',
+            name: t.sal
+        },
+        {
+            key: 'iod',
+            name: t.iod
+        },
+        {
+            key: 'sw',
+            name: t.sw
+        },
+        {
+            key: 'meat',
+            name: t.meat
+        }
+    ];
+    const container =
+        document.getElementById('cards-container');
+    if (!OYSTERS.length) {
+        container.innerHTML = `
+            <div class="state-block">
+                <div class="state-icon">
+                    ${ICONS.tray}
+                </div>
+                <div class="state-title">
+                    ${t.empty_category_title}
+                </div>
+                <p class="state-text">
+                    ${t.empty_category_text}
+                </p>
+            </div>
+        `;
+        return;
+    }
+    container.innerHTML =
+        OYSTERS.map(o => `
+            <div
+                id="card-${o.id}"
+                class="card"
+                role="tabpanel"
+                aria-labelledby="tab-${o.id}"
+                tabindex="0"
+            >
+                <div class="hero">
+                    <span class="badge">
+                        ${o.badge || ''}
+                    </span>
+                    <h2 class="oyster-name">
+                        ${o.name}
+                    </h2>
+                    ${
+                        o.image_url
+                        ? `
+                            <div class="oyster-photo">
+                                <img
+                                    src="${o.image_url}"
+                                    alt="${o.name}"
+                                    loading="lazy"
+                                >
+                            </div>
+                        `
+                        : ''
+                    }
+                    <div class="price-tag">
+                        <span class="price-amount">
+                            ${o.price} MDL
+                        </span>
+                        <span class="price-unit">
+                            ${t.unit}
+                        </span>
+                    </div>
+                    <p class="terroir">
+                        <span
+                            class="terroir-dot"
+                            aria-hidden="true"
+                        ></span>
+                        ${loc(o.terroir, currentLang)}
+                    </p>
+                </div>
+                <div class="info-block">
+                    <div class="block-label">
+                        ${t.taste}
+                    </div>
+                    ${
+                        TASTE_LABELS.map(lb => `
+                            <div
+                                class="taste-row"
+                                style="margin-bottom:10px"
+                            >
+                                <div
+                                    class="taste-meta"
+                                    style="font-size:var(--fs-sm)"
+                                >
+                                    <span class="taste-label">
+                                        ${lb.name}
+                                    </span>
+                                    <span class="taste-score">
+                                        ${o[lb.key]}/10
+                                    </span>
+                                </div>
+                                <div
+                                    class="bar-track"
+                                    style="height:4px"
+                                    role="img"
+                                    aria-label="${lb.name}: ${o[lb.key]} из 10"
+                                >
+                                    <div
+                                        class="bar-fill"
+                                        data-val="${o[lb.key] * 10}"
+                                    ></div>
+                                </div>
+                            </div>
+                        `).join('')
+                    }
+                    <div
+                        class="scale-hint"
+                        aria-hidden="true"
+                    >
+                        <span>
+                            ${t.low}
+                        </span>
+                        <span>
+                            ${t.high}
+                        </span>
+                    </div>
+                </div>
+                <p class="desc">
+                    ${loc(o.desc, currentLang)}
+                </p>
+                <div class="info-block">
+                    <div class="block-label">
+                        ${t.origin}
+                    </div>
+                    <div class="origin-map-line">
+                        <span
+                            class="origin-flag"
+                            aria-hidden="true"
+                        >
+                            ${
+                                o.origin
+                                ? (
+                                    ICONS[o.origin.flag] ||
+                                    o.origin.flag ||
+                                    ''
+                                )
+                                : ''
+                            }
+                        </span>
+                        <div>
+                            <div class="origin-place">
+                                ${
+                                    o.origin
+                                    ? loc(
+                                        o.origin.place,
+                                        currentLang
+                                    )
+                                    : ''
+                                }
+                            </div>
+                            <div class="origin-region">
+                                ${
+                                    o.origin
+                                    ? loc(
+                                        o.origin.region,
+                                        currentLang
+                                    )
+                                    : ''
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <p class="origin-text">
+                        ${
+                            o.origin
+                            ? loc(
+                                o.origin.text,
+                                currentLang
+                            )
+                            : ''
+                        }
+                    </p>
+                </div>
+                <div class="info-block">
+                    <div class="block-label">
+                        ${t.facts}
+                    </div>
+                    <div class="facts-list">
+                        ${
+                            o.facts &&
+                            o.facts[currentLang]
+                            ? o.facts[currentLang]
+                                .map((f, fi) => `
+                                    <div class="fact-item">
+                                        <div
+                                            class="fact-num"
+                                            aria-hidden="true"
+                                        >
+                                            ${fi + 1}
+                                        </div>
+                                        <p class="fact-text">
+                                            ${f}
+                                        </p>
+                                    </div>
+                                `).join('')
+                            : ''
+                        }
+                    </div>
+                </div>
+            </div>
+        `).join('');
+}
+/* ============================================================
+   TASTE BARS
+============================================================ */
+function activateBars(cardEl) {
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            cardEl
+                .querySelectorAll('.bar-fill')
+                .forEach(b => {
+                    b.style.width =
+                        b.getAttribute('data-val') + '%';
+                });
+        });
+    });
+}
+/* ============================================================
+   SHOW OYSTER
+============================================================ */
+function showOyster(id) {
+    document
+        .querySelectorAll('.card')
+        .forEach(c =>
+            c.classList.remove('active')
+        );
+    document
+        .querySelectorAll('#tabs .tab')
+        .forEach(t =>
+            t.setAttribute(
+                'aria-selected',
+                'false'
+            )
+        );
+    const card =
+        document.getElementById(
+            'card-' + id
+        );
+    const tab =
+        document.querySelector(
+            `#tabs .tab[data-target="${id}"]`
+        );
+    if (!card || !tab) {
+        return;
+    }
+    card.classList.add('active');
+    tab.setAttribute(
+        'aria-selected',
+        'true'
+    );
+    tab.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+        inline: 'center'
+    });
+    activateBars(card);
+}
+/* ============================================================
+   FOOD CATEGORY TABS
+============================================================ */
+function renderFoodTabs() {
+    const tabsEl =
+        document.getElementById('food-tabs');
+    tabsEl.innerHTML =
+        FOOD_CATEGORIES.map(c => `
+            <button
+                class="tab"
+                data-cat="${c.key}"
+                role="tab"
+                id="food-tab-${c.key}"
+                aria-selected="${c.key === currentFoodCategory}"
+                aria-controls="food-${c.key}"
+            >
+                ${loc(c.label, currentLang)}
+            </button>
+        `).join('');
+}
+/* ============================================================
+   SCROLL ACTIVE FOOD TAB INTO VIEW
+============================================================ */
+function scrollActiveFoodTabIntoView() {
+    const activeTab =
+        document.querySelector(
+            '#food-tabs .tab[aria-selected="true"]'
+        );
+    if (activeTab) {
+        activeTab.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+        });
+    }
+}
+/* ============================================================
+   RENDER ENTIRE FOOD MENU
+============================================================ */
+function renderFoodCards() {
+    const t = UI[currentLang];
+    const container =
+        document.getElementById(
+            'food-cards-container'
+        );
+    if (!FOOD_CATEGORIES.length) {
+        container.innerHTML = `
+            <div class="state-block">
+                <div class="state-icon">
+                    ${ICONS.tray}
+                </div>
+                <div class="state-title">
+                    ${t.empty_category_title}
+                </div>
+                <p class="state-text">
+                    ${t.empty_category_text}
+                </p>
+            </div>
+        `;
+        return;
+    }
+    container.innerHTML =
+        FOOD_CATEGORIES.map(cat => {
+            const categoryName =
+                loc(
+                    cat.label,
+                    currentLang
+                );
+            const categorySubtitle =
+                loc(
+                    cat.subtitle,
+                    currentLang
+                );
+            return `
+                <section
+                    class="food-category-section"
+                    id="food-${cat.key}"
+                    data-category="${cat.key}"
+                    aria-labelledby="food-heading-${cat.key}"
+                >
+                    <div class="food-category-header">
+                        <h2
+                            id="food-heading-${cat.key}"
+                            class="section-title"
+                        >
+                            ${categoryName}
+                        </h2>
+                        ${
+                            categorySubtitle
+                            ? `
+                                <p class="food-category-subtitle">
+                                    ${categorySubtitle}
+                                </p>
+                            `
+                            : ''
+                        }
+                    </div>
+                    ${
+                        cat.items.length
+                        ? `
+                            <div class="dish-grid">
+                                ${
+                                    cat.items
+                                    .map((item, idx) => {
+                                        const name =
+                                            loc(
+                                                item.name,
+                                                currentLang
+                                            );
+                                        const desc =
+                                            loc(
+                                                item.desc,
+                                                currentLang
+                                            );
+                                        const delay =
+                                            Math
+                                            .min(
+                                                idx * 0.05,
+                                                0.3
+                                            )
+                                            .toFixed(2);
+                                        return `
+                                            <div
+                                                class="dish-card animate-in"
+                                                data-id="${item.id}"
+                                                data-category="${cat.key}"
+                                                style="animation-delay:${delay}s"
+                                            >
+                                                <div class="dish-card-inner">
+                                                    <div
+                                                        class="dish-thumb"
+                                                        data-id="${item.id}"
+                                                        role="button"
+                                                        tabindex="0"
+                                                        aria-label="${t.view_photo}: ${name}"
+                                                    >
+                                                        ${
+                                                            item.badge
+                                                            ? `
+                                                                <span class="dish-badge">
+                                                                    ${loc(
+                                                                        item.badge,
+                                                                        currentLang
+                                                                    )}
+                                                                </span>
+                                                            `
+                                                            : ''
+                                                        }
+                                                        ${
+                                                            item.image_url
+                                                            ? `
+                                                                <img
+                                                                    src="${item.image_url}"
+                                                                    alt="${name}"
+                                                                    loading="lazy"
+                                                                >
+                                                            `
+                                                            : ICONS.plate
+                                                        }
+                                                    </div>
+                                                    <div class="dish-content">
+                                                        <div class="dish-top">
+                                                            <div class="dish-name">
+                                                                ${name}
+                                                            </div>
+                                                            <div class="dish-price-chip">
+                                                                ${item.price} MDL
+                                                            </div>
+                                                        </div>
+                                                        ${
+                                                            item.weight
+                                                            ? `
+                                                                <div class="dish-weight">
+                                                                    ${item.weight}
+                                                                </div>
+                                                            `
+                                                            : ''
+                                                        }
+                                                        <div class="dish-desc">
+                                                            ${desc}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+                                    })
+                                    .join('')
+                                }
+                            </div>
+                        `
+                        : `
+                            <div class="state-block">
+                                <div class="state-icon">
+                                    ${ICONS.tray}
+                                </div>
+                                <div class="state-title">
+                                    ${t.empty_category_title}
+                                </div>
+                                <p class="state-text">
+                                    ${t.empty_category_text}
+                                </p>
+                            </div>
+                        `
+                    }
+                </section>
+            `;
+        }).join('');
+    setupFoodCategoryObserver();
+}
+/* ============================================================
+   FOOD CATEGORY OBSERVER
+============================================================ */
+function setupFoodCategoryObserver() {
+    /*
+        Destroy previous observer.
+        Important because renderFoodCards()
+        can be called after changing language.
+    */
+    if (foodCategoryObserver) {
+        foodCategoryObserver.disconnect();
+        foodCategoryObserver = null;
+    }
+    const sections =
+        document.querySelectorAll(
+            '.food-category-section'
+        );
+    if (!sections.length) {
+        return;
+    }
+    foodCategoryObserver =
+        new IntersectionObserver(
+            entries => {
+                const visible =
+                    entries
+                    .filter(
+                        entry =>
+                            entry.isIntersecting
+                    )
+                    .sort(
+                        (a, b) =>
+                            b.intersectionRatio -
+                            a.intersectionRatio
+                    );
+                if (!visible.length) {
+                    return;
+                }
+                const key =
+                    visible[0]
+                    .target
+                    .dataset
+                    .category;
+                if (
+                    key ===
+                    currentFoodCategory
+                ) {
+                    return;
+                }
+                currentFoodCategory =
+                    key;
+                /*
+                    Only update visual state.
+                    Do NOT rerender the whole menu here.
+                */
+                document
+                    .querySelectorAll(
+                        '#food-tabs .tab'
+                    )
+                    .forEach(tab => {
+                        const active =
+                            tab.dataset.cat === key;
+                        tab.setAttribute(
+                            'aria-selected',
+                            active
+                                ? 'true'
+                                : 'false'
+                        );
+                    });
+                const activeTab =
+                    document.querySelector(
+                        `#food-tabs .tab[data-cat="${key}"]`
+                    );
+                if (activeTab) {
+                    activeTab.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest',
+                        inline: 'center'
+                    });
+                }
+            },
+            {
+                root: null,
+                /*
+                    Compensates for:
+                    header + category tabs.
+                */
+                rootMargin:
+                    '-140px 0px -55% 0px',
+                threshold: [
+                    0,
+                    0.15,
+                    0.35,
+                    0.6
+                ]
+            }
+        );
+    sections.forEach(section => {
+        foodCategoryObserver.observe(
+            section
+        );
+    });
+}
+/* ============================================================
+   FOOD CATEGORY CLICK
+============================================================ */
+function goToFoodCategory(key) {
+    const target =
+        document.getElementById(
+            'food-' + key
+        );
+    if (!target) {
+        return;
+    }
+    currentFoodCategory = key;
+    /*
+        Update active tab immediately.
+    */
+    document
+        .querySelectorAll(
+            '#food-tabs .tab'
+        )
+        .forEach(tab => {
+            const active =
+                tab.dataset.cat === key;
+            tab.setAttribute(
+                'aria-selected',
+                active
+                    ? 'true'
+                    : 'false'
+            );
+        });
+    const activeTab =
+        document.querySelector(
+            `#food-tabs .tab[data-cat="${key}"]`
+        );
+    if (activeTab) {
+        activeTab.scrollIntoView({
+            behavior: 'smooth',
+            block: 'nearest',
+            inline: 'center'
+        });
+    }
+    /*
+        Native browser hash.
+        This means:
+        #food-tacos
+        #food-salads
+        etc.
+        can also be shared as a URL.
+    */
+    if (
+        history.pushState
+    ) {
+        history.pushState(
+            null,
+            '',
+            '#food-' + key
+        );
+    } else {
+        window.location.hash =
+            'food-' + key;
+    }
+    /*
+        scroll-margin-top in CSS
+        takes care of the sticky header.
+    */
+    target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+/* ============================================================
+   HASH HANDLING
+============================================================ */
+function handleInitialHash() {
+    const hash =
+        window.location.hash
+        .replace('#', '')
+        .toLowerCase();
+    /*
+        FOOD HASH
+    */
+    if (
+        hash.startsWith('food-')
+    ) {
+        const key =
+            hash.substring(5);
+        const exists =
+            FOOD_CATEGORIES.some(
+                c =>
+                    String(c.key)
+                    .toLowerCase() === key
+            );
+        if (exists) {
+            currentFoodCategory =
+                FOOD_CATEGORIES.find(
+                    c =>
+                        String(c.key)
+                        .toLowerCase() === key
+                ).key;
+            renderFoodTabs();
+            requestAnimationFrame(() => {
+                const target =
+                    document.getElementById(
+                        'food-' +
+                        currentFoodCategory
+                    );
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'auto',
+                        block: 'start'
+                    });
+                }
+            });
+            return;
+        }
+    }
+    /*
+        OYSTER HASH
+    */
+    const valid =
+        OYSTERS.find(
+            o =>
+                String(o.id)
+                .toLowerCase() === hash
+        );
+    /*
+        Default:
+        MENU at the top.
+    */
+    if (
+        currentSection === 'food'
+    ) {
+        currentFoodCategory =
+            FOOD_CATEGORIES.length
+            ? FOOD_CATEGORIES[0].key
+            : null;
+        renderFoodTabs();
+        requestAnimationFrame(() => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'auto'
+            });
+        });
+        return;
+    }
+    if (OYSTERS.length) {
+        showOyster(
+            valid
+                ? valid.id
+                : OYSTERS[0].id
+        );
+    }
+}
+/* ============================================================
+   HASH CHANGE
+============================================================ */
+window.addEventListener(
+    'hashchange',
+    () => {
+        if (
+            currentSection === 'food'
+        ) {
+            handleInitialHash();
+        } else {
+            handleHash();
+        }
+    }
+);
+/* ============================================================
+   OLD OYSTER HASH
+============================================================ */
+function handleHash() {
+    const hash =
+        window.location.hash
+        .replace('#', '')
+        .toLowerCase();
+    const valid =
+        OYSTERS.find(
+            o =>
+                String(o.id)
+                .toLowerCase() === hash
+        );
+    if (OYSTERS.length) {
+        showOyster(
+            valid
+                ? valid.id
+                : OYSTERS[0].id
+        );
+    }
+}
+/* ============================================================
+   SWITCH MAIN SECTION
+============================================================ */
+function switchSection(section) {
+    currentSection =
+        section;
+    document
+        .querySelectorAll('.nav-btn')
+        .forEach(btn => {
+            const isActive =
+                btn.dataset.section ===
+                section;
+            btn.classList.toggle(
+                'active',
+                isActive
+            );
+            if (isActive) {
+                btn.setAttribute(
+                    'aria-current',
+                    'page'
+                );
+            } else {
+                btn.removeAttribute(
+                    'aria-current'
+                );
+            }
+        });
+    const oysterSection =
+        document.getElementById(
+            'section-oysters'
+        );
+    const foodSection =
+        document.getElementById(
+            'section-food'
+        );
+    oysterSection.style.display =
+        section === 'oysters'
+            ? ''
+            : 'none';
+    foodSection.style.display =
+        section === 'food'
+            ? ''
+            : 'none';
+    /*
+        OYSTERS
+    */
+    if (
+        section === 'oysters'
+    ) {
+        /*
+            Remove food hash when
+            switching to oysters.
+        */
+        if (
+            window.location.hash
+            .startsWith('#food-')
+        ) {
+            history.replaceState(
+                null,
+                '',
+                window.location.pathname +
+                window.location.search
+            );
+        }
+        handleHash();
+        window.scrollTo({
+            top: 0,
+            behavior: 'auto'
+        });
+        return;
+    }
+    /*
+        FOOD
+    */
+    if (
+        section === 'food'
+    ) {
+        renderFoodTabs();
+        renderFoodCards();
+        /*
+            If a food hash exists,
+            go there.
+            Otherwise start at top.
+        */
+        const hash =
+            window.location.hash
+            .replace('#', '');
+        if (
+            hash.startsWith('food-')
+        ) {
+            requestAnimationFrame(() => {
+                handleInitialHash();
+            });
+        } else {
+            requestAnimationFrame(() => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'auto'
+                });
+            });
+        }
+    }
+}
+/* ============================================================
+   LANGUAGE
+============================================================ */
+function setLanguage(lang) {
+    currentLang =
+        lang;
+    document.documentElement.lang =
+        lang;
+    document
+        .querySelectorAll('.lang-btn')
+        .forEach(btn => {
+            const isActive =
+                btn.dataset.lang === lang;
+            btn.classList.toggle(
+                'active',
+                isActive
+            );
+            btn.setAttribute(
+                'aria-pressed',
+                isActive
+                    ? 'true'
+                    : 'false'
+            );
+        });
+    document
+        .querySelectorAll('[data-t]')
+        .forEach(el => {
+            const key =
+                el.getAttribute(
+                    'data-t'
+                );
+            if (
+                UI[lang][key]
+            ) {
+                el.textContent =
+                    UI[lang][key];
+            }
+        });
+    /*
+        Preserve current section
+        and current food category.
+    */
+    const previousSection =
+        currentSection;
+    renderTabs();
+    renderCards();
+    if (
+        FOOD_CATEGORIES.length
+    ) {
+        renderFoodTabs();
+        renderFoodCards();
+    }
+    switchSection(
+        previousSection
+    );
+    updateHeaderHeightVar();
+}
+/* ============================================================
+   LIGHTBOX
+============================================================ */
+function openPhotoLightbox(
+    item,
+    triggerEl
+) {
+    lastFocusedEl =
+        triggerEl ||
+        document.activeElement;
+    const name =
+        loc(
+            item.name,
+            currentLang
+        );
+    const desc =
+        loc(
+            item.desc,
+            currentLang
+        );
+    const imgContainer =
+        document.getElementById(
+            'photoLightboxImage'
+        );
+    imgContainer.innerHTML =
+        item.image_url
+        ? `
+            <img
+                src="${item.image_url}"
+                alt="${name}"
+            >
+        `
         : ICONS.plate;
-    document.getElementById('photoLightboxName').textContent = name;
-    document.getElementById('photoLightboxPrice').textContent = item.price + ' MDL' + (item.weight ? ' · ' + item.weight : '');
-    document.getElementById('photoLightboxDesc').textContent = desc;
-    document.getElementById('photoLightbox').classList.add('active');
-    document.addEventListener('keydown', handleOverlayKeydown);
-    document.getElementById('photoLightboxClose').focus();
+    document.getElementById(
+        'photoLightboxName'
+    ).textContent =
+        name;
+    document.getElementById(
+        'photoLightboxPrice'
+    ).textContent =
+        item.price +
+        ' MDL' +
+        (
+            item.weight
+            ? ' · ' + item.weight
+            : ''
+        );
+    document.getElementById(
+        'photoLightboxDesc'
+    ).textContent =
+        desc;
+    document
+        .getElementById(
+            'photoLightbox'
+        )
+        .classList.add('active');
+    document.addEventListener(
+        'keydown',
+        handleOverlayKeydown
+    );
+    document
+        .getElementById(
+            'photoLightboxClose'
+        )
+        .focus();
 }
-
+/* ============================================================
+   CLOSE LIGHTBOX
+============================================================ */
 function closePhotoLightbox() {
-    document.getElementById('photoLightbox').classList.remove('active');
-    document.removeEventListener('keydown', handleOverlayKeydown);
-    if (lastFocusedEl) lastFocusedEl.focus();
+    document
+        .getElementById(
+            'photoLightbox'
+        )
+        .classList.remove(
+            'active'
+        );
+    document.removeEventListener(
+        'keydown',
+        handleOverlayKeydown
+    );
+    if (lastFocusedEl) {
+        lastFocusedEl.focus();
+    }
 }
-
-// Shared Escape-to-close + focus-trap handler for the photo lightbox overlay,
-// so keyboard users can never tab out of it or get stuck with no way to
-// dismiss it.
+/* ============================================================
+   LIGHTBOX KEYBOARD
+============================================================ */
 function handleOverlayKeydown(e) {
-    const activeOverlay = document.querySelector('.photo-lightbox.active');
-    if (!activeOverlay) return;
-    if (e.key === 'Escape') {
+    const activeOverlay =
+        document.querySelector(
+            '.photo-lightbox.active'
+        );
+    if (!activeOverlay) {
+        return;
+    }
+    if (
+        e.key === 'Escape'
+    ) {
         closePhotoLightbox();
         return;
     }
-    if (e.key !== 'Tab') return;
-    const focusable = Array.from(activeOverlay.querySelectorAll('button, [href], select, input, [tabindex]:not([tabindex="-1"])'))
-        .filter(el => el.offsetParent !== null);
-    if (!focusable.length) return;
-    const first = focusable[0], last = focusable[focusable.length - 1];
-    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-}
-
-function handleHash() {
-    const hash = window.location.hash.replace('#', '').toLowerCase();
-    const valid = OYSTERS.find(o => o.id === hash);
-    if (OYSTERS.length) showOyster(valid ? hash : OYSTERS[0].id);
-}
-
-function switchSection(section) {
-    currentSection = section;
-    document.querySelectorAll('.nav-btn').forEach(btn => {
-        const isActive = btn.dataset.section === section;
-        btn.classList.toggle('active', isActive);
-        if (isActive) btn.setAttribute('aria-current', 'page'); else btn.removeAttribute('aria-current');
-    });
-    document.getElementById('section-oysters').style.display = section === 'oysters' ? '' : 'none';
-    document.getElementById('section-food').style.display = section === 'food' ? '' : 'none';
-    if (section === 'oysters') handleHash();
-    if (section === 'food') { renderFoodTabs(); renderFoodCards(); scrollActiveFoodTabIntoView(); }
-}
-
-function setLanguage(lang) {
-    currentLang = lang;
-    document.documentElement.lang = lang; // keeps screen readers announcing the right language
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        const isActive = btn.dataset.lang === lang;
-        btn.classList.toggle('active', isActive);
-        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    });
-    document.querySelectorAll('[data-t]').forEach(el => {
-        const key = el.getAttribute('data-t');
-        if (UI[lang][key]) el.textContent = UI[lang][key];
-    });
-    renderTabs();
-    renderCards();
-    switchSection(currentSection);
-    updateHeaderHeightVar();
-}
-
-// ==================== ИНИЦИАЛИЗАЦИЯ ====================
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('navIconOysters').innerHTML = ICONS.oyster;
-    document.getElementById('navIconFood').innerHTML = ICONS.menu;
-
-    updateHeaderHeightVar();
-    window.addEventListener('resize', updateHeaderHeightVar);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateHeaderHeightVar);
-
-    document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => switchSection(btn.dataset.section)));
-
-    document.getElementById('tabs').addEventListener('click', e => {
-        const btn = e.target.closest('.tab');
-        if (btn) {
-            showOyster(btn.dataset.target);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    });
-
-    document.getElementById('food-tabs').addEventListener('click', e => {
-        const btn = e.target.closest('.tab');
-        if (btn) {
-            currentFoodCategory = btn.dataset.cat;
-            renderFoodTabs();
-            renderFoodCards();
-            scrollActiveFoodTabIntoView();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-    });
-
-    document.getElementById('photoLightboxClose').innerHTML = ICONS.close;
-    document.getElementById('photoLightboxClose').addEventListener('click', closePhotoLightbox);
-    document.getElementById('photoLightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closePhotoLightbox(); });
-
-    // Delegated click + keyboard (Enter/Space) handling for dish photo thumbnails.
-    // The original markup had role="button" tabindex="0" but no keydown listener,
-    // so keyboard-only users had no way to open the photo lightbox.
-    const openThumb = (el) => {
-        const cat = FOOD_CATEGORIES.find(c => c.key === currentFoodCategory);
-        const item = cat && cat.items.find(i => i.id === el.dataset.id);
-        if (item) openPhotoLightbox(item, el);
-    };
-    // Clicking anywhere on the dish card (not just the photo thumbnail) opens the lightbox.
-    document.getElementById('food-cards-container').addEventListener('click', e => {
-        const card = e.target.closest('.dish-card');
-        if (card) openThumb(card);
-    });
-    document.getElementById('food-cards-container').addEventListener('keydown', e => {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        const thumb = e.target.closest('.dish-thumb');
-        if (!thumb) return;
+    if (
+        e.key !== 'Tab'
+    ) {
+        return;
+    }
+    const focusable =
+        Array.from(
+            activeOverlay.querySelectorAll(
+                'button, [href], select, input, [tabindex]:not([tabindex="-1"])'
+            )
+        )
+        .filter(
+            el =>
+                el.offsetParent !== null
+        );
+    if (!focusable.length) {
+        return;
+    }
+    const first =
+        focusable[0];
+    const last =
+        focusable[
+            focusable.length - 1
+        ];
+    if (
+        e.shiftKey &&
+        document.activeElement === first
+    ) {
         e.preventDefault();
-        openThumb(thumb);
-    });
-
-    loadData().then(() => setLanguage(currentLang));
-});
-
-window.addEventListener('hashchange', handleHash);
+        last.focus();
+    } else if (
+        !e.shiftKey &&
+        document.activeElement === last
+    ) {
+        e.preventDefault();
+        first.focus();
+    }
+}
+/* ============================================================
+   DOM READY
+============================================================ */
+document.addEventListener(
+    'DOMContentLoaded',
+    () => {
+        /*
+            Icons
+        */
+        document.getElementById(
+            'navIconOysters'
+        ).innerHTML =
+            ICONS.oyster;
+        document.getElementById(
+            'navIconFood'
+        ).innerHTML =
+            ICONS.menu;
+        /*
+            Header height
+        */
+        updateHeaderHeightVar();
+        window.addEventListener(
+            'resize',
+            updateHeaderHeightVar
+        );
+        if (
+            document.fonts &&
+            document.fonts.ready
+        ) {
+            document.fonts.ready.then(
+                updateHeaderHeightVar
+            );
+        }
+        /*
+            Languages
+        */
+        document
+            .querySelectorAll(
+                '.lang-btn'
+            )
+            .forEach(btn => {
+                btn.addEventListener(
+                    'click',
+                    () =>
+                        setLanguage(
+                            btn.dataset.lang
+                        )
+                );
+            });
+        /*
+            Main navigation
+        */
+        document
+            .querySelectorAll(
+                '.nav-btn'
+            )
+            .forEach(btn => {
+                btn.addEventListener(
+                    'click',
+                    () =>
+                        switchSection(
+                            btn.dataset.section
+                        )
+                );
+            });
+        /*
+            Oyster tabs
+        */
+        document
+            .getElementById('tabs')
+            .addEventListener(
+                'click',
+                e => {
+                    const btn =
+                        e.target.closest(
+                            '.tab'
+                        );
+                    if (!btn) {
+                        return;
+                    }
+                    showOyster(
+                        btn.dataset.target
+                    );
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                }
+            );
+        /*
+            FOOD CATEGORY TABS
+            This is now navigation only.
+            It does NOT rerender the menu.
+        */
+        document
+            .getElementById(
+                'food-tabs'
+            )
+            .addEventListener(
+                'click',
+                e => {
+                    const btn =
+                        e.target.closest(
+                            '.tab'
+                        );
+                    if (!btn) {
+                        return;
+                    }
+                    goToFoodCategory(
+                        btn.dataset.cat
+                    );
+                }
+            );
+        /*
+            Lightbox close button
+        */
+        document
+            .getElementById(
+                'photoLightboxClose'
+            )
+            .innerHTML =
+                ICONS.close;
+        document
+            .getElementById(
+                'photoLightboxClose'
+            )
+            .addEventListener(
+                'click',
+                closePhotoLightbox
+            );
+        /*
+            Close by clicking outside
+        */
+        document
+            .getElementById(
+                'photoLightbox'
+            )
+            .addEventListener(
+                'click',
+                e => {
+                    if (
+                        e.target ===
+                        e.currentTarget
+                    ) {
+                        closePhotoLightbox();
+                    }
+                }
+            );
+        /*
+            FOOD CARD / PHOTO
+            Clicking anywhere on the dish card
+            opens the photo lightbox.
+        */
+        const openDishPhoto =
+            el => {
+                const cat =
+                    FOOD_CATEGORIES.find(
+                        c =>
+                            c.key ===
+                            currentFoodCategory
+                    );
+                /*
+                    If user clicked a card
+                    from another category while
+                    observer has not updated yet,
+                    find the item globally.
+                */
+                let item =
+                    cat &&
+                    cat.items.find(
+                        i =>
+                            i.id ===
+                            el.dataset.id
+                    );
+                if (!item) {
+                    for (
+                        const category
+                        of FOOD_CATEGORIES
+                    ) {
+                        item =
+                            category.items.find(
+                                i =>
+                                    i.id ===
+                                    el.dataset.id
+                            );
+                        if (item) {
+                            break;
+                        }
+                    }
+                }
+                if (item) {
+                    openPhotoLightbox(
+                        item,
+                        el
+                    );
+                }
+            };
+        /*
+            Click
+        */
+        document
+            .getElementById(
+                'food-cards-container'
+            )
+            .addEventListener(
+                'click',
+                e => {
+                    const card =
+                        e.target.closest(
+                            '.dish-card'
+                        );
+                    if (!card) {
+                        return;
+                    }
+                    openDishPhoto(
+                        card
+                    );
+                }
+            );
+        /*
+            Keyboard
+        */
+        document
+            .getElementById(
+                'food-cards-container'
+            )
+            .addEventListener(
+                'keydown',
+                e => {
+                    if (
+                        e.key !== 'Enter' &&
+                        e.key !== ' '
+                    ) {
+                        return;
+                    }
+                    const thumb =
+                        e.target.closest(
+                            '.dish-thumb'
+                        );
+                    if (!thumb) {
+                        return;
+                    }
+                    e.preventDefault();
+                    openDishPhoto(
+                        thumb
+                    );
+                }
+            );
+        /*
+            LOAD EVERYTHING
+        */
+        loadData().then(() => {
+            /*
+                Keep Menu as the default
+                section.
+            */
+            setLanguage(
+                currentLang
+            );
+        });
+    }
+);
 </script>
 </body>
 </html>
