@@ -45,6 +45,7 @@
                (e.g. "Special Gillardeau No.2") never overflow a 320–360px screen. */
             --fs-xl:     clamp(2.25rem, 8vw, 3.15rem);
             --tap-min:   44px; /* comfortable mobile touch target */
+            --shell-w:   480px; /* ширина "телефонной" колонки — переопределяется по брейкпоинтам ниже */
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -102,7 +103,7 @@
 
         .shell {
             width: 100%;
-            max-width: 480px;
+            max-width: var(--shell-w);
             min-height: 100vh;
             min-height: 100dvh;
             position: relative;
@@ -116,7 +117,7 @@
             position: fixed;
             top: 0; left: 50%;
             transform: translateX(-50%);
-            width: 480px; height: 100vh;
+            width: var(--shell-w); height: 100vh;
             background: radial-gradient(ellipse at 50% 0%, rgba(212,176,98,0.03) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
@@ -356,6 +357,23 @@
             body { padding: 20px 0; }
             .shell { border-radius: 28px; border: 1px solid var(--faint); overflow: hidden; box-shadow: 0 20px 80px rgba(0,0,0,0.4); }
             header { border-radius: 28px 28px 0 0; }
+        }
+
+        /* Планшеты и небольшие ноутбуки: шире карточка, вкладки не скроллятся
+           горизонтально (места хватает), детальная карточка устрицы держит
+           комфортную ширину строки, а плитки блюд идут в 2 колонки. */
+        @media (min-width: 700px) {
+            :root { --shell-w: 720px; }
+            .tabs { flex-wrap: wrap; overflow-x: visible; scroll-snap-type: none; }
+            .tabs-wrapper::after { display: none; }
+            .card { max-width: 620px; margin: 0 auto; }
+            .dish-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); align-items: start; }
+        }
+
+        /* Ноутбуки/десктоп: ещё шире контейнер — сетка блюд сама добавит
+           третью колонку за счёт minmax(300px, 1fr) выше, без лишних правил. */
+        @media (min-width: 1040px) {
+            :root { --shell-w: 960px; }
         }
 
         ::-webkit-scrollbar { width: 0; height: 0; }
