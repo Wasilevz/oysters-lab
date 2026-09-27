@@ -24,6 +24,9 @@
             --gold-glow: rgba(212,176,98,0.04);
             --text:      #f0ece4;
             --text-sec:  #c8c0b4;
+            /* --muted was rgba(138,159,186,0.4) on lang-btn (~2:1 contrast, fails WCAG 1.4.3).
+               --muted itself is #7a8fa3 solid, which measures ~6.45:1 on --bg — keep this,
+               drop the low-alpha variant everywhere text needs to be read. */
             --muted:     #7a8fa3;
             --faint:     #1a222e;
             --header-brand: #6ba39f;
@@ -38,8 +41,10 @@
             --fs-base:   1rem;
             --fs-md:     1.25rem;
             --fs-lg:     1.563rem;
+            /* Fluid type: locks the hero name to the viewport so long EN/RO names
+               (e.g. "Special Gillardeau No.2") never overflow a 320–360px screen. */
             --fs-xl:     clamp(2.25rem, 8vw, 3.15rem);
-            --tap-min:   44px;
+            --tap-min:   44px; /* comfortable mobile touch target */
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -60,11 +65,15 @@
             line-height: 1.5;
         }
 
+        /* Visually hidden but screen-reader accessible — used for labels that
+           would clutter the visual layout (e.g. select labels). */
         .sr-only {
             position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
             overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
         }
 
+        /* Skip link: lets keyboard users jump past the repeated header/nav,
+           which sits at the top of every screen in this single-page app. */
         .skip-link {
             position: absolute; top: -60px; left: 12px; z-index: 1000;
             background: var(--gold); color: #0c0f14; font-weight: 700;
@@ -73,6 +82,8 @@
         }
         .skip-link:focus { top: 12px; }
 
+        /* Consistent, visible focus ring across the whole app instead of relying
+           on (or worse, suppressing) the browser default outline. */
         :focus { outline: none; }
         :focus-visible {
             outline: 2px solid var(--gold-light);
@@ -111,6 +122,7 @@
             z-index: 0;
         }
 
+        /* ─── HEADER ─── */
         header {
             padding: calc(22px + env(safe-area-inset-top)) 20px 16px;
             border-bottom: 1px solid var(--faint);
@@ -144,6 +156,8 @@
         .lang-switch { display: inline-flex; gap: 3px; background: var(--surface); padding: 4px; border-radius: 24px; border: 1px solid var(--faint); }
         .lang-btn {
             background: transparent; border: 1px solid transparent;
+            /* Was rgba(138,159,186,0.4) → ~2:1 contrast on this bg. Fixed to the
+               solid --muted token (~6.45:1), which passes WCAG AA comfortably. */
             color: var(--muted);
             font-size: var(--fs-xs); font-weight: 700;
             cursor: pointer; width: var(--tap-min); height: var(--tap-min); border-radius: 22px;
@@ -153,6 +167,7 @@
         .lang-btn:hover:not(.active) { color: var(--text); }
         .lang-btn.active { background: var(--gold-dim); color: var(--gold); border-color: var(--gold-line); }
 
+        /* ─── NAV TABS ─── */
         .main-nav { display: flex; gap: 8px; }
         .nav-btn {
             flex: 1; background: var(--surface); border: 1px solid var(--faint);
@@ -166,6 +181,12 @@
         .nav-btn[aria-current="page"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
         .nav-icon { font-size: var(--fs-base); display: inline-flex; }
 
+        /* ─── OYSTER / FOOD TABS ─── */
+        /* Sticky under the header: switching oysters or dish categories while
+           reading a long description no longer requires scrolling back up.
+           --header-h is measured by JS (updateHeaderHeightVar) because the
+           header's real height depends on env(safe-area-inset-top) and can't
+           be hardcoded reliably in CSS alone. */
         .tabs-wrapper {
             position: sticky;
             top: var(--header-h, 118px);
@@ -190,6 +211,7 @@
         .tab:hover { border-color: var(--gold-line); color: var(--text); }
         .tab[aria-selected="true"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
 
+        /* ─── CARDS ─── */
         .card { display: none; padding: 0 20px 80px; animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
         .card.active { display: block; }
         .card .info-block { position: relative; z-index: 1; }
@@ -253,12 +275,37 @@
         .fact-text { font-size: var(--fs-base); line-height: 1.65; color: var(--body-text); }
         .fact-text strong { color: var(--text); font-weight: 600; }
 
+        /* ─── НЕТ В НАЛИЧИИ ─── */
+        .unavailable-strip {
+            background: rgba(224,132,122,0.12); color: var(--danger);
+            border: 1px solid rgba(224,132,122,0.28);
+            font-size: var(--fs-xs); font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.08em; text-align: center; padding: 7px 10px;
+            border-radius: 10px; margin-bottom: 12px;
+        }
+        .tab.unavailable-tab { opacity: 0.5; }
+        .oyster-photo.is-unavailable { opacity: 0.45; filter: grayscale(0.5); }
+        .dish-card.is-unavailable { opacity: 0.55; }
+        .dish-card.is-unavailable .dish-thumb img { filter: grayscale(0.6); }
+
+        /* ─── FOOD MENU ─── */
         .section-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-lg); font-weight: 600; padding: 24px 20px 12px; color: var(--text); letter-spacing: 0.5px; }
-        .dish-grid { padding: 0 20px 24px; display: flex; flex-direction: column; gap: 12px; }
+        .dish-grid { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
+        /* Bottom breathing room now lives once on the whole scroll container,
+           not repeated after every category (previously .dish-grid had it,
+           which was fine for one visible category at a time but would leave
+           an 80px gap between every category once they're all on one page). */
+        #food-cards-container { padding-bottom: 80px; }
         .dish-card { background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 18px; transition: border-color 0.25s ease; cursor: pointer; }
         .dish-card:hover { border-color: var(--gold-line); }
         .dish-card-inner { display: flex; gap: 16px; align-items: flex-start; }
+        /* Bigger than the original 84px so the photo actually helps the "order
+           or not" decision, but kept as a side-thumb (not a full-width hero
+           image) so scanning a long category list doesn't cost extra scrolling —
+           tapping still opens the full-size photo in the lightbox. */
         .dish-thumb { width: 108px; height: 108px; flex-shrink: 0; position: relative; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.7; cursor: pointer; }
+        /* Optional attention badge ("Хит" / "Новинка") — renders only when the
+           dish has item.badge set; otherwise nothing is added to the layout. */
         .dish-badge {
             position: absolute; top: -6px; left: -6px; z-index: 1;
             background: var(--gold); color: #0c0f14; font-size: 0.625rem; font-weight: 800;
@@ -275,6 +322,7 @@
         .dish-weight { font-size: var(--fs-sm); color: var(--muted); margin-bottom: 10px; letter-spacing: 0.02em; }
         .dish-desc { font-size: var(--fs-sm); color: var(--body-text); line-height: 1.65; font-weight: 400; }
 
+        /* photo lightbox */
         .photo-lightbox { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(6,10,16,0.94); z-index: 300; display: none; justify-content: center; align-items: center; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 20px; }
         .photo-lightbox.active { display: flex; }
         .photo-lightbox-panel { width: 100%; max-width: 400px; background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 20px; position: relative; animation: slideUp 0.3s cubic-bezier(0.22,1,0.36,1) forwards; }
@@ -287,18 +335,23 @@
         .photo-lightbox-price { font-size: var(--fs-md); color: var(--gold-light); font-weight: 800; text-align: center; margin-bottom: 12px; }
         .photo-lightbox-desc { font-size: var(--fs-sm); color: var(--body-text); line-height: 1.65; text-align: center; }
 
+        /* ─── SKELETON LOADING STATE ─── */
+        /* Shown while Supabase data is in flight, instead of a blank screen. */
         .skeleton { background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 37%, var(--surface) 63%); background-size: 400px 100%; animation: shimmer 1.4s ease infinite; border-radius: var(--radius-sm); }
         @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
         .skeleton-wrap { padding: 0 20px; }
 
+        /* ─── ERROR / EMPTY STATES ─── */
         .state-block { text-align: center; padding: 64px 28px; }
         .state-icon { color: var(--gold); opacity: 0.6; margin-bottom: 16px; display: flex; justify-content: center; }
         .state-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-md); font-weight: 600; color: var(--text); margin-bottom: 8px; }
         .state-text { font-size: var(--fs-sm); color: var(--muted); line-height: 1.6; margin-bottom: 22px; }
+        /* Shared button style also used by the retry button in the error state above (not quiz-specific). */
         .quiz-btn { width: 100%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-light); font-size: var(--fs-sm); font-weight: 700; padding: 14px; min-height: var(--tap-min); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.08em; }
         .quiz-btn:hover { background: var(--gold-line); color: var(--text); }
         .state-block .quiz-btn { max-width: 220px; margin: 0 auto; }
 
+        /* ─── RESPONSIVE ─── */
         @media (min-width: 481px) {
             body { padding: 20px 0; }
             .shell { border-radius: 28px; border: 1px solid var(--faint); overflow: hidden; box-shadow: 0 20px 80px rgba(0,0,0,0.4); }
@@ -309,18 +362,6 @@
 
         @keyframes slideUpFood { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
         .dish-card.animate-in { animation: slideUpFood 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
-
-        /* ─── ONE-PAGE MENU (anchored sections) ─── */
-        /* Each food category renders as its own section in one continuous
-           scroll. scroll-margin-top keeps a tapped/anchored section from
-           landing underneath the sticky header + sticky tabs bar.
-           --scroll-offset is kept in sync with their combined height via JS. */
-        .food-section {
-            scroll-margin-top: var(--scroll-offset, 170px);
-        }
-        .food-section .section-title { padding-top: 28px; }
-        .food-section:first-of-type .section-title { padding-top: 20px; }
-        #food-cards-container { padding-bottom: 60px; }
     </style>
 </head>
 <body>
@@ -346,18 +387,18 @@
     </header>
 
     <main id="main-content">
-        <div id="section-food">
-            <div class="tabs-wrapper">
-                <div class="tabs" id="food-tabs" role="tablist" aria-label="Категории меню"></div>
-            </div>
-            <div id="food-cards-container"></div>
-        </div>
-
         <div id="section-oysters" style="display:none;">
             <div class="tabs-wrapper">
                 <div class="tabs" id="tabs" role="tablist" aria-label="Список устриц"></div>
             </div>
             <div id="cards-container"></div>
+        </div>
+
+        <div id="section-food">
+            <div class="tabs-wrapper">
+                <div class="tabs" id="food-tabs" role="tablist" aria-label="Категории меню"></div>
+            </div>
+            <div id="food-cards-container"></div>
         </div>
     </main>
 
@@ -390,6 +431,7 @@ const UI = {
         empty_category_title: 'Пока пусто',
         empty_category_text: 'В этой категории скоро появятся блюда.',
         view_photo: 'Смотреть фото',
+        unavailable: 'Временно недоступно',
     },
     ro: {
         taste: 'Profil Gustativ', origin: 'Origine', pairing: 'Băuturi Ideale',
@@ -405,6 +447,7 @@ const UI = {
         empty_category_title: 'Momentan gol',
         empty_category_text: 'Preparatele din această categorie vor apărea în curând.',
         view_photo: 'Vezi foto',
+        unavailable: 'Temporar indisponibil',
     },
     en: {
         taste: 'Taste Profile', origin: 'Origin', pairing: 'Perfect Pairings',
@@ -420,6 +463,7 @@ const UI = {
         empty_category_title: 'Nothing here yet',
         empty_category_text: 'Dishes in this category are coming soon.',
         view_photo: 'View photo',
+        unavailable: 'Temporarily unavailable',
     }
 };
 
@@ -434,11 +478,17 @@ const ICONS = {
 };
 
 // ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
+// Note: language choice is kept in memory only (not localStorage) so this preview
+// behaves consistently wherever it's rendered. When you deploy this file to your
+// own hosting, you can restore `localStorage.getItem('oyster_lang')` /
+// `localStorage.setItem(...)` in setLanguage() to persist the choice across visits.
 let currentLang = 'ru';
 let currentSection = 'food';
 let currentFoodCategory = null;
+let isProgrammaticFoodScroll = false;
+let programmaticFoodScrollTimeout = null;
+let foodSectionObserver = null;
 let lastFocusedEl = null;
-let foodScrollObserver = null;
 
 let OYSTERS = [];
 let FOOD_CATEGORIES = [];
@@ -452,44 +502,45 @@ function loc(value, lang) {
     return value;
 }
 
-// Keeps the sticky tabs bar positioned exactly below the header, and keeps
-// --scroll-offset (header + tabs-wrapper height) in sync so anchored food
-// sections land correctly below both sticky bars when a category tab is tapped.
+// Keeps the sticky tabs bar positioned exactly below the header. The header's
+// real height depends on env(safe-area-inset-top) and the language currently
+// shown, so it's measured in JS rather than hardcoded in CSS.
 function updateHeaderHeightVar() {
     const header = document.querySelector('header');
     if (header) document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
-    const activeTabsWrapper = document.querySelector(
-        currentSection === 'food' ? '#section-food .tabs-wrapper' : '#section-oysters .tabs-wrapper'
-    );
-    if (header && activeTabsWrapper) {
-        const offset = header.offsetHeight + activeTabsWrapper.offsetHeight + 8;
-        document.documentElement.style.setProperty('--scroll-offset', offset + 'px');
-    }
 }
 
-// ==================== LOADING / ERROR STATES ====================
+// ==================== LOADING / ERROR / EMPTY STATES ====================
 function renderSkeleton() {
     const t = UI[currentLang];
-    document.getElementById('food-tabs').innerHTML = '';
-    document.getElementById('food-cards-container').innerHTML = `
+    const skeletonHtml = `
         <div class="skeleton-wrap" role="status" aria-label="${t.loading}">
             <div class="skeleton" style="height:26px;width:55%;margin:24px auto 16px;border-radius:16px;"></div>
-            <div class="skeleton" style="height:120px;margin-bottom:14px;"></div>
-            <div class="skeleton" style="height:120px;margin-bottom:14px;"></div>
-            <div class="skeleton" style="height:120px;"></div>
+            <div class="skeleton" style="height:44px;width:45%;margin:0 auto 24px;border-radius:24px;"></div>
+            <div class="skeleton" style="height:180px;margin-bottom:14px;"></div>
+            <div class="skeleton" style="height:140px;margin-bottom:14px;"></div>
+            <div class="skeleton" style="height:100px;"></div>
         </div>`;
+    // Обе секции получают заглушку: по умолчанию открыта "Меню", но пользователь
+    // может переключиться на "Устрицы" ещё до того, как данные подгрузятся.
+    document.getElementById('tabs').innerHTML = '';
+    document.getElementById('cards-container').innerHTML = skeletonHtml;
+    document.getElementById('food-tabs').innerHTML = '';
+    document.getElementById('food-cards-container').innerHTML = skeletonHtml;
 }
 
 function renderErrorState(onRetry) {
     const t = UI[currentLang];
-    document.getElementById('food-cards-container').innerHTML = `
+    const errorHtml = `
         <div class="state-block" role="alert">
             <div class="state-icon">${ICONS.warning}</div>
             <div class="state-title">${t.error_title}</div>
             <p class="state-text">${t.error_text}</p>
-            <button class="quiz-btn" id="retryBtn">${t.retry}</button>
+            <button class="quiz-btn retry-btn">${t.retry}</button>
         </div>`;
-    document.getElementById('retryBtn').addEventListener('click', onRetry);
+    document.getElementById('cards-container').innerHTML = errorHtml;
+    document.getElementById('food-cards-container').innerHTML = errorHtml;
+    document.querySelectorAll('.retry-btn').forEach(btn => btn.addEventListener('click', onRetry));
 }
 
 // ==================== ЗАГРУЗКА ДАННЫХ ====================
@@ -498,6 +549,9 @@ async function loadData() {
     try {
         const headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
 
+        // Fetch all three endpoints in parallel instead of sequentially —
+        // cuts perceived load time roughly to the slowest single request
+        // instead of the sum of all three.
         const [oystersRes, catRes, itemsRes] = await Promise.all([
             fetch(`${SUPABASE_URL}/rest/v1/oysters?select=*`, { headers }),
             fetch(`${SUPABASE_URL}/rest/v1/food_categories?select=*&order=sort_order.asc`, { headers }),
@@ -522,9 +576,11 @@ async function loadData() {
 
         renderTabs();
         renderCards();
-        renderFoodTabs();
-        renderFoodCards();
-        setupFoodScrollSpy();
+        if (currentSection === 'food') {
+            renderFoodTabs();
+            renderFoodCards();
+            scrollActiveFoodTabIntoView();
+        }
         handleHash();
 
     } catch (error) {
@@ -533,11 +589,11 @@ async function loadData() {
     }
 }
 
-// ==================== ФУНКЦИИ РЕНДЕРИНГА: УСТРИЦЫ ====================
+// ==================== ФУНКЦИИ РЕНДЕРИНГА ====================
 function renderTabs() {
     const tabsEl = document.getElementById('tabs');
     tabsEl.innerHTML = OYSTERS.map(o => `
-        <button class="tab" data-target="${o.id}" role="tab" id="tab-${o.id}" aria-selected="false" aria-controls="card-${o.id}">${o.name}</button>
+        <button class="tab ${o.available === false ? 'unavailable-tab' : ''}" data-target="${o.id}" role="tab" id="tab-${o.id}" aria-selected="false" aria-controls="card-${o.id}">${o.name}</button>
     `).join('');
 }
 
@@ -565,8 +621,9 @@ function renderCards() {
         <div id="card-${o.id}" class="card" role="tabpanel" aria-labelledby="tab-${o.id}" tabindex="0">
             <div class="hero">
                 <span class="badge">${o.badge}</span>
+                ${o.available === false ? `<div class="unavailable-strip">${t.unavailable}</div>` : ''}
                 <h2 class="oyster-name">${o.name}</h2>
-                ${o.image_url ? `<div class="oyster-photo"><img src="${o.image_url}" alt="${o.name}" loading="lazy"></div>` : ''}
+                ${o.image_url ? `<div class="oyster-photo ${o.available === false ? 'is-unavailable' : ''}"><img src="${o.image_url}" alt="${o.name}" loading="lazy"></div>` : ''}
                 <div class="price-tag">
                     <span class="price-amount">${o.price} MDL</span>
                     <span class="price-unit">${t.unit}</span>
@@ -644,7 +701,6 @@ function showOyster(id) {
     activateBars(card);
 }
 
-// ==================== ФУНКЦИИ РЕНДЕРИНГА: МЕНЮ (одна длинная страница) ====================
 function renderFoodTabs() {
     const tabsEl = document.getElementById('food-tabs');
     tabsEl.innerHTML = FOOD_CATEGORIES.map(c => `
@@ -657,9 +713,6 @@ function scrollActiveFoodTabIntoView() {
     if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 }
 
-// Renders every category, one after another, each as its own anchored
-// section (id="food-panel-<key>") with its title, so the whole menu lives
-// on one continuously scrollable page instead of switching panels.
 function renderFoodCards() {
     const t = UI[currentLang];
     const container = document.getElementById('food-cards-container');
@@ -674,83 +727,94 @@ function renderFoodCards() {
         return;
     }
 
+    // Все категории рендерятся сразу, одна под другой, на одной длинной
+    // странице — клик по табу-категории просто прокручивает к нужному
+    // разделу (см. scrollToFoodCategory), а не подменяет контент.
     container.innerHTML = FOOD_CATEGORIES.map(cat => {
         const label = loc(cat.label, currentLang);
-        if (!cat.items.length) {
-            return `
-                <section class="food-section" id="food-panel-${cat.key}" role="region" aria-labelledby="food-tab-${cat.key}">
-                    <h2 class="section-title">${label}</h2>
-                    <div class="state-block">
-                        <div class="state-icon">${ICONS.tray}</div>
-                        <div class="state-title">${t.empty_category_title}</div>
-                        <p class="state-text">${t.empty_category_text}</p>
-                    </div>
-                </section>`;
-        }
-        return `
-            <section class="food-section" id="food-panel-${cat.key}" role="region" aria-labelledby="food-tab-${cat.key}">
-                <h2 class="section-title">${label}</h2>
-                <div class="dish-grid">
-                    ${cat.items.map((item, idx) => {
-                        const name = loc(item.name, currentLang);
-                        const desc = loc(item.desc, currentLang);
-                        const delay = Math.min(idx * 0.05, 0.3).toFixed(2);
-                        return `
-                        <div class="dish-card animate-in" data-id="${item.id}" style="animation-delay: ${delay}s">
-                            <div class="dish-card-inner">
-                                <div class="dish-thumb" data-id="${item.id}" data-cat="${cat.key}" role="button" tabindex="0" aria-label="${t.view_photo}: ${name}">
-                                    ${item.badge ? `<span class="dish-badge">${loc(item.badge, currentLang)}</span>` : ''}
-                                    ${item.image_url ? `<img src="${item.image_url}" alt="${name}" loading="lazy">` : ICONS.plate}
-                                </div>
-                                <div class="dish-content">
-                                    <div class="dish-top">
-                                        <div class="dish-name">${name}</div>
-                                        <div class="dish-price-chip">${item.price} MDL</div>
-                                    </div>
-                                    ${item.weight ? `<div class="dish-weight">${item.weight}</div>` : ''}
-                                    <div class="dish-desc">${desc}</div>
-                                </div>
-                            </div>
+        const itemsHtml = cat.items.length
+            ? cat.items.map((item, idx) => {
+                const name = loc(item.name, currentLang);
+                const desc = loc(item.desc, currentLang);
+                const unavailable = item.available === false;
+                // Deterministic, capped stagger instead of Math.random() — keeps
+                // the reveal orderly and avoids a different, jumpy animation
+                // sequence every single time the category is re-rendered.
+                const delay = Math.min(idx * 0.05, 0.3).toFixed(2);
+                return `
+                <div class="dish-card animate-in ${unavailable ? 'is-unavailable' : ''}" data-id="${item.id}" style="animation-delay: ${delay}s">
+                    ${unavailable ? `<div class="unavailable-strip">${t.unavailable}</div>` : ''}
+                    <div class="dish-card-inner">
+                        <div class="dish-thumb" data-id="${item.id}" role="button" tabindex="0" aria-label="${t.view_photo}: ${name}">
+                            ${item.badge && !unavailable ? `<span class="dish-badge">${loc(item.badge, currentLang)}</span>` : ''}
+                            ${item.image_url ? `<img src="${item.image_url}" alt="${name}" loading="lazy">` : ICONS.plate}
                         </div>
-                    `;
-                    }).join('')}
+                        <div class="dish-content">
+                            <div class="dish-top">
+                                <div class="dish-name">${name}</div>
+                                <div class="dish-price-chip">${item.price} MDL</div>
+                            </div>
+                            ${item.weight ? `<div class="dish-weight">${item.weight}</div>` : ''}
+                            <div class="dish-desc">${desc}</div>
+                        </div>
+                    </div>
                 </div>
+            `;
+              }).join('')
+            : `
+                <div class="state-block" style="padding:32px 16px;">
+                    <div class="state-icon">${ICONS.tray}</div>
+                    <div class="state-title">${t.empty_category_title}</div>
+                    <p class="state-text">${t.empty_category_text}</p>
+                </div>`;
+
+        return `
+            <section class="food-category-section" id="food-panel-${cat.key}" data-cat-key="${cat.key}" aria-labelledby="food-tab-${cat.key}">
+                <h2 class="section-title">${label}</h2>
+                <div class="dish-grid">${itemsHtml}</div>
             </section>`;
     }).join('');
 
-    updateHeaderHeightVar();
+    setupFoodScrollSpy();
 }
 
-// Smooth-scrolls the page to a category's anchored section (used by the
-// category tab bar instead of switching visible content).
-function scrollToFoodCategory(key) {
+// Прокручивает страницу к началу секции категории, с учётом высоты
+// липких header + tabs-wrapper (иначе заголовок категории окажется под ними).
+function scrollToFoodCategory(key, behavior = 'smooth') {
     const target = document.getElementById('food-panel-' + key);
     if (!target) return;
-    currentFoodCategory = key;
-    renderFoodTabs();
-    scrollActiveFoodTabIntoView();
-    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const header = document.querySelector('header');
+    const tabsWrapper = document.querySelector('#section-food .tabs-wrapper');
+    const offset = (header ? header.offsetHeight : 0) + (tabsWrapper ? tabsWrapper.offsetHeight : 0);
+    const top = target.getBoundingClientRect().top + window.pageYOffset - offset - 4;
+    isProgrammaticFoodScroll = true;
+    clearTimeout(programmaticFoodScrollTimeout);
+    window.scrollTo({ top, behavior });
+    programmaticFoodScrollTimeout = setTimeout(() => { isProgrammaticFoodScroll = false; }, 700);
 }
 
-// Highlights whichever category tab corresponds to the section currently
-// in view, so the tab bar stays in sync as the user free-scrolls the page.
+// Подсвечивает таб той категории, что сейчас видна при прокрутке страницы —
+// игнорируется во время программной прокрутки по клику, чтобы таб не мигал
+// по промежуточным категориям, пролетающим мимо во время анимации.
 function setupFoodScrollSpy() {
-    if (foodScrollObserver) foodScrollObserver.disconnect();
-    const sections = document.querySelectorAll('.food-section');
-    if (!sections.length || !('IntersectionObserver' in window)) return;
-    foodScrollObserver = new IntersectionObserver((entries) => {
+    if (typeof IntersectionObserver === 'undefined') return;
+    if (foodSectionObserver) foodSectionObserver.disconnect();
+    const header = document.querySelector('header');
+    const tabsWrapper = document.querySelector('#section-food .tabs-wrapper');
+    const topOffset = (header ? header.offsetHeight : 0) + (tabsWrapper ? tabsWrapper.offsetHeight : 0);
+    foodSectionObserver = new IntersectionObserver((entries) => {
+        if (isProgrammaticFoodScroll) return;
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const key = entry.target.id.replace('food-panel-', '');
-                if (key !== currentFoodCategory) {
-                    currentFoodCategory = key;
-                    renderFoodTabs();
-                    scrollActiveFoodTabIntoView();
-                }
+            if (!entry.isIntersecting) return;
+            const key = entry.target.dataset.catKey;
+            if (key && key !== currentFoodCategory) {
+                currentFoodCategory = key;
+                renderFoodTabs();
+                scrollActiveFoodTabIntoView();
             }
         });
-    }, { root: null, rootMargin: '-45% 0px -50% 0px', threshold: 0 });
-    sections.forEach(s => foodScrollObserver.observe(s));
+    }, { root: null, rootMargin: `-${topOffset + 1}px 0px -70% 0px`, threshold: 0 });
+    document.querySelectorAll('.food-category-section').forEach(sec => foodSectionObserver.observe(sec));
 }
 
 function openPhotoLightbox(item, triggerEl) {
@@ -762,7 +826,8 @@ function openPhotoLightbox(item, triggerEl) {
         ? `<img src="${item.image_url}" alt="${name}">`
         : ICONS.plate;
     document.getElementById('photoLightboxName').textContent = name;
-    document.getElementById('photoLightboxPrice').textContent = item.price + ' MDL' + (item.weight ? ' · ' + item.weight : '');
+    const t = UI[currentLang];
+    document.getElementById('photoLightboxPrice').innerHTML = (item.available === false ? `<span style="color:var(--danger)">${t.unavailable} · </span>` : '') + item.price + ' MDL' + (item.weight ? ' · ' + item.weight : '');
     document.getElementById('photoLightboxDesc').textContent = desc;
     document.getElementById('photoLightbox').classList.add('active');
     document.addEventListener('keydown', handleOverlayKeydown);
@@ -796,10 +861,8 @@ function handleOverlayKeydown(e) {
 
 function handleHash() {
     const hash = window.location.hash.replace('#', '').toLowerCase();
-    if (currentSection === 'oysters') {
-        const valid = OYSTERS.find(o => o.id === hash);
-        if (OYSTERS.length) showOyster(valid ? hash : OYSTERS[0].id);
-    }
+    const valid = OYSTERS.find(o => o.id === hash);
+    if (OYSTERS.length) showOyster(valid ? hash : OYSTERS[0].id);
 }
 
 function switchSection(section) {
@@ -811,9 +874,8 @@ function switchSection(section) {
     });
     document.getElementById('section-oysters').style.display = section === 'oysters' ? '' : 'none';
     document.getElementById('section-food').style.display = section === 'food' ? '' : 'none';
-    updateHeaderHeightVar();
     if (section === 'oysters') handleHash();
-    if (section === 'food') scrollActiveFoodTabIntoView();
+    if (section === 'food') { renderFoodTabs(); renderFoodCards(); scrollActiveFoodTabIntoView(); }
 }
 
 function setLanguage(lang) {
@@ -830,9 +892,6 @@ function setLanguage(lang) {
     });
     renderTabs();
     renderCards();
-    renderFoodTabs();
-    renderFoodCards();
-    setupFoodScrollSpy();
     switchSection(currentSection);
     updateHeaderHeightVar();
 }
@@ -857,11 +916,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Category tabs now scroll the page down to the matching anchored
-    // section instead of swapping which category is displayed.
     document.getElementById('food-tabs').addEventListener('click', e => {
         const btn = e.target.closest('.tab');
-        if (btn) scrollToFoodCategory(btn.dataset.cat);
+        if (btn) {
+            currentFoodCategory = btn.dataset.cat;
+            renderFoodTabs();
+            scrollActiveFoodTabIntoView();
+            scrollToFoodCategory(btn.dataset.cat);
+        }
     });
 
     document.getElementById('photoLightboxClose').innerHTML = ICONS.close;
@@ -869,18 +931,20 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('photoLightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closePhotoLightbox(); });
 
     // Delegated click + keyboard (Enter/Space) handling for dish photo thumbnails.
+    // The original markup had role="button" tabindex="0" but no keydown listener,
+    // so keyboard-only users had no way to open the photo lightbox.
     const openThumb = (el) => {
-        const cat = FOOD_CATEGORIES.find(c => c.key === el.dataset.cat);
-        const item = cat && cat.items.find(i => i.id === el.dataset.id);
+        let item = null;
+        for (const cat of FOOD_CATEGORIES) {
+            item = cat.items.find(i => i.id === el.dataset.id);
+            if (item) break;
+        }
         if (item) openPhotoLightbox(item, el);
     };
     // Clicking anywhere on the dish card (not just the photo thumbnail) opens the lightbox.
     document.getElementById('food-cards-container').addEventListener('click', e => {
         const card = e.target.closest('.dish-card');
-        if (card) {
-            const thumb = card.querySelector('.dish-thumb');
-            if (thumb) openThumb(thumb);
-        }
+        if (card) openThumb(card);
     });
     document.getElementById('food-cards-container').addEventListener('keydown', e => {
         if (e.key !== 'Enter' && e.key !== ' ') return;
