@@ -22,6 +22,9 @@
             --gold-line: rgba(212,176,98,0.18);
             --text:      #f0ece4;
             --text-sec:  #c8c0b4;
+            /* --muted was rgba(138,159,186,0.4) on lang-btn (~2:1 contrast, fails WCAG 1.4.3).
+               --muted itself is #7a8fa3 solid, which measures ~6.45:1 on --bg — keep this,
+               drop the low-alpha variant everywhere text needs to be read. */
             --muted:     #7a8fa3;
             --faint:     #1a222e;
             --header-brand: #6ba39f;
@@ -35,9 +38,11 @@
             --fs-base:   1rem;
             --fs-md:     1.25rem;
             --fs-lg:     1.563rem;
+            /* Fluid type: locks the hero name to the viewport so long EN/RO names
+               (e.g. "Special Gillardeau No.2") never overflow a 320–360px screen. */
             --fs-xl:     clamp(2.25rem, 8vw, 3.15rem);
-            --tap-min:   44px;
-            --shell-w:   480px;
+            --tap-min:   44px; /* comfortable mobile touch target */
+            --shell-w:   480px; /* ширина "телефонной" колонки — переопределяется по брейкпоинтам ниже */
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -58,6 +63,8 @@
             line-height: 1.5;
         }
 
+        /* Skip link: lets keyboard users jump past the repeated header/nav,
+           which sits at the top of every screen in this single-page app. */
         .skip-link {
             position: absolute; top: -60px; left: 12px; z-index: 1000;
             background: var(--gold); color: #0c0f14; font-weight: 700;
@@ -66,6 +73,8 @@
         }
         .skip-link:focus { top: 12px; }
 
+        /* Consistent, visible focus ring across the whole app instead of relying
+           on (or worse, suppressing) the browser default outline. */
         :focus { outline: none; }
         :focus-visible {
             outline: 2px solid var(--gold-light);
@@ -93,18 +102,12 @@
             background: var(--bg);
         }
 
-        /* Fixed: раньше width: var(--shell-w) на узком экране был шире
-           вьюпорта и давал горизонтальный скролл. Теперь — 100% + max-width. */
         .shell::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            margin: 0 auto;
-            width: 100%;
-            max-width: var(--shell-w);
-            height: 100vh;
+            top: 0; left: 50%;
+            transform: translateX(-50%);
+            width: var(--shell-w); height: 100vh;
             background: radial-gradient(ellipse at 50% 0%, rgba(212,176,98,0.03) 0%, transparent 60%);
             pointer-events: none;
             z-index: 0;
@@ -145,6 +148,8 @@
         .lang-switch { display: inline-flex; gap: 3px; background: var(--surface); padding: 4px; border-radius: 24px; border: 1px solid var(--faint); }
         .lang-btn {
             background: transparent; border: 1px solid transparent;
+            /* Was rgba(138,159,186,0.4) → ~2:1 contrast on this bg. Fixed to the
+               solid --muted token (~6.45:1), which passes WCAG AA comfortably. */
             color: var(--muted);
             font-size: var(--fs-xs); font-weight: 700;
             cursor: pointer; width: var(--tap-min); height: var(--tap-min); border-radius: 22px;
@@ -168,6 +173,11 @@
         .nav-icon { font-size: var(--fs-base); display: inline-flex; }
 
         /* ─── OYSTER / FOOD TABS ─── */
+        /* Sticky under the header: switching oysters or dish categories while
+           reading a long description no longer requires scrolling back up.
+           --header-h is measured by JS (updateHeaderHeightVar) because the
+           header's real height depends on env(safe-area-inset-top) and can't
+           be hardcoded reliably in CSS alone. */
         .tabs-wrapper {
             position: sticky;
             top: var(--header-h, 118px);
@@ -274,11 +284,21 @@
         .section-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-lg); font-weight: 600; padding: 24px 20px 12px; color: var(--text); letter-spacing: 0.5px; }
         .section-subtitle { font-size: var(--fs-sm); color: var(--muted); padding: 0 20px 14px; margin-top: -8px; line-height: 1.5; }
         .dish-grid { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
+        /* Bottom breathing room now lives once on the whole scroll container,
+           not repeated after every category (previously .dish-grid had it,
+           which was fine for one visible category at a time but would leave
+           an 80px gap between every category once they're all on one page). */
         #food-cards-container { padding-bottom: 80px; }
         .dish-card { background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 18px; transition: border-color 0.25s ease; cursor: pointer; }
         .dish-card:hover { border-color: var(--gold-line); }
         .dish-card-inner { display: flex; gap: 16px; align-items: flex-start; }
+        /* Bigger than the original 84px so the photo actually helps the "order
+           or not" decision, but kept as a side-thumb (not a full-width hero
+           image) so scanning a long category list doesn't cost extra scrolling —
+           tapping still opens the full-size photo in the lightbox. */
         .dish-thumb { width: 108px; height: 108px; flex-shrink: 0; position: relative; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.7; cursor: pointer; }
+        /* Optional attention badge ("Хит" / "Новинка") — renders only when the
+           dish has item.badge set; otherwise nothing is added to the layout. */
         .dish-badge {
             position: absolute; top: -6px; left: -6px; z-index: 1;
             background: var(--gold); color: #0c0f14; font-size: 0.625rem; font-weight: 800;
@@ -309,6 +329,7 @@
         .photo-lightbox-desc { font-size: var(--fs-sm); color: var(--body-text); line-height: 1.65; text-align: center; }
 
         /* ─── SKELETON LOADING STATE ─── */
+        /* Shown while Supabase data is in flight, instead of a blank screen. */
         .skeleton { background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 37%, var(--surface) 63%); background-size: 400px 100%; animation: shimmer 1.4s ease infinite; border-radius: var(--radius-sm); }
         @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
         .skeleton-wrap { padding: 0 20px; }
@@ -318,6 +339,7 @@
         .state-icon { color: var(--gold); opacity: 0.6; margin-bottom: 16px; display: flex; justify-content: center; }
         .state-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-md); font-weight: 600; color: var(--text); margin-bottom: 8px; }
         .state-text { font-size: var(--fs-sm); color: var(--muted); line-height: 1.6; margin-bottom: 22px; }
+        /* Shared button style for the retry button in the error state below. */
         .action-btn { width: 100%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-light); font-size: var(--fs-sm); font-weight: 700; padding: 14px; min-height: var(--tap-min); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.08em; }
         .action-btn:hover { background: var(--gold-line); color: var(--text); }
         .state-block .action-btn { max-width: 220px; margin: 0 auto; }
@@ -329,6 +351,9 @@
             header { border-radius: 28px 28px 0 0; }
         }
 
+        /* Планшеты и небольшие ноутбуки: шире карточка, вкладки не скроллятся
+           горизонтально (места хватает), детальная карточка устрицы держит
+           комфортную ширину строки, а плитки блюд идут в 2 колонки. */
         @media (min-width: 700px) {
             :root { --shell-w: 720px; }
             .tabs { flex-wrap: wrap; overflow-x: visible; scroll-snap-type: none; }
@@ -337,6 +362,8 @@
             .dish-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); align-items: start; }
         }
 
+        /* Ноутбуки/десктоп: ещё шире контейнер — сетка блюд сама добавит
+           третью колонку за счёт minmax(300px, 1fr) выше, без лишних правил. */
         @media (min-width: 1040px) {
             :root { --shell-w: 960px; }
         }
@@ -458,11 +485,13 @@ const ICONS = {
 };
 
 // ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
+// Note: language choice is kept in memory only (not localStorage) so this preview
+// behaves consistently wherever it's rendered. When you deploy this file to your
+// own hosting, you can restore `localStorage.getItem('oyster_lang')` /
+// `localStorage.setItem(...)` in setLanguage() to persist the choice across visits.
 let currentLang = 'ru';
 let currentSection = 'food';
 let currentFoodCategory = null;
-let currentOysterId = null;        // помним выбранную устрицу между рендерами
-let dataLoaded = false;            // не трогаем skeleton до завершения загрузки
 let isProgrammaticFoodScroll = false;
 let programmaticFoodScrollTimeout = null;
 let foodSectionObserver = null;
@@ -480,6 +509,9 @@ function loc(value, lang) {
     return value;
 }
 
+// Keeps the sticky tabs bar positioned exactly below the header. The header's
+// real height depends on env(safe-area-inset-top) and the language currently
+// shown, so it's measured in JS rather than hardcoded in CSS.
 function updateHeaderHeightVar() {
     const header = document.querySelector('header');
     if (header) document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
@@ -487,7 +519,6 @@ function updateHeaderHeightVar() {
 
 // ==================== LOADING / ERROR / EMPTY STATES ====================
 function renderSkeleton() {
-    dataLoaded = false;
     const t = UI[currentLang];
     const skeletonHtml = `
         <div class="skeleton-wrap" role="status" aria-label="${t.loading}">
@@ -497,6 +528,8 @@ function renderSkeleton() {
             <div class="skeleton" style="height:140px;margin-bottom:14px;"></div>
             <div class="skeleton" style="height:100px;"></div>
         </div>`;
+    // Обе секции получают заглушку: по умолчанию открыта "Меню", но пользователь
+    // может переключиться на "Устрицы" ещё до того, как данные подгрузятся.
     document.getElementById('tabs').innerHTML = '';
     document.getElementById('cards-container').innerHTML = skeletonHtml;
     document.getElementById('food-tabs').innerHTML = '';
@@ -523,6 +556,9 @@ async function loadData() {
     try {
         const headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
 
+        // Fetch all three endpoints in parallel instead of sequentially —
+        // cuts perceived load time roughly to the slowest single request
+        // instead of the sum of all three.
         const [oystersRes, catRes, itemsRes] = await Promise.all([
             fetch(`${SUPABASE_URL}/rest/v1/oysters?select=*`, { headers }),
             fetch(`${SUPABASE_URL}/rest/v1/food_categories?select=*&order=sort_order.asc`, { headers }),
@@ -545,12 +581,13 @@ async function loadData() {
 
         if (!currentFoodCategory && FOOD_CATEGORIES.length) currentFoodCategory = FOOD_CATEGORIES[0].key;
 
+        // Обе секции рендерятся один раз здесь, независимо от того, какая
+        // сейчас видна — переключение разделов дальше просто показывает/
+        // прячет уже готовый DOM, а не рендерит его заново.
         renderTabs();
         renderCards();
         renderFoodTabs();
         renderFoodCards();
-        dataLoaded = true;
-
         if (currentSection === 'oysters') {
             handleHash();
         } else {
@@ -597,6 +634,8 @@ function renderCards() {
         const originPlace = loc(o.origin?.place, currentLang);
         const originRegion = loc(o.origin?.region, currentLang);
         const originText = loc(o.origin?.text, currentLang);
+        // Фоллбэк как у блюд: если для текущего языка факты не заполнены в
+        // админке, берём ru → en → ro → пустой список, а не падаем на undefined.
         const facts = o.facts?.[currentLang] || o.facts?.ru || o.facts?.en || o.facts?.ro || [];
         return `
         <div id="card-${o.id}" class="card" role="tabpanel" aria-labelledby="tab-${o.id}" tabindex="0">
@@ -672,7 +711,6 @@ function activateBars(cardEl) {
 }
 
 function showOyster(id) {
-    currentOysterId = id;
     document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
     document.querySelectorAll('#tabs .tab').forEach(t => t.setAttribute('aria-selected', 'false'));
     const card = document.getElementById('card-' + id);
@@ -691,6 +729,11 @@ function renderFoodTabs() {
     `).join('');
 }
 
+// Лёгкое переключение подсветки активной вкладки: просто меняет атрибут
+// aria-current у уже существующих кнопок, без пересоздания DOM. Именно
+// это (а не renderFoodTabs) нужно вызывать во время скролла — пересоздание
+// innerHTML вкладок на каждый шаг scroll-spy и вызывало подвисания/рывки
+// при прокрутке длинной страницы меню.
 function updateFoodTabsSelection() {
     document.querySelectorAll('#food-tabs .tab').forEach(btn => {
         btn.setAttribute('aria-current', btn.dataset.cat === currentFoodCategory ? 'true' : 'false');
@@ -716,6 +759,9 @@ function renderFoodCards() {
         return;
     }
 
+    // Все категории рендерятся сразу, одна под другой, на одной длинной
+    // странице — клик по табу-категории просто прокручивает к нужному
+    // разделу (см. scrollToFoodCategory), а не подменяет контент.
     container.innerHTML = FOOD_CATEGORIES.map(cat => {
         const label = loc(cat.label, currentLang);
         const subtitle = loc(cat.subtitle, currentLang);
@@ -724,6 +770,9 @@ function renderFoodCards() {
                 const name = loc(item.name, currentLang);
                 const desc = loc(item.desc, currentLang);
                 const unavailable = item.available === false;
+                // Deterministic, capped stagger instead of Math.random() — keeps
+                // the reveal orderly and avoids a different, jumpy animation
+                // sequence every single time the category is re-rendered.
                 const delay = Math.min(idx * 0.05, 0.3).toFixed(2);
                 return `
                 <div class="dish-card animate-in ${unavailable ? 'is-unavailable' : ''}" data-id="${item.id}" style="animation-delay: ${delay}s">
@@ -763,6 +812,8 @@ function renderFoodCards() {
     setupFoodScrollSpy();
 }
 
+// Прокручивает страницу к началу секции категории, с учётом высоты
+// липких header + tabs-wrapper (иначе заголовок категории окажется под ними).
 function scrollToFoodCategory(key, behavior = 'smooth') {
     const target = document.getElementById('food-panel-' + key);
     if (!target) return;
@@ -776,6 +827,9 @@ function scrollToFoodCategory(key, behavior = 'smooth') {
     programmaticFoodScrollTimeout = setTimeout(() => { isProgrammaticFoodScroll = false; }, 700);
 }
 
+// Подсвечивает таб той категории, что сейчас видна при прокрутке страницы —
+// игнорируется во время программной прокрутки по клику, чтобы таб не мигал
+// по промежуточным категориям, пролетающим мимо во время анимации.
 function setupFoodScrollSpy() {
     if (typeof IntersectionObserver === 'undefined') return;
     if (foodSectionObserver) foodSectionObserver.disconnect();
@@ -790,6 +844,9 @@ function setupFoodScrollSpy() {
             if (!entry.isIntersecting) return;
             pendingKey = entry.target.dataset.catKey;
         });
+        // Батчим через requestAnimationFrame: во время быстрой прокрутки
+        // observer может сработать несколько раз за кадр — обновляем DOM
+        // максимум один раз за кадр, а не на каждое срабатывание.
         if (pendingKey && !rafId) {
             rafId = requestAnimationFrame(() => {
                 rafId = null;
@@ -827,6 +884,9 @@ function closePhotoLightbox() {
     if (lastFocusedEl) lastFocusedEl.focus();
 }
 
+// Shared Escape-to-close + focus-trap handler for the photo lightbox overlay,
+// so keyboard users can never tab out of it or get stuck with no way to
+// dismiss it.
 function handleOverlayKeydown(e) {
     const activeOverlay = document.querySelector('.photo-lightbox.active');
     if (!activeOverlay) return;
@@ -844,20 +904,9 @@ function handleOverlayKeydown(e) {
 }
 
 function handleHash() {
-    if (!OYSTERS.length) return;
-
-    // 1) Сохраняем уже выбранную устрицу между ре-рендерами (смена языка, переключение секций).
-    if (currentOysterId != null &&
-        OYSTERS.some(o => String(o.id) === String(currentOysterId))) {
-        showOyster(currentOysterId);
-        return;
-    }
-
-    // 2) Fallback на hash в URL. id из Supabase может прийти числом,
-    //    dataset/hash — всегда строка, сравниваем через String().
-    const hash = (window.location.hash || '').replace('#', '').toLowerCase();
-    const found = hash ? OYSTERS.find(o => String(o.id).toLowerCase() === hash) : null;
-    showOyster(found ? found.id : OYSTERS[0].id);
+    const hash = window.location.hash.replace('#', '').toLowerCase();
+    const valid = OYSTERS.find(o => o.id === hash);
+    if (OYSTERS.length) showOyster(valid ? hash : OYSTERS[0].id);
 }
 
 function switchSection(section) {
@@ -869,23 +918,13 @@ function switchSection(section) {
     });
     document.getElementById('section-oysters').style.display = section === 'oysters' ? '' : 'none';
     document.getElementById('section-food').style.display = section === 'food' ? '' : 'none';
-
-    // Пока идёт загрузка — не трогаем DOM, иначе стираем skeleton.
-    if (!dataLoaded) return;
-
-    // Раньше здесь принудительно вызывались renderFoodTabs()/renderFoodCards()
-    // при каждом клике по вкладке — это пересоздавало DOM и переподключало
-    // IntersectionObserver. Содержимое уже отрисовано в loadData()/setLanguage().
     if (section === 'oysters') handleHash();
-    if (section === 'food') {
-        updateFoodTabsSelection();
-        scrollActiveFoodTabIntoView();
-    }
+    if (section === 'food') { renderFoodTabs(); renderFoodCards(); scrollActiveFoodTabIntoView(); }
 }
 
 function setLanguage(lang) {
     currentLang = lang;
-    document.documentElement.lang = lang;
+    document.documentElement.lang = lang; // keeps screen readers announcing the right language
     document.querySelectorAll('.lang-btn').forEach(btn => {
         const isActive = btn.dataset.lang === lang;
         btn.classList.toggle('active', isActive);
@@ -895,19 +934,9 @@ function setLanguage(lang) {
         const key = el.getAttribute('data-t');
         if (UI[lang][key]) el.textContent = UI[lang][key];
     });
-
-    // Не запускаем рендеры, пока данные в пути — иначе перезапишем skeleton.
-    if (dataLoaded) {
-        renderTabs();
-        renderCards();
-        renderFoodTabs();
-        renderFoodCards();
-        if (currentSection === 'oysters') handleHash();
-        if (currentSection === 'food') {
-            updateFoodTabsSelection();
-            scrollActiveFoodTabIntoView();
-        }
-    }
+    renderTabs();
+    renderCards();
+    switchSection(currentSection);
     updateHeaderHeightVar();
 }
 
@@ -945,16 +974,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('photoLightboxClose').addEventListener('click', closePhotoLightbox);
     document.getElementById('photoLightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closePhotoLightbox(); });
 
-    // Delegated click + keyboard handling for dish photo thumbnails.
+    // Delegated click + keyboard (Enter/Space) handling for dish photo thumbnails.
+    // The original markup had role="button" tabindex="0" but no keydown listener,
+    // so keyboard-only users had no way to open the photo lightbox.
     const openThumb = (el) => {
         let item = null;
         for (const cat of FOOD_CATEGORIES) {
-            // id может быть числом → сравниваем как строки
-            item = cat.items.find(i => String(i.id) === String(el.dataset.id));
+            item = cat.items.find(i => i.id === el.dataset.id);
             if (item) break;
         }
         if (item) openPhotoLightbox(item, el);
     };
+    // Clicking anywhere on the dish card (not just the photo thumbnail) opens the lightbox.
     document.getElementById('food-cards-container').addEventListener('click', e => {
         const card = e.target.closest('.dish-card');
         if (card) openThumb(card);
@@ -970,12 +1001,7 @@ document.addEventListener('DOMContentLoaded', () => {
     loadData();
 });
 
-window.addEventListener('hashchange', () => {
-    // Хэш в URL — явный запрос конкретной устрицы: сбрасываем «запомненный»
-    // выбор и позволяем handleHash отработать по URL.
-    currentOysterId = null;
-    if (currentSection === 'oysters') handleHash();
-});
+window.addEventListener('hashchange', handleHash);
 </script>
 </body>
 </html>
