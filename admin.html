@@ -56,7 +56,7 @@ select option { background: var(--bg-card); color: var(--text); }
 button { cursor: pointer; }
 h1, h2, h3 { font-family: 'Cormorant Garamond', serif; font-weight: 600; color: var(--text); }
 
-.shell { width: 100%; max-width: 560px; min-height: 100vh; min-height: 100dvh; position: relative; padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
+.shell { width: 100%; max-width: var(--shell-w, 560px); min-height: 100vh; min-height: 100dvh; position: relative; padding-bottom: calc(90px + env(safe-area-inset-bottom)); }
 
 /* ─── LOGIN ─── */
 .login-wrap { min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; padding: 24px; }
@@ -117,11 +117,17 @@ header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sti
 @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 
 /* ─── FAB ─── */
-.fab { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); right: 50%; transform: translateX(calc(280px - 24px - 56px)); width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--gold-light), var(--gold)); border: none; display: flex; align-items: center; justify-content: center; color: var(--bg); box-shadow: 0 8px 24px rgba(212,176,98,0.35); z-index: 60; transition: transform .2s; }
-.fab:active { transform: translateX(calc(280px - 24px - 56px)) scale(0.94); }
+.fab { position: fixed; bottom: calc(24px + env(safe-area-inset-bottom)); right: 50%; transform: translateX(calc(var(--shell-w, 560px) / 2 - 24px - 56px)); width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, var(--gold-light), var(--gold)); border: none; display: flex; align-items: center; justify-content: center; color: var(--bg); box-shadow: 0 8px 24px rgba(212,176,98,0.35); z-index: 60; transition: transform .2s; }
+.fab:active { transform: translateX(calc(var(--shell-w, 560px) / 2 - 24px - 56px)) scale(0.94); }
 @media (max-width: 560px) {
     .fab { right: 24px; transform: none; }
     .fab:active { transform: scale(0.94); }
+}
+
+/* Ноутбуки: панели просторнее, список — в 2 колонки. */
+@media (min-width: 900px) {
+    :root { --shell-w: 900px; }
+    .list { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 10px 14px; }
 }
 
 /* ─── TOASTS ─── */
