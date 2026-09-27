@@ -97,12 +97,14 @@ header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sti
 
 /* ─── LIST ─── */
 .list { padding: 14px 20px 20px; display: flex; flex-direction: column; gap: 10px; }
-.item-card { display: flex; gap: 12px; align-items: center; background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 12px; }
+.item-card { display: flex; gap: 12px; align-items: center; background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 12px; transition: opacity .2s; }
+.item-card.unavailable { opacity: 0.5; }
 .item-thumb { width: 56px; height: 56px; flex-shrink: 0; border-radius: var(--radius-xs); background: var(--surface-2); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.8; overflow: hidden; }
 .item-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .item-info { flex: 1; min-width: 0; }
 .item-name { font-weight: 700; font-size: var(--fs-base); color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .item-sub { font-size: var(--fs-xs); color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.item-sub .tag-unavailable { color: var(--danger); font-weight: 700; }
 .item-actions { display: flex; gap: 6px; flex-shrink: 0; }
 .item-actions .icon-btn { width: 34px; height: 34px; }
 
@@ -158,6 +160,17 @@ header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sti
 .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; }
 .form-hint { font-size: var(--fs-xs); color: var(--muted); margin-top: 6px; }
 .form-error-text { font-size: var(--fs-xs); color: var(--danger); margin-top: 6px; }
+
+/* Переключатель "В наличии" — крупная область, вся строка кликабельна */
+.availability-toggle {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: var(--surface); border: 1px solid var(--faint); border-radius: var(--radius-xs);
+    padding: 13px 16px; cursor: pointer; margin-bottom: 16px; transition: border-color .2s;
+}
+.availability-toggle:hover { border-color: var(--gold-line); }
+.availability-toggle .label-text { font-size: var(--fs-base); font-weight: 600; color: var(--text-sec); }
+.availability-toggle .label-hint { font-size: var(--fs-xs); color: var(--muted); margin-top: 2px; }
+.availability-toggle input[type=checkbox] { width: 22px; height: 22px; accent-color: var(--gold); cursor: pointer; flex-shrink: 0; }
 
 .section-divider { display: flex; align-items: center; gap: 10px; margin: 22px 0 16px; }
 .section-divider span { font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--gold); white-space: nowrap; }
@@ -493,18 +506,21 @@ function renderList() {
     if (currentTab === 'oysters') {
         data = oystersData.filter(o => !searchQuery || (o.name||'').toLowerCase().includes(searchQuery));
         if (!data.length) return renderEmpty(container, oystersData.length ? 'Ничего не найдено' : 'Пока нет устриц. Добавьте первую.');
-        cardsHtml = data.map(o => `
-            <div class="item-card">
+        cardsHtml = data.map(o => {
+            const unavailable = o.available === false;
+            return `
+            <div class="item-card ${unavailable ? 'unavailable' : ''}">
                 <div class="item-thumb">${o.image_url ? `<img src="${escapeHtml(o.image_url)}">` : ICON.oyster}</div>
                 <div class="item-info">
                     <div class="item-name">${escapeHtml(o.name)}</div>
-                    <div class="item-sub">${escapeHtml(o.badge||'')} · ${o.price ?? 0} MDL</div>
+                    <div class="item-sub">${escapeHtml(o.badge||'')} · ${o.price ?? 0} MDL${unavailable ? ' · <span class="tag-unavailable">Нет в наличии</span>' : ''}</div>
                 </div>
                 <div class="item-actions">
                     <button class="icon-btn" onclick="openEditModal('oysters','${o.id}')">${ICON.edit}</button>
                     <button class="icon-btn danger-hover" onclick="askDelete('oysters','${o.id}','${escapeHtml(o.name)}')">${ICON.trash}</button>
                 </div>
-            </div>`).join('');
+            </div>`;
+        }).join('');
     } else if (currentTab === 'categories') {
         data = categoriesData.filter(c => !searchQuery || (c.label?.ru||c.id||'').toLowerCase().includes(searchQuery));
         if (!data.length) return renderEmpty(container, categoriesData.length ? 'Ничего не найдено' : 'Пока нет категорий. Добавьте первую.');
@@ -529,12 +545,13 @@ function renderList() {
         cardsHtml = data.map(item => {
             const name = (item.name && typeof item.name === 'object') ? (item.name.ru || item.name.en || '') : (item.name || '');
             const cat = categoriesData.find(c => c.id === item.category_id);
+            const unavailable = item.available === false;
             return `
-            <div class="item-card">
+            <div class="item-card ${unavailable ? 'unavailable' : ''}">
                 <div class="item-thumb">${item.image_url ? `<img src="${escapeHtml(item.image_url)}">` : ICON.plate}</div>
                 <div class="item-info">
                     <div class="item-name">${escapeHtml(name)}</div>
-                    <div class="item-sub">${escapeHtml(cat?.label?.ru || item.category_id || '')} · ${item.price ?? 0} MDL</div>
+                    <div class="item-sub">${escapeHtml(cat?.label?.ru || item.category_id || '')} · ${item.price ?? 0} MDL${unavailable ? ' · <span class="tag-unavailable">Нет в наличии</span>' : ''}</div>
                 </div>
                 <div class="item-actions">
                     <button class="icon-btn" onclick="openEditModal('items','${item.id}')">${ICON.edit}</button>
@@ -587,6 +604,21 @@ function langTabsHtml(fieldsForDot) {
         </div>`;
 }
 
+// ---------- Переключатель "В наличии" ----------
+function availabilityToggleHtml(available) {
+    // available === false — единственное значение, которое считаем "нет в наличии";
+    // отсутствие поля (новая запись или старые данные без этого поля) — значит товар в наличии.
+    const checked = available !== false;
+    return `
+        <label class="availability-toggle" for="f_available">
+            <span>
+                <span class="label-text">В наличии</span><br>
+                <span class="label-hint">Если выключено — на сайте будет отмечено как временно недоступно</span>
+            </span>
+            <input type="checkbox" id="f_available" ${checked ? 'checked' : ''}>
+        </label>`;
+}
+
 // ==================== ДОБАВЛЕНИЕ / РЕДАКТИРОВАНИЕ ====================
 function openAddModal(type) {
     editingId = null;
@@ -624,7 +656,7 @@ window.openEditModal = openEditModal;
 
 // ---------- Форма: УСТРИЦА ----------
 function oysterFormHtml(o) {
-    const d = o || { id:'', name:'', badge:'', price:0, sal:5, iod:5, sw:5, meat:5, region_group:'france',
+    const d = o || { id:'', name:'', badge:'', price:0, sal:5, iod:5, sw:5, meat:5, region_group:'france', available:true,
         terroir:{ru:'',ro:'',en:''}, description:{ru:'',ro:'',en:''},
         origin:{flag:'🇫🇷', place:{ru:'',ro:'',en:''}, region:{ru:'',ro:'',en:''}, text:{ru:'',ro:'',en:''}},
         facts:{ru:['','',''],ro:['','',''],en:['','','']}, image_url:'' };
@@ -663,6 +695,8 @@ function oysterFormHtml(o) {
                 <option value="other" ${d.region_group==='other'?'selected':''}>Другое</option>
             </select>
         </div>
+
+        ${availabilityToggleHtml(d.available)}
 
         <div class="section-divider"><span>Вкусовой профиль</span></div>
         <div class="taste-grid">
@@ -751,7 +785,7 @@ function categoryFormHtml(c) {
 
 // ---------- Форма: БЛЮДО ----------
 function itemFormHtml(item) {
-    const d = item || { id:'', category_id: categoriesData[0]?.id || '', name:{ru:'',ro:'',en:''}, price:0, weight:'', description:{ru:'',ro:'',en:''}, image_url:'', sort_order:0 };
+    const d = item || { id:'', category_id: categoriesData[0]?.id || '', name:{ru:'',ro:'',en:''}, price:0, weight:'', description:{ru:'',ro:'',en:''}, image_url:'', sort_order:0, available:true };
     const name = ensureLangObj(d.name);
     const desc = ensureLangObj(d.description);
     const catOptions = categoriesData.map(c => `<option value="${escapeHtml(c.id)}" ${d.category_id===c.id?'selected':''}>${escapeHtml(c.label?.ru || c.id)}</option>`).join('');
@@ -779,6 +813,8 @@ function itemFormHtml(item) {
             <label class="form-label">Порядок отображения</label>
             <input class="form-input" type="number" id="f_sort_order" value="${d.sort_order ?? 0}">
         </div>
+
+        ${availabilityToggleHtml(d.available)}
 
         <div class="section-divider"><span>Тексты по языкам</span></div>
         ${langTabsHtml(l => name[l] && desc[l])}
@@ -902,6 +938,7 @@ document.getElementById('sheetSave').addEventListener('click', async () => {
                 sw: parseInt(g('f_sw')) || 0,
                 meat: parseInt(g('f_meat')) || 0,
                 region_group: g('f_region_group'),
+                available: !!document.getElementById('f_available')?.checked,
                 terroir: { ru: g('f_terroir_ru'), ro: g('f_terroir_ro'), en: g('f_terroir_en') },
                 description: { ru: g('f_desc_ru'), ro: g('f_desc_ro'), en: g('f_desc_en') },
                 origin: {
@@ -941,7 +978,8 @@ document.getElementById('sheetSave').addEventListener('click', async () => {
                 weight: g('f_weight'),
                 description: { ru: g('f_description_ru'), ro: g('f_description_ro'), en: g('f_description_en') },
                 image_url: g('f_image_url'),
-                sort_order: parseInt(g('f_sort_order')) || 0
+                sort_order: parseInt(g('f_sort_order')) || 0,
+                available: !!document.getElementById('f_available')?.checked
             };
             await apiFetch('/api/food-items', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
             await loadItems();
