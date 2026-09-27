@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#060a10">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,12 +16,10 @@
             --bg-card:   #0c1118;
             --surface:   #111820;
             --surface-2: #171f2a;
-            --surface-3: #1f2b3a;
             --gold:      #d4b062;
             --gold-light:#e8cc8a;
             --gold-dim:  rgba(212,176,98,0.08);
             --gold-line: rgba(212,176,98,0.18);
-            --gold-glow: rgba(212,176,98,0.04);
             --text:      #f0ece4;
             --text-sec:  #c8c0b4;
             /* --muted was rgba(138,159,186,0.4) on lang-btn (~2:1 contrast, fails WCAG 1.4.3).
@@ -34,7 +32,6 @@
             --radius:    20px;
             --radius-sm: 14px;
             --radius-xs: 10px;
-            --green:     #6bcf8e;
             --danger:    #e0847a;
             --fs-xs:     0.75rem;
             --fs-sm:     0.875rem;
@@ -64,13 +61,6 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             line-height: 1.5;
-        }
-
-        /* Visually hidden but screen-reader accessible — used for labels that
-           would clutter the visual layout (e.g. select labels). */
-        .sr-only {
-            position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-            overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
         }
 
         /* Skip link: lets keyboard users jump past the repeated header/nav,
@@ -131,9 +121,10 @@
             top: 0;
             z-index: 100;
             background: rgba(6,10,16,0.92);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             will-change: transform;
+            transform: translateZ(0);
         }
 
         .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
@@ -178,8 +169,7 @@
             justify-content: center; gap: 7px; letter-spacing: 0.02em;
         }
         .nav-btn:hover { border-color: var(--gold-line); color: var(--text); }
-        .nav-btn.active { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
-        .nav-btn[aria-current="page"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
+        .nav-btn.active, .nav-btn[aria-current="page"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
         .nav-icon { font-size: var(--fs-base); display: inline-flex; }
 
         /* ─── OYSTER / FOOD TABS ─── */
@@ -193,9 +183,10 @@
             top: var(--header-h, 118px);
             z-index: 90;
             background: rgba(6,10,16,0.92);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             border-bottom: 1px solid var(--faint);
+            transform: translateZ(0);
         }
         .tabs-wrapper::after {
             content: ''; position: absolute; right: 0; top: 0; bottom: 1px; width: 44px;
@@ -210,7 +201,7 @@
             user-select: none; letter-spacing: 0.02em; scroll-snap-align: center;
         }
         .tab:hover { border-color: var(--gold-line); color: var(--text); }
-        .tab[aria-selected="true"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
+        .tab[aria-selected="true"], .tab[aria-current="true"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
 
         /* ─── CARDS ─── */
         .card { display: none; padding: 0 20px 80px; animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
@@ -291,6 +282,7 @@
 
         /* ─── FOOD MENU ─── */
         .section-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-lg); font-weight: 600; padding: 24px 20px 12px; color: var(--text); letter-spacing: 0.5px; }
+        .section-subtitle { font-size: var(--fs-sm); color: var(--muted); padding: 0 20px 14px; margin-top: -8px; line-height: 1.5; }
         .dish-grid { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
         /* Bottom breathing room now lives once on the whole scroll container,
            not repeated after every category (previously .dish-grid had it,
@@ -347,10 +339,10 @@
         .state-icon { color: var(--gold); opacity: 0.6; margin-bottom: 16px; display: flex; justify-content: center; }
         .state-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-md); font-weight: 600; color: var(--text); margin-bottom: 8px; }
         .state-text { font-size: var(--fs-sm); color: var(--muted); line-height: 1.6; margin-bottom: 22px; }
-        /* Shared button style also used by the retry button in the error state above (not quiz-specific). */
-        .quiz-btn { width: 100%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-light); font-size: var(--fs-sm); font-weight: 700; padding: 14px; min-height: var(--tap-min); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.08em; }
-        .quiz-btn:hover { background: var(--gold-line); color: var(--text); }
-        .state-block .quiz-btn { max-width: 220px; margin: 0 auto; }
+        /* Shared button style for the retry button in the error state below. */
+        .action-btn { width: 100%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-light); font-size: var(--fs-sm); font-weight: 700; padding: 14px; min-height: var(--tap-min); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.08em; }
+        .action-btn:hover { background: var(--gold-line); color: var(--text); }
+        .state-block .action-btn { max-width: 220px; margin: 0 auto; }
 
         /* ─── RESPONSIVE ─── */
         @media (min-width: 481px) {
@@ -392,7 +384,7 @@
                 <h1>Oyster's LAB</h1>
                 <p>from the seabed</p>
             </div>
-            <div class="lang-switch" id="langSwitch" role="group" aria-label="Язык / Language">
+            <div class="lang-switch" role="group" aria-label="Язык / Language">
                 <button class="lang-btn active" data-lang="ru" aria-pressed="true">RU</button>
                 <button class="lang-btn" data-lang="ro" aria-pressed="false">RO</button>
                 <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
@@ -414,7 +406,7 @@
 
         <div id="section-food">
             <div class="tabs-wrapper">
-                <div class="tabs" id="food-tabs" role="tablist" aria-label="Категории меню"></div>
+                <div class="tabs" id="food-tabs" role="group" aria-label="Категории меню"></div>
             </div>
             <div id="food-cards-container"></div>
         </div>
@@ -436,12 +428,11 @@
 // ==================== UI TEXTS ====================
 const UI = {
     ru: {
-        taste: 'Вкусовой профиль', origin: 'Происхождение', pairing: 'Идеальные напитки',
+        taste: 'Вкусовой профиль', origin: 'Происхождение',
         facts: 'Интересные факты', low: '− слабо', high: 'интенсивно +', unit: '/ шт.',
         sal: 'Солёность', iod: 'Йодистость', sw: 'Сладость', meat: 'Мясистость',
         nav_oysters: 'Устрицы', nav_food: 'Меню',
         skip_link: 'Перейти к содержимому',
-        composition: 'Состав',
         loading: 'Загружаем меню…',
         error_title: 'Не удалось загрузить данные',
         error_text: 'Проверьте соединение с интернетом и попробуйте ещё раз.',
@@ -452,12 +443,11 @@ const UI = {
         unavailable: 'Временно недоступно',
     },
     ro: {
-        taste: 'Profil Gustativ', origin: 'Origine', pairing: 'Băuturi Ideale',
+        taste: 'Profil Gustativ', origin: 'Origine',
         facts: 'Fapte Interesante', low: '− slab', high: 'intens +', unit: '/ buc.',
         sal: 'Salinitate', iod: 'Iod', sw: 'Dulceață', meat: 'Cărnozitate',
         nav_oysters: 'Stridii', nav_food: 'Meniu',
         skip_link: 'Sari la conținut',
-        composition: 'Compoziție',
         loading: 'Se încarcă meniul…',
         error_title: 'Datele nu au putut fi încărcate',
         error_text: 'Verificați conexiunea la internet și încercați din nou.',
@@ -468,12 +458,11 @@ const UI = {
         unavailable: 'Temporar indisponibil',
     },
     en: {
-        taste: 'Taste Profile', origin: 'Origin', pairing: 'Perfect Pairings',
+        taste: 'Taste Profile', origin: 'Origin',
         facts: 'Interesting Facts', low: '− mild', high: 'intense +', unit: '/ pc.',
         sal: 'Salinity', iod: 'Iodine', sw: 'Sweetness', meat: 'Meatiness',
         nav_oysters: 'Oysters', nav_food: 'Menu',
         skip_link: 'Skip to content',
-        composition: 'Composition',
         loading: 'Loading the menu…',
         error_title: 'Couldn\'t load the menu',
         error_text: 'Check your connection and try again.',
@@ -554,7 +543,7 @@ function renderErrorState(onRetry) {
             <div class="state-icon">${ICONS.warning}</div>
             <div class="state-title">${t.error_title}</div>
             <p class="state-text">${t.error_text}</p>
-            <button class="quiz-btn retry-btn">${t.retry}</button>
+            <button class="action-btn retry-btn">${t.retry}</button>
         </div>`;
     document.getElementById('cards-container').innerHTML = errorHtml;
     document.getElementById('food-cards-container').innerHTML = errorHtml;
@@ -581,7 +570,7 @@ async function loadData() {
             oystersRes.json(), catRes.json(), itemsRes.json()
         ]);
 
-        OYSTERS = oystersRaw.map(o => ({ ...o, desc: o.description, regionGroup: o.region_group }));
+        OYSTERS = oystersRaw.map(o => ({ ...o, desc: o.description }));
 
         FOOD_CATEGORIES = categoriesRaw.map(cat => ({
             key: cat.id,
@@ -592,14 +581,18 @@ async function loadData() {
 
         if (!currentFoodCategory && FOOD_CATEGORIES.length) currentFoodCategory = FOOD_CATEGORIES[0].key;
 
+        // Обе секции рендерятся один раз здесь, независимо от того, какая
+        // сейчас видна — переключение разделов дальше просто показывает/
+        // прячет уже готовый DOM, а не рендерит его заново.
         renderTabs();
         renderCards();
-        if (currentSection === 'food') {
-            renderFoodTabs();
-            renderFoodCards();
+        renderFoodTabs();
+        renderFoodCards();
+        if (currentSection === 'oysters') {
+            handleHash();
+        } else {
             scrollActiveFoodTabIntoView();
         }
-        handleHash();
 
     } catch (error) {
         console.error('Не удалось загрузить данные:', error);
@@ -635,7 +628,16 @@ function renderCards() {
         return;
     }
 
-    container.innerHTML = OYSTERS.map((o) => `
+    container.innerHTML = OYSTERS.map((o) => {
+        const desc = loc(o.desc, currentLang);
+        const terroir = loc(o.terroir, currentLang);
+        const originPlace = loc(o.origin?.place, currentLang);
+        const originRegion = loc(o.origin?.region, currentLang);
+        const originText = loc(o.origin?.text, currentLang);
+        // Фоллбэк как у блюд: если для текущего языка факты не заполнены в
+        // админке, берём ru → en → ro → пустой список, а не падаем на undefined.
+        const facts = o.facts?.[currentLang] || o.facts?.ru || o.facts?.en || o.facts?.ro || [];
+        return `
         <div id="card-${o.id}" class="card" role="tabpanel" aria-labelledby="tab-${o.id}" tabindex="0">
             <div class="hero">
                 <span class="badge">${o.badge}</span>
@@ -648,7 +650,7 @@ function renderCards() {
                 </div>
                 <p class="terroir">
                     <span class="terroir-dot" aria-hidden="true"></span>
-                    ${o.terroir[currentLang]}
+                    ${terroir}
                 </p>
             </div>
 
@@ -668,24 +670,24 @@ function renderCards() {
                 <div class="scale-hint" aria-hidden="true"><span>${t.low}</span><span>${t.high}</span></div>
             </div>
 
-            <p class="desc">${o.desc[currentLang]}</p>
+            <p class="desc">${desc}</p>
 
             <div class="info-block">
                 <div class="block-label">${t.origin}</div>
                 <div class="origin-map-line">
-                    <span class="origin-flag" aria-hidden="true">${ICONS[o.origin.flag] || o.origin.flag}</span>
+                    <span class="origin-flag" aria-hidden="true">${o.origin?.flag || ''}</span>
                     <div>
-                        <div class="origin-place">${o.origin.place[currentLang]}</div>
-                        <div class="origin-region">${o.origin.region[currentLang]}</div>
+                        <div class="origin-place">${originPlace}</div>
+                        <div class="origin-region">${originRegion}</div>
                     </div>
                 </div>
-                <p class="origin-text">${o.origin.text[currentLang]}</p>
+                <p class="origin-text">${originText}</p>
             </div>
 
             <div class="info-block">
                 <div class="block-label">${t.facts}</div>
                 <div class="facts-list">
-                    ${o.facts[currentLang].map((f, fi) => `
+                    ${facts.map((f, fi) => `
                         <div class="fact-item">
                             <div class="fact-num" aria-hidden="true">${fi + 1}</div>
                             <p class="fact-text">${f}</p>
@@ -694,7 +696,8 @@ function renderCards() {
                 </div>
             </div>
         </div>
-    `).join('');
+    `;
+    }).join('');
 }
 
 function activateBars(cardEl) {
@@ -722,12 +725,23 @@ function showOyster(id) {
 function renderFoodTabs() {
     const tabsEl = document.getElementById('food-tabs');
     tabsEl.innerHTML = FOOD_CATEGORIES.map(c => `
-        <button class="tab" data-cat="${c.key}" role="tab" id="food-tab-${c.key}" aria-selected="${c.key === currentFoodCategory}" aria-controls="food-panel-${c.key}">${loc(c.label, currentLang)}</button>
+        <button class="tab" data-cat="${c.key}" id="food-tab-${c.key}" aria-current="${c.key === currentFoodCategory ? 'true' : 'false'}" aria-controls="food-panel-${c.key}">${loc(c.label, currentLang)}</button>
     `).join('');
 }
 
+// Лёгкое переключение подсветки активной вкладки: просто меняет атрибут
+// aria-current у уже существующих кнопок, без пересоздания DOM. Именно
+// это (а не renderFoodTabs) нужно вызывать во время скролла — пересоздание
+// innerHTML вкладок на каждый шаг scroll-spy и вызывало подвисания/рывки
+// при прокрутке длинной страницы меню.
+function updateFoodTabsSelection() {
+    document.querySelectorAll('#food-tabs .tab').forEach(btn => {
+        btn.setAttribute('aria-current', btn.dataset.cat === currentFoodCategory ? 'true' : 'false');
+    });
+}
+
 function scrollActiveFoodTabIntoView() {
-    const activeTab = document.querySelector('#food-tabs .tab[aria-selected="true"]');
+    const activeTab = document.querySelector('#food-tabs .tab[aria-current="true"]');
     if (activeTab) activeTab.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
 }
 
@@ -750,6 +764,7 @@ function renderFoodCards() {
     // разделу (см. scrollToFoodCategory), а не подменяет контент.
     container.innerHTML = FOOD_CATEGORIES.map(cat => {
         const label = loc(cat.label, currentLang);
+        const subtitle = loc(cat.subtitle, currentLang);
         const itemsHtml = cat.items.length
             ? cat.items.map((item, idx) => {
                 const name = loc(item.name, currentLang);
@@ -787,8 +802,9 @@ function renderFoodCards() {
                 </div>`;
 
         return `
-            <section class="food-category-section" id="food-panel-${cat.key}" data-cat-key="${cat.key}" aria-labelledby="food-tab-${cat.key}">
-                <h2 class="section-title">${label}</h2>
+            <section class="food-category-section" role="region" id="food-panel-${cat.key}" data-cat-key="${cat.key}" aria-labelledby="food-heading-${cat.key}">
+                <h2 class="section-title" id="food-heading-${cat.key}">${label}</h2>
+                ${subtitle ? `<p class="section-subtitle">${subtitle}</p>` : ''}
                 <div class="dish-grid">${itemsHtml}</div>
             </section>`;
     }).join('');
@@ -820,17 +836,27 @@ function setupFoodScrollSpy() {
     const header = document.querySelector('header');
     const tabsWrapper = document.querySelector('#section-food .tabs-wrapper');
     const topOffset = (header ? header.offsetHeight : 0) + (tabsWrapper ? tabsWrapper.offsetHeight : 0);
+    let pendingKey = null;
+    let rafId = null;
     foodSectionObserver = new IntersectionObserver((entries) => {
         if (isProgrammaticFoodScroll) return;
         entries.forEach(entry => {
             if (!entry.isIntersecting) return;
-            const key = entry.target.dataset.catKey;
-            if (key && key !== currentFoodCategory) {
-                currentFoodCategory = key;
-                renderFoodTabs();
-                scrollActiveFoodTabIntoView();
-            }
+            pendingKey = entry.target.dataset.catKey;
         });
+        // Батчим через requestAnimationFrame: во время быстрой прокрутки
+        // observer может сработать несколько раз за кадр — обновляем DOM
+        // максимум один раз за кадр, а не на каждое срабатывание.
+        if (pendingKey && !rafId) {
+            rafId = requestAnimationFrame(() => {
+                rafId = null;
+                if (pendingKey && pendingKey !== currentFoodCategory) {
+                    currentFoodCategory = pendingKey;
+                    updateFoodTabsSelection();
+                    scrollActiveFoodTabIntoView();
+                }
+            });
+        }
     }, { root: null, rootMargin: `-${topOffset + 1}px 0px -70% 0px`, threshold: 0 });
     document.querySelectorAll('.food-category-section').forEach(sec => foodSectionObserver.observe(sec));
 }
@@ -938,7 +964,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const btn = e.target.closest('.tab');
         if (btn) {
             currentFoodCategory = btn.dataset.cat;
-            renderFoodTabs();
+            updateFoodTabsSelection();
             scrollActiveFoodTabIntoView();
             scrollToFoodCategory(btn.dataset.cat);
         }
@@ -972,7 +998,7 @@ document.addEventListener('DOMContentLoaded', () => {
         openThumb(thumb);
     });
 
-    loadData().then(() => setLanguage(currentLang));
+    loadData();
 });
 
 window.addEventListener('hashchange', handleHash);
