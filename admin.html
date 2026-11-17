@@ -235,6 +235,15 @@ header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sti
 .btn-danger:hover { background: var(--danger); color: var(--text); }
 
 .hidden { display: none !important; }
+.slot-row { display: flex; gap: 14px; align-items: center; padding: 12px; border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--faint); margin-bottom: 10px; }
+.slot-row .slot-thumb { width: 84px; height: 64px; border-radius: var(--radius-xs); background: var(--surface-2); overflow: hidden; display: grid; place-items: center; color: var(--gold); flex-shrink: 0; }
+.slot-row .slot-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.slot-row .slot-info { flex: 1; min-width: 0; }
+.slot-row .slot-name { font-weight: 700; font-size: var(--fs-sm); }
+.slot-row .slot-hint { font-size: var(--fs-xs); color: var(--muted); margin-top: 2px; }
+.slot-row .slot-actions { display: flex; gap: 6px; flex-shrink: 0; }
+.slot-row .slot-actions label { position: relative; overflow: hidden; cursor: pointer; }
+.slot-row .slot-actions input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 :focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
 .item-actions .icon-btn { width: 40px; height: 40px; }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
@@ -267,6 +276,7 @@ header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sti
                 <p>Админ-панель</p>
             </div>
             <div style="display:flex;gap:8px">
+            <button class="icon-btn" id="sitePhotosBtn" title="Фото сайта" aria-label="Фото сайта"></button>
             <button class="icon-btn" id="optimizeBtn" title="Сжать фото" aria-label="Сжать фото"></button>
             <button class="icon-btn danger-hover" id="logoutBtn" title="Выйти" aria-label="Выйти"></button>
             </div>
@@ -338,6 +348,7 @@ const ICON = {
     warn: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L14.71 3.86a2 2 0 00-3.42 0z"/></svg>',
     eyeOffSm: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0112 19c-7 0-11-7-11-7a19.6 19.6 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 7 11 7a19.6 19.6 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><path d="M1 1l22 22"/></svg>',
     eyeSm: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+    image: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>',
     zap: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
     fish: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 12c.94-3.46 4.94-6 8.5-6 3.56 0 6 2 6 2s-1.5 2-1.5 4-1 4 1.5 6c0 0-2.44 2-6 2-3.56 0-7.56-2.54-8.5-6"/><path d="M6.5 12L2 8l1 4-1 4z"/><circle cx="16" cy="10" r=".8" fill="currentColor" stroke="none"/></svg>'
 };
@@ -641,6 +652,71 @@ function renderEmpty(container, message) {
     container.innerHTML = `<div class="empty-state">${ICON.fish}<p>${escapeHtml(message)}</p></div>`;
 }
 
+// ==================== ФОТО САЙТА (лендинг /about) ====================
+const SITE_SLOTS = [
+    ['hero', 'Главное фото', 'Первый экран, вертикальное 4:5'],
+    ['hall', 'Зал', 'Галерея, широкое'],
+    ['oysters', 'Устрицы', 'Галерея, квадратное'],
+    ['bar', 'Бар / вино', 'Галерея, квадратное'],
+    ['table', 'Столики', 'Блок «Бронь», 16:9'],
+    ['events', 'Мероприятия', 'Блок «Мероприятия», 16:9']
+];
+let sitePhotos = {};
+document.getElementById('sitePhotosBtn').innerHTML = ICON.image;
+document.getElementById('sitePhotosBtn').addEventListener('click', async () => {
+    try {
+        const res = await apiFetch('/api/site-photos');
+        sitePhotos = Object.fromEntries((await res.json()).map(r => [r.id, r.image_url]));
+    } catch { return; }
+    editingType = 'site-photos';
+    openSheet('Фото сайта');
+    document.querySelector('.sheet-footer').classList.add('hidden');
+    renderSitePhotos();
+});
+function renderSitePhotos() {
+    document.getElementById('sheetBody').innerHTML = `
+        <p class="form-hint" style="margin:0 0 14px">Фото для страницы <a href="/about" target="_blank" style="color:var(--gold-light)">oysters-lab.com/about</a>. Пока фото нет, там показывается красивая заглушка, а галерея скрыта.</p>
+        ${SITE_SLOTS.map(([id, name, hint]) => {
+            const url = sitePhotos[id];
+            return `<div class="slot-row">
+                <div class="slot-thumb">${url ? `<img src="${escapeHtml(thumb(url))}" data-orig="${escapeHtml(url)}" alt="">` : ICON.camera}</div>
+                <div class="slot-info"><div class="slot-name">${name}</div><div class="slot-hint" id="slotStatus_${id}">${hint}</div></div>
+                <div class="slot-actions">
+                    <label class="icon-btn" title="${url ? 'Заменить' : 'Загрузить'}" aria-label="${url ? 'Заменить' : 'Загрузить'} фото «${name}»">${ICON.camera}<input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/avif" data-photo-slot="${id}"></label>
+                    ${url ? `<button type="button" class="icon-btn danger-hover" data-remove-slot="${id}" aria-label="Убрать фото «${name}»">${ICON.trash}</button>` : ''}
+                </div>
+            </div>`;
+        }).join('')}`;
+}
+async function saveSlot(id, url) {
+    await apiFetch('/api/site-photos', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, image_url: url }) });
+    sitePhotos[id] = url;
+    formDirty = false;
+    renderSitePhotos();
+}
+document.getElementById('sheetBody').addEventListener('change', async e => {
+    const input = e.target.closest('input[data-photo-slot]');
+    if (!input || !input.files[0]) return;
+    const id = input.dataset.photoSlot;
+    const status = document.getElementById('slotStatus_' + id);
+    status.innerHTML = `${ICON.spinner} Обработка и загрузка…`;
+    try {
+        const base64 = await compressImage(input.files[0]);
+        const res = await apiFetch('/api/upload-image', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ fileBase64: base64 }) });
+        const data = await res.json();
+        await saveSlot(id, data.url);
+        toast('Фото обновлено');
+    } catch {
+        status.textContent = 'Не удалось загрузить';
+    }
+    formDirty = false;
+});
+document.getElementById('sheetBody').addEventListener('click', async e => {
+    const btn = e.target.closest('[data-remove-slot]');
+    if (!btn || !confirm('Убрать это фото со страницы?')) return;
+    try { await saveSlot(btn.dataset.removeSlot, ''); toast('Фото убрано'); } catch {}
+});
+
 // ==================== СЖАТИЕ ФОТО ====================
 // Пережимает старые тяжёлые фото на сервере. Оригиналы остаются в хранилище.
 document.getElementById('optimizeBtn').innerHTML = ICON.zap;
@@ -700,6 +776,7 @@ function openSheet(title) {
 function closeSheet(force = false) {
     if (force !== true && formDirty && !confirm('Закрыть без сохранения? Изменения будут потеряны.')) return;
     formDirty = false;
+    document.querySelector('.sheet-footer').classList.remove('hidden');
     document.getElementById('sheetOverlay').classList.remove('active');
     document.documentElement.style.overflow = '';
     if (sheetOpener && document.contains(sheetOpener)) sheetOpener.focus();

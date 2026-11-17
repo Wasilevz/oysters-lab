@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#070b11">
+    <meta name="color-scheme" content="dark">
+    <title>Oyster's LAB — французские устрицы в Кишинёве · доставка</title>
+    <meta name="description" content="Oyster's LAB — самый широкий выбор французских устриц в Кишинёве. Ресторан на ул. Александру Бернардацци, 64, доставка по всему Кишинёву, устрицы на мероприятия, вино и просекко.">
+    <link rel="canonical" href="https://oysters-lab.com/about">
+    <meta property="og:type" content="restaurant">
+    <meta property="og:title" content="Oyster's LAB — французские устрицы в Кишинёве">
+    <meta property="og:description" content="Ресторан, доставка по Кишинёву и устрицы на мероприятия. Ул. Александру Бернардацци, 64.">
+    <meta property="og:url" content="https://oysters-lab.com/about">
+    <meta property="og:site_name" content="Oyster's LAB">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23070b11'/%3E%3Cpath d='M32 13c-11 0-19 8.5-19 19 0 9 7 17 19 19 12-2 19-10 19-19 0-10.5-8-19-19-19z' fill='none' stroke='%23d4b062' stroke-width='3'/%3E%3Cpath d='M22 34c3-5 7-7 10-7s7 2 10 7' fill='none' stroke='%23d4b062' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='36' r='3.5' fill='%23e8cc8a'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&display=swap">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Restaurant",
+      "name": "Oyster's LAB",
+      "url": "https://oysters-lab.com/about",
+      "hasMenu": "https://oysters-lab.com/",
+      "telephone": "+37376870870",
+      "servesCuisine": ["Seafood", "French", "Oysters"],
+      "acceptsReservations": true,
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Strada Alexandru Bernardazzi 64",
+        "addressLocality": "Chișinău",
+        "addressCountry": "MD"
+      },
+      "openingHoursSpecification": [
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday"], "opens": "12:00", "closes": "22:00" },
+        { "@type": "OpeningHoursSpecification", "dayOfWeek": ["Saturday","Sunday"], "opens": "11:00", "closes": "22:00" }
+      ],
+      "sameAs": ["https://www.instagram.com/oysters_lab/"]
+    }
+    </script>
+    <style>
+        :root {
+            --bg: #070b11; --bg-card: #0d131b; --surface: #121a24; --surface-2: #18212d;
+            --line: rgba(255,255,255,0.06); --line-2: rgba(255,255,255,0.10);
+            --gold: #d4b062; --gold-light: #e8cc8a; --gold-dim: rgba(212,176,98,0.09); --gold-line: rgba(212,176,98,0.24);
+            --sea: #6ba39f; --sea-dim: rgba(107,163,159,0.12);
+            --text: #f2eee6; --text-sec: #cfc8bc; --body-text: #b9c3cd; --muted: #8494a5;
+            --ok: #7fcf9a; --danger: #e8907f;
+            --radius: 22px; --radius-sm: 14px;
+            --gutter: 20px; --wrap: 1080px;
+            --ease: cubic-bezier(0.22,1,0.36,1);
+            --serif: 'Cormorant Garamond', 'Times New Roman', serif;
+            --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { background: var(--bg); -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+        body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.55; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+        a { color: inherit; }
+        button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+        img { display: block; max-width: 100%; }
+        :focus { outline: none; }
+        :focus-visible { outline: 2px solid var(--gold-light); outline-offset: 3px; border-radius: 8px; }
+        .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
+        .serif { font-family: var(--serif); }
+
+        /* ─── TOP BAR ─── */
+        .topbar {
+            position: sticky; top: 0; z-index: 50;
+            background: rgba(7,11,17,0.9); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px);
+            border-bottom: 1px solid var(--line);
+            padding-top: env(safe-area-inset-top);
+        }
+        .topbar .wrap { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 64px; }
+        .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; min-width: 0; }
+        .brand-mark { width: 36px; height: 36px; border-radius: 11px; display: grid; place-items: center; color: var(--gold); background: linear-gradient(145deg, rgba(212,176,98,0.16), rgba(212,176,98,0.04)); border: 1px solid var(--gold-line); flex-shrink: 0; }
+        .brand-name { font-family: var(--serif); font-size: 1.2rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+        .top-actions { display: flex; align-items: center; gap: 8px; }
+        .lang-switch { display: inline-flex; background: var(--surface); padding: 3px; border-radius: 999px; border: 1px solid var(--line); }
+        .lang-btn { color: var(--muted); font-size: .75rem; font-weight: 700; min-width: 34px; height: 34px; border-radius: 999px; padding: 0 6px; }
+        .lang-btn[aria-pressed="true"] { background: var(--gold-dim); color: var(--gold-light); box-shadow: inset 0 0 0 1px var(--gold-line); }
+        .btn.top-menu-link { display: none; }
+
+        /* ─── BUTTONS ─── */
+        .btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 50px; padding: 0 22px; border-radius: 999px; font-weight: 700; font-size: .95rem; text-decoration: none; letter-spacing: .01em; transition: background .2s, border-color .2s, transform .2s var(--ease); white-space: nowrap; }
+        .btn:active { transform: scale(.98); }
+        .btn-gold { background: var(--gold); color: #14100a; }
+        .btn-gold:hover { background: var(--gold-light); }
+        .btn-ghost { background: var(--surface); border: 1px solid var(--line-2); color: var(--text); }
+        .btn-ghost:hover { border-color: var(--gold-line); }
+        .btn svg { flex-shrink: 0; }
+
+        /* ─── HERO ─── */
+        .hero { position: relative; overflow: hidden; padding: 36px 0 30px; }
+        .hero::before { content: ''; position: absolute; inset: -20% -10% auto; height: 120%; pointer-events: none;
+            background: radial-gradient(50% 50% at 30% 20%, rgba(212,176,98,0.10), transparent 70%), radial-gradient(40% 40% at 85% 30%, rgba(107,163,159,0.10), transparent 70%); }
+        .hero-grid { position: relative; display: grid; gap: 28px; }
+        .status { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); font-size: .8rem; font-weight: 600; color: var(--text-sec); }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+        .status.open .status-dot { background: var(--ok); box-shadow: 0 0 0 4px rgba(127,207,154,0.15); }
+        .status.closed .status-dot { background: var(--danger); }
+        .eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--sea); margin: 22px 0 10px; }
+        .hero h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(2.6rem, 11vw, 4.6rem); line-height: .98; letter-spacing: -.005em; text-wrap: balance; }
+        .hero h1 em { font-style: italic; color: var(--gold-light); }
+        .hero-lead { font-size: 1.08rem; color: var(--body-text); margin: 18px 0 26px; max-width: 34ch; }
+        .hero-ctas { display: flex; flex-wrap: wrap; gap: 10px; }
+        .hero-ctas .btn { flex: 1 1 160px; }
+        .hero-media { position: relative; }
+
+        /* Фото-слоты: пока нет фото — декоративная заглушка */
+        .photo { position: relative; overflow: hidden; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--line); }
+        .photo img { width: 100%; height: 100%; object-fit: cover; }
+        .photo.placeholder { display: grid; place-items: center; color: rgba(212,176,98,0.5);
+            background:
+                radial-gradient(80% 60% at 30% 25%, rgba(212,176,98,0.10), transparent 70%),
+                radial-gradient(70% 60% at 80% 80%, rgba(107,163,159,0.12), transparent 70%),
+                repeating-linear-gradient(135deg, rgba(255,255,255,0.018) 0 2px, transparent 2px 14px),
+                linear-gradient(160deg, var(--surface-2), var(--bg-card)); }
+        .photo.placeholder svg { width: 34%; max-width: 140px; height: auto; opacity: .8; }
+        .hero-photo { aspect-ratio: 4 / 5; }
+        .hero-badge { position: absolute; left: 14px; bottom: 14px; right: 14px; display: flex; gap: 10px; align-items: center;
+            padding: 12px 14px; border-radius: 16px; background: rgba(7,11,17,0.78); border: 1px solid var(--line-2);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+        .hero-badge strong { display: block; font-size: .95rem; }
+        .hero-badge span { font-size: .8rem; color: var(--muted); }
+        .hero-badge .ico { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--gold-dim); color: var(--gold); flex-shrink: 0; }
+
+        /* ─── QUICK FACTS ─── */
+        .facts { display: grid; gap: 10px; margin: 6px 0 0; }
+        .fact { display: flex; gap: 14px; align-items: center; padding: 16px; border-radius: var(--radius-sm); background: var(--bg-card); border: 1px solid var(--line); text-decoration: none; transition: border-color .2s; }
+        a.fact:hover { border-color: var(--gold-line); }
+        .fact .ico { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; background: var(--gold-dim); color: var(--gold); flex-shrink: 0; }
+        .fact small { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
+        .fact b { font-weight: 600; font-size: 1rem; }
+
+        /* ─── SECTIONS ─── */
+        section.block { padding: 56px 0 8px; scroll-margin-top: 70px; }
+        .sec-head { margin-bottom: 24px; }
+        .sec-eyebrow { display: flex; align-items: center; gap: 10px; font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
+        .sec-eyebrow::after { content: ''; flex: 1; max-width: 120px; height: 1px; background: linear-gradient(90deg, var(--gold-line), transparent); }
+        .sec-title { font-family: var(--serif); font-weight: 600; font-size: clamp(2rem, 7vw, 2.9rem); line-height: 1.02; text-wrap: balance; }
+        .sec-lead { color: var(--body-text); margin-top: 10px; max-width: 56ch; font-size: 1.02rem; }
+
+        /* Что у нас есть */
+        .offer-grid { display: grid; gap: 12px; }
+        .offer { position: relative; padding: 22px; border-radius: var(--radius); background: var(--bg-card); border: 1px solid var(--line); overflow: hidden; }
+        .offer .ico { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--gold-dim); color: var(--gold); margin-bottom: 16px; }
+        .offer h3 { font-family: var(--serif); font-size: 1.6rem; font-weight: 600; line-height: 1.1; margin-bottom: 8px; }
+        .offer p { color: var(--body-text); font-size: .98rem; }
+        .offer.featured { background: linear-gradient(160deg, rgba(212,176,98,0.10), var(--bg-card) 60%); border-color: var(--gold-line); }
+        .offer .num { position: absolute; top: 16px; right: 20px; font-family: var(--serif); font-size: 1.1rem; color: var(--gold); opacity: .6; }
+
+        /* Доставка */
+        .delivery-card { border-radius: 26px; border: 1px solid var(--gold-line); background: linear-gradient(170deg, rgba(212,176,98,0.08), var(--bg-card) 45%); padding: 24px; display: grid; gap: 24px; }
+        .steps { display: grid; gap: 14px; counter-reset: step; list-style: none; }
+        .step { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; }
+        .step-num { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-family: var(--serif); font-size: 1.35rem; font-weight: 700; color: #14100a; background: var(--gold); }
+        .step h4 { font-size: 1.02rem; font-weight: 700; margin: 2px 0 2px; }
+        .step p { color: var(--body-text); font-size: .95rem; }
+        .price-table { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .price-cell { padding: 16px; border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--line); }
+        .price-cell small { display: block; font-size: .78rem; color: var(--muted); margin-bottom: 4px; }
+        .price-cell b { font-family: var(--serif); font-size: 1.9rem; font-weight: 700; color: var(--gold-light); line-height: 1; font-variant-numeric: lining-nums; }
+        .price-cell b span { font-family: var(--sans); font-size: .75rem; color: var(--gold); letter-spacing: .08em; margin-left: 4px; }
+        .price-cell.free b { color: var(--ok); }
+        .note-list { list-style: none; display: grid; gap: 10px; }
+        .note-list li { display: flex; gap: 10px; align-items: flex-start; color: var(--body-text); font-size: .96rem; }
+        .note-list li svg { color: var(--sea); flex-shrink: 0; margin-top: 3px; }
+        .cta-row { display: flex; flex-wrap: wrap; gap: 10px; }
+        .cta-row .btn { flex: 1 1 180px; }
+
+        /* Галерея (показывается, только когда есть хотя бы одно фото) */
+        .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .gallery .photo { aspect-ratio: 1; }
+        .gallery .photo.wide { grid-column: span 2; aspect-ratio: 2 / 1; }
+
+        /* Бронь / мероприятия */
+        .split { display: grid; gap: 12px; }
+        .panel { padding: 24px; border-radius: var(--radius); background: var(--bg-card); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 14px; }
+        .panel h3 { font-family: var(--serif); font-size: 1.8rem; font-weight: 600; line-height: 1.05; }
+        .panel p { color: var(--body-text); }
+        .panel .btn { align-self: flex-start; }
+        .panel .photo { aspect-ratio: 16 / 9; }
+
+        /* Как нас найти */
+        .find-grid { display: grid; gap: 12px; }
+        .map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--surface); aspect-ratio: 4 / 3; position: relative; }
+        .map iframe { width: 100%; height: 100%; border: 0; filter: grayscale(.35) invert(.92) hue-rotate(180deg) contrast(.9); }
+        .map-fallback { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--muted); padding: 20px; }
+        .hours { width: 100%; border-collapse: collapse; font-size: .98rem; }
+        .hours td { padding: 11px 0; border-bottom: 1px solid var(--line); }
+        .hours td:last-child { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-sec); }
+        .hours tr.today td { color: var(--gold-light); font-weight: 700; }
+        .hours tr:last-child td { border-bottom: 0; }
+        .addr { font-family: var(--serif); font-size: 1.7rem; font-weight: 600; line-height: 1.1; }
+        .addr small { display: block; font-family: var(--sans); font-size: .9rem; font-weight: 500; color: var(--muted); margin-top: 6px; }
+
+        /* Footer */
+        footer { margin-top: 64px; padding: 36px 0 30px; border-top: 1px solid var(--line); text-align: center; color: var(--muted); font-size: .85rem; }
+        .foot-brand { font-family: var(--serif); font-size: 1.4rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-sec); }
+        .foot-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 18px; margin: 14px 0; }
+        .foot-links a { text-decoration: none; color: var(--text-sec); }
+        .foot-links a:hover { color: var(--gold-light); }
+
+        /* Мобильная панель действий */
+        .action-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; padding: 10px 12px calc(10px + env(safe-area-inset-bottom));
+            background: rgba(7,11,17,0.94); border-top: 1px solid var(--line); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+        .action-bar a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 52px; border-radius: 14px; text-decoration: none; font-size: .72rem; font-weight: 700; color: var(--text-sec); background: var(--surface); border: 1px solid var(--line); }
+        .action-bar a.primary { background: var(--gold); color: #14100a; border-color: var(--gold); }
+
+        .reveal { opacity: 0; transform: translateY(16px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
+        .reveal.in { opacity: 1; transform: none; }
+
+        @media (min-width: 760px) {
+            :root { --gutter: 32px; }
+            body { padding-bottom: 0; }
+            .action-bar { display: none; }
+            .btn.top-menu-link { display: inline-flex; min-height: 40px; padding: 0 16px; font-size: .85rem; }
+            .hero { padding: 64px 0 40px; }
+            .hero-grid { grid-template-columns: 1.1fr .9fr; align-items: center; gap: 48px; }
+            .facts { grid-template-columns: repeat(3, 1fr); }
+            .offer-grid { grid-template-columns: repeat(2, 1fr); }
+            .delivery-card { grid-template-columns: 1.1fr .9fr; padding: 36px; gap: 36px; }
+            .gallery { grid-template-columns: repeat(4, 1fr); }
+            .gallery .photo.wide { grid-column: span 2; aspect-ratio: auto; }
+            .split { grid-template-columns: 1fr 1fr; }
+            .find-grid { grid-template-columns: 1.2fr .8fr; }
+            .map { aspect-ratio: auto; min-height: 380px; }
+            section.block { padding-top: 88px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html { scroll-behavior: auto; }
+            *, *::before, *::after { animation: none !important; transition: none !important; }
+            .reveal { opacity: 1; transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="topbar">
+    <div class="wrap">
+        <a class="brand" href="/" aria-label="Oyster's LAB — меню">
+            <span class="brand-mark" data-icon="logo" aria-hidden="true"></span>
+            <span class="brand-name">Oyster's LAB</span>
+        </a>
+        <div class="top-actions">
+            <a class="btn btn-ghost top-menu-link" href="/" data-t="nav_menu">Меню</a>
+            <div class="lang-switch" role="group" aria-label="Язык / Limba / Language">
+                <button class="lang-btn" data-lang="ru" aria-pressed="true" lang="ru">RU</button>
+                <button class="lang-btn" data-lang="ro" aria-pressed="false" lang="ro">RO</button>
+                <button class="lang-btn" data-lang="en" aria-pressed="false" lang="en">EN</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <!-- HERO -->
+    <div class="hero">
+        <div class="wrap hero-grid">
+            <div>
+                <span class="status" id="openStatus"><span class="status-dot"></span><span id="openStatusText">Ул. Александру Бернардацци, 64</span></span>
+                <p class="eyebrow" data-t="hero_eyebrow">Кишинёв · открыто ежедневно</p>
+                <h1 data-t="hero_title">Французские <em>устрицы</em> в Кишинёве</h1>
+                <p class="hero-lead" data-t="hero_lead">Самый широкий выбор устриц в городе. Приходите к нам, заказывайте доставку или зовите нас с устрицами на ваш праздник.</p>
+                <div class="hero-ctas">
+                    <a class="btn btn-gold" href="/" data-icon-before="menu"><span data-t="cta_menu">Смотреть меню</span></a>
+                    <a class="btn btn-ghost" href="#delivery" data-icon-before="truck"><span data-t="cta_delivery">Доставка</span></a>
+                </div>
+            </div>
+            <div class="hero-media">
+                <div class="photo hero-photo placeholder" data-slot="hero"></div>
+                <div class="hero-badge">
+                    <span class="ico" data-icon="shield" aria-hidden="true"></span>
+                    <div><strong data-t="hero_badge_t">Поставщик устриц для ресторанов</strong><span data-t="hero_badge_s">Свежесть, которой доверяют шефы Кишинёва</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wrap">
+            <div class="facts" style="margin-top:28px">
+                <a class="fact" href="#find">
+                    <span class="ico" data-icon="pin" aria-hidden="true"></span>
+                    <span><small data-t="f_addr">Адрес</small><b data-t="addr_short">ул. А. Бернардацци, 64</b></span>
+                </a>
+                <a class="fact" href="#find">
+                    <span class="ico" data-icon="clock" aria-hidden="true"></span>
+                    <span><small data-t="f_hours">Часы работы</small><b data-t="hours_short">Пн–Пт 12–22 · Сб–Вс 11–22</b></span>
+                </a>
+                <a class="fact" href="tel:+37376870870">
+                    <span class="ico" data-icon="phone" aria-hidden="true"></span>
+                    <span><small data-t="f_phone">Бронь и доставка</small><b>076 870 870</b></span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ЧТО У НАС ЕСТЬ -->
+    <section class="block" id="offer">
+        <div class="wrap">
+            <div class="sec-head reveal">
+                <p class="sec-eyebrow" data-t="offer_eyebrow">Что у нас есть</p>
+                <h2 class="sec-title" data-t="offer_title">Устрицы — это то, в чём мы разбираемся лучше всех</h2>
+            </div>
+            <div class="offer-grid">
+                <article class="offer featured reveal">
+                    <span class="num">01</span>
+                    <span class="ico" data-icon="oyster" aria-hidden="true"></span>
+                    <h3 data-t="o1_t">Устрицы Франции</h3>
+                    <p data-t="o1_p">Самый широкий ассортимент в Кишинёве: от нежных Fine de Claire до мясистых Gillardeau. Подскажем, с какой начать, и расскажем о каждой.</p>
+                </article>
+                <article class="offer reveal">
+                    <span class="num">02</span>
+                    <span class="ico" data-icon="glass" aria-hidden="true"></span>
+                    <h3 data-t="o2_t">Вино и просекко</h3>
+                    <p data-t="o2_p">Большая винная карта и просекко, которые подобраны к устрицам и морепродуктам.</p>
+                </article>
+                <article class="offer reveal">
+                    <span class="num">03</span>
+                    <span class="ico" data-icon="calendar" aria-hidden="true"></span>
+                    <h3 data-t="o3_t">Устрицы на мероприятие</h3>
+                    <p data-t="o3_p">Привезём устрицы на ваш праздник вместе с мастером, который откроет их прямо при гостях.</p>
+                </article>
+                <article class="offer reveal">
+                    <span class="num">04</span>
+                    <span class="ico" data-icon="shield" aria-hidden="true"></span>
+                    <h3 data-t="o4_t">Поставки в рестораны</h3>
+                    <p data-t="o4_p">Мы поставляем устрицы в рестораны Кишинёва, поэтому у нас всегда свежий товар и честные цены.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- ДОСТАВКА -->
+    <section class="block" id="delivery">
+        <div class="wrap">
+            <div class="sec-head reveal">
+                <p class="sec-eyebrow" data-t="del_eyebrow">Доставка по Кишинёву</p>
+                <h2 class="sec-title" data-t="del_title">Устрицы домой — без проблем</h2>
+                <p class="sec-lead" data-t="del_lead">Да, устрицы можно заказать на дом. Мы откроем их заранее и привезём на льду — останется только открыть просекко.</p>
+            </div>
+            <div class="delivery-card reveal">
+                <div>
+                    <ol class="steps">
+                        <li class="step"><span class="step-num">1</span><div><h4 data-t="s1_t">Позвоните или напишите нам</h4><p data-t="s1_p">По телефону 076 870 870 или в Instagram — подскажем по выбору.</p></div></li>
+                        <li class="step"><span class="step-num">2</span><div><h4 data-t="s2_t">Мы откроем и упакуем</h4><p data-t="s2_p">Устрицы открываем заранее и укладываем в кассероль со льдом. Добавим лимон и соус миньонет.</p></div></li>
+                        <li class="step"><span class="step-num">3</span><div><h4 data-t="s3_t">Привезём по всему Кишинёву</h4><p data-t="s3_p">Оплата при получении — лучше наличными.</p></div></li>
+                    </ol>
+                </div>
+                <div style="display:grid;gap:18px;align-content:start">
+                    <div class="price-table">
+                        <div class="price-cell"><small data-t="p_below">Заказ до 1000 MDL</small><b>100<span>MDL</span></b></div>
+                        <div class="price-cell free"><small data-t="p_above">Заказ от 1000 MDL</small><b data-t="p_free">Бесплатно</b></div>
+                    </div>
+                    <ul class="note-list">
+                        <li><span data-icon="check" aria-hidden="true"></span><span data-t="n1">Доставляем в любой район Кишинёва</span></li>
+                        <li><span data-icon="check" aria-hidden="true"></span><span data-t="n2">Устрицы приезжают открытыми, на льду, с лимоном и миньонетом</span></li>
+                        <li><span data-icon="check" aria-hidden="true"></span><span data-t="n3">Оплата при получении, удобнее всего наличными</span></li>
+                    </ul>
+                    <div class="cta-row">
+                        <a class="btn btn-gold" href="tel:+37376870870" data-icon-before="phone"><span data-t="cta_call">Позвонить</span></a>
+                        <a class="btn btn-ghost" href="https://ig.me/m/oysters_lab" target="_blank" rel="noopener" data-icon-before="instagram"><span data-t="cta_ig">Написать в Instagram</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ГАЛЕРЕЯ (скрыта, пока нет фото) -->
+    <section class="block" id="gallery" hidden>
+        <div class="wrap">
+            <div class="sec-head reveal">
+                <p class="sec-eyebrow" data-t="gal_eyebrow">Атмосфера</p>
+                <h2 class="sec-title" data-t="gal_title">Загляните к нам</h2>
+            </div>
+            <div class="gallery reveal">
+                <div class="photo wide placeholder" data-slot="hall"></div>
+                <div class="photo placeholder" data-slot="oysters"></div>
+                <div class="photo placeholder" data-slot="bar"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- БРОНЬ И МЕРОПРИЯТИЯ -->
+    <section class="block" id="book">
+        <div class="wrap split">
+            <div class="panel reveal">
+                <div class="photo placeholder" data-slot="table"></div>
+                <p class="sec-eyebrow" data-t="book_eyebrow">Столики</p>
+                <h3 data-t="book_title">Лучше забронировать заранее</h3>
+                <p data-t="book_p">Позвоните нам — подберём удобное время и столик.</p>
+                <a class="btn btn-gold" href="tel:+37376870870" data-icon-before="phone"><span data-t="cta_book">Забронировать</span></a>
+            </div>
+            <div class="panel reveal">
+                <div class="photo placeholder" data-slot="events"></div>
+                <p class="sec-eyebrow" data-t="ev_eyebrow">Мероприятия</p>
+                <h3 data-t="ev_title">Устричный бар на вашем празднике</h3>
+                <p data-t="ev_p">День рождения, свадьба, корпоратив — привезём устрицы и мастера, который откроет их при гостях. Расскажите о событии, и мы всё рассчитаем.</p>
+                <a class="btn btn-ghost" href="tel:+37376870870" data-icon-before="calendar"><span data-t="cta_event">Обсудить мероприятие</span></a>
+            </div>
+        </div>
+    </section>
+
+    <!-- КАК НАС НАЙТИ -->
+    <section class="block" id="find">
+        <div class="wrap">
+            <div class="sec-head reveal">
+                <p class="sec-eyebrow" data-t="find_eyebrow">Как нас найти</p>
+                <h2 class="sec-title" data-t="find_title">Ждём вас в центре Кишинёва</h2>
+            </div>
+            <div class="find-grid reveal">
+                <div class="map">
+                    <div class="map-fallback" data-t="map_loading">Карта загружается…</div>
+                    <iframe title="Oyster's LAB на карте" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        src="https://www.google.com/maps?q=Oyster's+Lab,+Strada+Alexandru+Bernardazzi+64,+Chi%C8%99in%C4%83u&z=16&output=embed"></iframe>
+                </div>
+                <div class="panel">
+                    <p class="addr"><span data-t="addr_full">ул. Александру Бернардацци, 64</span><small data-t="addr_city">Кишинёв, Молдова</small></p>
+                    <table class="hours" aria-label="Часы работы">
+                        <tbody id="hoursTable"></tbody>
+                    </table>
+                    <div class="cta-row">
+                        <a class="btn btn-gold" href="https://share.google/SewMWAqWtrvXzD99M" target="_blank" rel="noopener" data-icon-before="route"><span data-t="cta_route">Проложить маршрут</span></a>
+                        <a class="btn btn-ghost" href="tel:+37376870870" data-icon-before="phone"><span>076 870 870</span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <div class="wrap">
+        <div class="foot-brand">Oyster's LAB</div>
+        <div>from the seabed</div>
+        <nav class="foot-links" aria-label="Ссылки">
+            <a href="/" data-t="nav_menu">Меню</a>
+            <a href="#delivery" data-t="cta_delivery">Доставка</a>
+            <a href="#find" data-t="find_eyebrow">Как нас найти</a>
+            <a href="https://www.instagram.com/oysters_lab/" target="_blank" rel="noopener">Instagram</a>
+            <a href="tel:+37376870870">076 870 870</a>
+        </nav>
+        <p data-t="foot_addr">ул. Александру Бернардацци, 64, Кишинёв</p>
+    </div>
+</footer>
+
+<nav class="action-bar" aria-label="Быстрые действия">
+    <a class="primary" href="tel:+37376870870"><span data-icon="phone" aria-hidden="true"></span><span data-t="ab_call">Позвонить</span></a>
+    <a href="/"><span data-icon="menu" aria-hidden="true"></span><span data-t="nav_menu">Меню</span></a>
+    <a href="#find"><span data-icon="route" aria-hidden="true"></span><span data-t="ab_route">Маршрут</span></a>
+</nav>
+
+<script>
+'use strict';
+const SUPABASE_URL = 'https://lgtgzazoqzenedgzbzmf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxndGd6YXpvcXplbmVkZ3piem1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTYyMjksImV4cCI6MjEwNDI3MjIyOX0.9eH14E5PbaM2PTkW9o7m2f9pCzFYdVF0NXVxZ-X57AQ';
+const LANG_KEY = 'ol_lang';
+const LANGS = ['ru', 'ro', 'en'];
+
+const S = (p, w = 22, sw = 1.6) => `<svg width="${w}" height="${w}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${p}</svg>`;
+const ICONS = {
+    logo: S('<path d="M12 3.5C7.6 3.5 4 6.8 4 11.2c0 4 3 7.6 8 9.3 5-1.7 8-5.3 8-9.3 0-4.4-3.6-7.7-8-7.7z"/><path d="M7.5 12.5c1.3-2 2.9-3 4.5-3s3.2 1 4.5 3"/><circle cx="12" cy="13.6" r="1.6" fill="currentColor" stroke="none"/>', 20),
+    oyster: S('<path d="M12 3.5C7.6 3.5 4 6.8 4 11.2c0 4 3 7.6 8 9.3 5-1.7 8-5.3 8-9.3 0-4.4-3.6-7.7-8-7.7z"/><path d="M7.5 12.5c1.3-2 2.9-3 4.5-3s3.2 1 4.5 3"/><circle cx="12" cy="13.6" r="1.6" fill="currentColor" stroke="none"/>'),
+    menu: S('<path d="M4 19h16"/><path d="M5 16a7 7 0 0114 0z"/><path d="M12 6v3"/><circle cx="12" cy="5" r="1"/>', 18),
+    truck: S('<path d="M1 6h13v10H1z"/><path d="M14 9h4l3 3v4h-7"/><circle cx="5.5" cy="17.5" r="1.8"/><circle cx="17.5" cy="17.5" r="1.8"/>', 18),
+    pin: S('<path d="M12 21s7-5.6 7-11.5A7 7 0 005 9.5C5 15.4 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>'),
+    clock: S('<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'),
+    phone: S('<path d="M22 16.9v3a2 2 0 01-2.2 2 19.8 19.8 0 01-8.6-3.1 19.5 19.5 0 01-6-6A19.8 19.8 0 012.1 4.2 2 2 0 014.1 2h3a2 2 0 012 1.7c.1.9.4 1.8.7 2.7a2 2 0 01-.5 2.1L8 9.8a16 16 0 006 6l1.3-1.3a2 2 0 012.1-.4c.9.3 1.8.6 2.7.7a2 2 0 011.7 2z"/>', 18),
+    glass: S('<path d="M8 2h8l-1 8a3 3 0 01-6 0z"/><path d="M12 13v8M8 21h8"/>'),
+    calendar: S('<rect x="3" y="4" width="18" height="17" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>', 18),
+    shield: S('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>'),
+    check: S('<path d="M20 6L9 17l-5-5"/>', 16, 2),
+    route: S('<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h8.5a3.5 3.5 0 000-7h-9a3.5 3.5 0 010-7H16"/>', 18),
+    instagram: S('<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/>', 18)
+};
+const PLACEHOLDER = `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M60 22c-22 0-38 16-38 37 0 19 14 34 38 40 24-6 38-21 38-40 0-21-16-37-38-37z"/>
+    <path d="M38 64c6-10 14-15 22-15s16 5 22 15"/><path d="M44 78c5 5 10 7 16 7s11-2 16-7" opacity=".6"/>
+    <circle cx="60" cy="66" r="6" fill="currentColor" stroke="none" opacity=".8"/></svg>`;
+
+// Тексты RU берутся из разметки, RO/EN — здесь.
+const T = {
+    ru: {
+        open_now: 'Открыто сейчас · до {t}', closed_now: 'Закрыто · откроемся {d} в {t}', today: 'сегодня', tomorrow: 'завтра',
+        days: ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'], title: 'Oyster\'s LAB — французские устрицы в Кишинёве · доставка'
+    },
+    ro: {
+        nav_menu: 'Meniu', hero_eyebrow: 'Chișinău · deschis zilnic',
+        hero_title: 'Stridii <em>franțuzești</em> în Chișinău',
+        hero_lead: 'Cea mai largă selecție de stridii din oraș. Veniți la noi, comandați livrare sau chemați-ne cu stridii la evenimentul vostru.',
+        cta_menu: 'Vezi meniul', cta_delivery: 'Livrare',
+        hero_badge_t: 'Furnizor de stridii pentru restaurante', hero_badge_s: 'Prospețime în care au încredere bucătarii din Chișinău',
+        f_addr: 'Adresa', addr_short: 'str. A. Bernardazzi, 64', f_hours: 'Program', hours_short: 'Lu–Vi 12–22 · Sâ–Du 11–22', f_phone: 'Rezervări și livrare',
+        offer_eyebrow: 'Ce avem', offer_title: 'Stridiile sunt ceea ce cunoaștem cel mai bine',
+        o1_t: 'Stridii din Franța', o1_p: 'Cel mai larg sortiment din Chișinău: de la delicatele Fine de Claire la cărnoasele Gillardeau. Vă ajutăm să alegeți și vă povestim despre fiecare.',
+        o2_t: 'Vin și prosecco', o2_p: 'O hartă bogată de vinuri și prosecco, alese pentru stridii și fructe de mare.',
+        o3_t: 'Stridii la eveniment', o3_p: 'Aducem stridii la sărbătoarea voastră împreună cu un maestru care le deschide chiar în fața oaspeților.',
+        o4_t: 'Livrări către restaurante', o4_p: 'Furnizăm stridii restaurantelor din Chișinău, de aceea avem mereu marfă proaspătă și prețuri corecte.',
+        del_eyebrow: 'Livrare în Chișinău', del_title: 'Stridii acasă — fără probleme',
+        del_lead: 'Da, stridiile se pot comanda acasă. Le deschidem în prealabil și le aducem pe gheață — rămâne doar să deschideți prosecco.',
+        s1_t: 'Sunați-ne sau scrieți-ne', s1_p: 'La 076 870 870 sau pe Instagram — vă ajutăm cu alegerea.',
+        s2_t: 'Deschidem și ambalăm', s2_p: 'Stridiile sunt deschise în prealabil și așezate într-un caserol cu gheață. Adăugăm lămâie și sos mignonette.',
+        s3_t: 'Livrăm în tot Chișinăul', s3_p: 'Plata la primire — de preferat în numerar.',
+        p_below: 'Comandă până la 1000 MDL', p_above: 'Comandă de la 1000 MDL', p_free: 'Gratuit',
+        n1: 'Livrăm în orice sector al Chișinăului', n2: 'Stridiile vin deschise, pe gheață, cu lămâie și mignonette', n3: 'Plata la primire, cel mai comod în numerar',
+        cta_call: 'Sunați', cta_ig: 'Scrieți pe Instagram',
+        gal_eyebrow: 'Atmosfera', gal_title: 'Treceți pe la noi',
+        book_eyebrow: 'Mese', book_title: 'Mai bine rezervați din timp', book_p: 'Sunați-ne — găsim o oră convenabilă și o masă pentru voi.', cta_book: 'Rezervați',
+        ev_eyebrow: 'Evenimente', ev_title: 'Bar de stridii la sărbătoarea voastră', ev_p: 'Zi de naștere, nuntă, petrecere corporativă — aducem stridii și un maestru care le deschide în fața oaspeților. Povestiți-ne despre eveniment și calculăm totul.', cta_event: 'Discutăm evenimentul',
+        find_eyebrow: 'Cum ne găsiți', find_title: 'Vă așteptăm în centrul Chișinăului', map_loading: 'Harta se încarcă…',
+        addr_full: 'str. Alexandru Bernardazzi, 64', addr_city: 'Chișinău, Moldova', cta_route: 'Traseu',
+        foot_addr: 'str. Alexandru Bernardazzi, 64, Chișinău', ab_call: 'Sunați', ab_route: 'Traseu',
+        open_now: 'Deschis acum · până la {t}', closed_now: 'Închis · deschidem {d} la {t}', today: 'azi', tomorrow: 'mâine',
+        days: ['Luni','Marți','Miercuri','Joi','Vineri','Sâmbătă','Duminică'], title: 'Oyster\'s LAB — stridii franțuzești în Chișinău · livrare'
+    },
+    en: {
+        nav_menu: 'Menu', hero_eyebrow: 'Chișinău · open daily',
+        hero_title: 'French <em>oysters</em> in Chișinău',
+        hero_lead: 'The widest selection of oysters in town. Visit us, order delivery, or invite us with oysters to your celebration.',
+        cta_menu: 'See the menu', cta_delivery: 'Delivery',
+        hero_badge_t: 'Oyster supplier to restaurants', hero_badge_s: 'Freshness trusted by Chișinău chefs',
+        f_addr: 'Address', addr_short: '64 A. Bernardazzi St.', f_hours: 'Opening hours', hours_short: 'Mon–Fri 12–22 · Sat–Sun 11–22', f_phone: 'Bookings & delivery',
+        offer_eyebrow: 'What we offer', offer_title: 'Oysters are what we know best',
+        o1_t: 'French oysters', o1_p: 'The widest range in Chișinău: from delicate Fine de Claire to meaty Gillardeau. We\'ll help you choose and tell you about each one.',
+        o2_t: 'Wine & prosecco', o2_p: 'A big wine list and prosecco, chosen to go with oysters and seafood.',
+        o3_t: 'Oysters for events', o3_p: 'We bring oysters to your celebration together with a shucker who opens them right in front of your guests.',
+        o4_t: 'Restaurant supplier', o4_p: 'We supply oysters to Chișinău restaurants, so our stock is always fresh and our prices fair.',
+        del_eyebrow: 'Delivery in Chișinău', del_title: 'Oysters at home — no problem',
+        del_lead: 'Yes, you can order oysters home. We open them in advance and deliver them on ice — all that\'s left is to pop the prosecco.',
+        s1_t: 'Call or message us', s1_p: 'At 076 870 870 or on Instagram — we\'ll help you choose.',
+        s2_t: 'We open and pack', s2_p: 'Oysters are opened in advance and packed in a casserole on ice, with lemon and mignonette sauce.',
+        s3_t: 'We deliver across Chișinău', s3_p: 'Pay on delivery — cash preferred.',
+        p_below: 'Orders under 1000 MDL', p_above: 'Orders from 1000 MDL', p_free: 'Free',
+        n1: 'We deliver to every district of Chișinău', n2: 'Oysters arrive opened, on ice, with lemon and mignonette', n3: 'Pay on delivery, cash is easiest',
+        cta_call: 'Call us', cta_ig: 'Message on Instagram',
+        gal_eyebrow: 'Atmosphere', gal_title: 'Come and see us',
+        book_eyebrow: 'Tables', book_title: 'Better book ahead', book_p: 'Give us a call — we\'ll find a time and a table that suit you.', cta_book: 'Book a table',
+        ev_eyebrow: 'Events', ev_title: 'An oyster bar at your celebration', ev_p: 'Birthday, wedding, corporate party — we bring oysters and a shucker who opens them in front of your guests. Tell us about your event and we\'ll work out the details.', cta_event: 'Discuss your event',
+        find_eyebrow: 'How to find us', find_title: 'In the centre of Chișinău', map_loading: 'Loading map…',
+        addr_full: '64 Alexandru Bernardazzi St.', addr_city: 'Chișinău, Moldova', cta_route: 'Get directions',
+        foot_addr: '64 Alexandru Bernardazzi St., Chișinău', ab_call: 'Call', ab_route: 'Directions',
+        open_now: 'Open now · until {t}', closed_now: 'Closed · opens {d} at {t}', today: 'today', tomorrow: 'tomorrow',
+        days: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], title: 'Oyster\'s LAB — French oysters in Chișinău · delivery'
+    }
+};
+
+// Часы работы: 0 = понедельник. [открытие, закрытие] в минутах.
+const HOURS = [[720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1320], [660, 1320], [660, 1320]];
+const fmt = m => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+
+let lang = 'ru';
+
+function storageGet(k) { try { return localStorage.getItem(k); } catch { return null; } }
+function storageSet(k, v) { try { localStorage.setItem(k, v); } catch {} }
+
+function chisinauNow() {
+    const parts = new Intl.DateTimeFormat('en-GB', { timeZone: 'Europe/Chisinau', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).formatToParts(new Date());
+    const get = t => parts.find(p => p.type === t)?.value;
+    const day = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].indexOf(get('weekday'));
+    return { day, min: Number(get('hour')) * 60 + Number(get('minute')) };
+}
+
+function renderStatus() {
+    const t = T[lang];
+    const { day, min } = chisinauNow();
+    const el = document.getElementById('openStatus');
+    const txt = document.getElementById('openStatusText');
+    if (day < 0) return;
+    const [o, c] = HOURS[day];
+    if (min >= o && min < c) {
+        el.className = 'status open'; txt.textContent = t.open_now.replace('{t}', fmt(c));
+    } else {
+        const nextDay = min < o ? day : (day + 1) % 7;
+        const label = nextDay === day ? t.today : t.tomorrow;
+        el.className = 'status closed'; txt.textContent = t.closed_now.replace('{d}', label).replace('{t}', fmt(HOURS[nextDay][0]));
+    }
+    const { day: today } = chisinauNow();
+    document.getElementById('hoursTable').innerHTML = HOURS.map(([o2, c2], i) =>
+        `<tr class="${i === today ? 'today' : ''}"><td>${t.days[i]}</td><td>${fmt(o2)}–${fmt(c2)}</td></tr>`).join('');
+}
+
+function setLang(l) {
+    if (!LANGS.includes(l)) l = 'ru';
+    lang = l;
+    storageSet(LANG_KEY, l);
+    document.documentElement.lang = l;
+    document.title = T[l].title;
+    document.querySelectorAll('.lang-btn').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === l ? 'true' : 'false'));
+    document.querySelectorAll('[data-t]').forEach(el => {
+        const k = el.dataset.t;
+        const v = T[l][k] ?? T.ru[k];
+        if (v != null) el.innerHTML = v;
+    });
+    renderStatus();
+}
+
+function detectLang() {
+    const saved = storageGet(LANG_KEY);
+    if (LANGS.includes(saved)) return saved;
+    for (const l of (navigator.languages || [navigator.language || ''])) {
+        const s = String(l).slice(0, 2).toLowerCase();
+        if (LANGS.includes(s)) return s;
+    }
+    return 'ru';
+}
+
+// Фото из админки (таблица site_photos). Нет фото — остаётся заглушка.
+function photoUrl(url, w) {
+    if (!/^https?:$/.test(location.protocol) || /^(localhost|127\.)/.test(location.hostname)) return url;
+    return `/_vercel/image?url=${encodeURIComponent(url)}&w=${w}&q=70`;
+}
+async function loadPhotos() {
+    let rows = [];
+    try {
+        const res = await fetch(`${SUPABASE_URL}/rest/v1/site_photos?select=id,image_url`, { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } });
+        if (res.ok) rows = await res.json();
+    } catch {}
+    const map = Object.fromEntries(rows.filter(r => r.image_url && /^https:\/\//.test(r.image_url)).map(r => [r.id, r.image_url]));
+    let galleryHas = false;
+    document.querySelectorAll('[data-slot]').forEach(el => {
+        const url = map[el.dataset.slot];
+        if (!url) return;
+        const img = new Image();
+        img.alt = '';
+        img.decoding = 'async';
+        img.loading = el.classList.contains('hero-photo') ? 'eager' : 'lazy';
+        img.src = photoUrl(url, el.classList.contains('hero-photo') || el.classList.contains('wide') ? 1080 : 640);
+        img.onerror = () => { if (img.src !== url) img.src = url; };
+        el.innerHTML = '';
+        el.appendChild(img);
+        el.classList.remove('placeholder');
+        if (el.closest('#gallery')) galleryHas = true;
+    });
+    if (galleryHas) document.getElementById('gallery').hidden = false;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Иконки
+    document.querySelectorAll('[data-icon]').forEach(el => { el.innerHTML = ICONS[el.dataset.icon] || ''; });
+    document.querySelectorAll('[data-icon-before]').forEach(el => el.insertAdjacentHTML('afterbegin', ICONS[el.dataset.iconBefore] || ''));
+    document.querySelectorAll('.photo.placeholder').forEach(el => { el.innerHTML = PLACEHOLDER; });
+    // RU-тексты из разметки
+    document.querySelectorAll('[data-t]').forEach(el => { const k = el.dataset.t; if (T.ru[k] == null) T.ru[k] = el.innerHTML; });
+
+    document.querySelectorAll('.lang-btn').forEach(b => b.addEventListener('click', () => setLang(b.dataset.lang)));
+    setLang(detectLang());
+    setInterval(renderStatus, 60000);
+
+    // Плавное появление блоков
+    if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(entries => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px' });
+        document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    } else {
+        document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+    }
+
+    // Карта: если Google не загрузился, остаётся подсказка
+    const iframe = document.querySelector('.map iframe');
+    iframe.addEventListener('load', () => { const fb = document.querySelector('.map-fallback'); if (fb) fb.style.display = 'none'; });
+
+    loadPhotos();
+});
+</script>
+</body>
+</html>
