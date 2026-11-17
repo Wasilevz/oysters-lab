@@ -1012,10 +1012,10 @@ function bindImageUploaders() {
     if (removeBtn) removeBtn.addEventListener('click', clearImage);
 }
 
-// Уменьшаем фото до 1600px по длинной стороне и перекодируем в WebP/JPEG.
+// Уменьшаем фото до 2048px по длинной стороне и перекодируем в WebP/JPEG.
 // Телефонные фото по 5–10 МБ превращаются в ~200–400 КБ: сайт грузится быстрее,
 // а запрос гарантированно укладывается в лимит Vercel.
-async function compressImage(file, maxSide = 1600) {
+async function compressImage(file, maxSide = 2048) {
     let bitmap;
     try {
         bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
@@ -1033,7 +1033,7 @@ async function compressImage(file, maxSide = 1600) {
     canvas.width = Math.round(w * scale);
     canvas.height = Math.round(h * scale);
     canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
-    const toBlob = type => new Promise(r => canvas.toBlob(r, type, 0.82));
+    const toBlob = type => new Promise(r => canvas.toBlob(r, type, 0.86));
     let blob = await toBlob('image/webp');
     if (!blob || blob.type !== 'image/webp') blob = await toBlob('image/jpeg');
     const buf = new Uint8Array(await blob.arrayBuffer());
