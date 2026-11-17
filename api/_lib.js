@@ -123,3 +123,6 @@ export function isSafeUrl(v) {
     return false;
   }
 }
+
+// Только для автотестов: подмена клиента Supabase.
+export function __setSupabaseForTests(client) { _supabase = client; }

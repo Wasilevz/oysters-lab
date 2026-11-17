@@ -74,5 +74,10 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "api/optimize-image.js": {
+      "maxDuration": 60
+    }
+  }
 }
