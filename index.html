@@ -705,7 +705,7 @@ function applyData(oystersRaw, categoriesRaw, itemsRaw) {
         label: cat.label,
         subtitle: cat.subtitle,
         items: (itemsRaw || [])
-            .filter(item => item.category_id === cat.id)
+            .filter(item => item.category_id === cat.id && item.hidden !== true)
             .map(item => ({ ...item, desc: item.description }))
     }));
     if (!FOOD_CATEGORIES.some(c => c.key === String(currentFoodCategory))) {

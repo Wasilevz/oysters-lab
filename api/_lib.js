@@ -56,7 +56,7 @@ export function pick(obj, fields) {
 /**
  * Универсальный CRUD-обработчик для таблиц с текстовым id.
  */
-export function crudHandler({ table, fields, orderBy, validate }) {
+export function crudHandler({ table, fields, orderBy, validate, patchFields = [] }) {
   return async function handler(req, res) {
     noStore(res);
     if (!verifyToken(req)) {
@@ -91,6 +91,19 @@ export function crudHandler({ table, fields, orderBy, validate }) {
         return res.status(200).json({ success: true, data });
       }
 
+      // Быстрое изменение флагов (скрыть/показать, в наличии) без пересохранения всей записи.
+      case 'PATCH': {
+        const body = req.body && typeof req.body === 'object' ? req.body : {};
+        if (!isValidId(body.id)) return res.status(400).json({ error: 'Missing or invalid id' });
+        const patch = pick(body, patchFields);
+        if (!Object.keys(patch).length) return res.status(400).json({ error: 'Нечего обновлять' });
+        if (Object.values(patch).some(v => typeof v !== 'boolean')) return res.status(400).json({ error: 'Некорректное значение' });
+        const { data, error } = await supabase.from(table).update(patch).eq('id', body.id).select();
+        if (error) return serverError(res, error, `${table}:patch`);
+        if (!data || !data.length) return res.status(404).json({ error: 'Запись не найдена' });
+        return res.status(200).json({ success: true, data: data[0] });
+      }
+
       case 'DELETE': {
         if (!isValidId(id)) return res.status(400).json({ error: 'Missing or invalid id' });
         const { error } = await supabase.from(table).delete().eq('id', id);
@@ -102,7 +115,7 @@ export function crudHandler({ table, fields, orderBy, validate }) {
       }
 
       default:
-        res.setHeader('Allow', 'GET, POST, DELETE');
+        res.setHeader('Allow', patchFields.length ? 'GET, POST, PATCH, DELETE' : 'GET, POST, DELETE');
         return res.status(405).json({ error: 'Method not allowed' });
     }
   };
