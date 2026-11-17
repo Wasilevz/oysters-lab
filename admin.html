@@ -2,10 +2,11 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#060a10">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="robots" content="noindex, nofollow">
 <title>Oyster's LAB — Админ-панель</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700&display=swap');
@@ -92,7 +93,7 @@ header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sti
 /* ─── SEARCH ─── */
 .search-wrap { padding: 14px 20px 0; position: relative; }
 .search-wrap svg { position: absolute; left: 34px; top: 50%; transform: translateY(-50%); color: var(--muted); pointer-events: none; }
-.search-wrap input { width: 100%; padding: 11px 14px 11px 40px; background: var(--surface); border: 1px solid var(--faint); border-radius: var(--radius-sm); color: var(--text); font-size: var(--fs-sm); }
+.search-wrap input { width: 100%; padding: 11px 14px 11px 40px; background: var(--surface); border: 1px solid var(--faint); border-radius: var(--radius-sm); color: var(--text); font-size: var(--fs-base); }
 .search-wrap input:focus { outline: none; border-color: var(--gold-line); }
 
 /* ─── LIST ─── */
@@ -230,6 +231,9 @@ header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sti
 .btn-danger:hover { background: var(--danger); color: var(--text); }
 
 .hidden { display: none !important; }
+:focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; }
+.item-actions .icon-btn { width: 40px; height: 40px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
 ::-webkit-scrollbar { width: 0; height: 0; }
 </style>
 </head>
@@ -242,8 +246,8 @@ header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sti
         <h1>Oyster's LAB</h1>
         <p class="login-sub">Панель управления</p>
         <div class="field-wrap">
-            <input type="password" id="passwordInput" placeholder="Пароль">
-            <button class="field-toggle" id="togglePassword"></button>
+            <input type="password" id="passwordInput" placeholder="Пароль" autocomplete="current-password" aria-label="Пароль" autofocus>
+            <button type="button" class="field-toggle" id="togglePassword" aria-label="Показать пароль"></button>
         </div>
         <button class="btn-primary" id="loginBtn">Войти</button>
         <div class="login-error" id="loginError"></div>
@@ -258,7 +262,7 @@ header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sti
                 <h1>Oyster's LAB</h1>
                 <p>Админ-панель</p>
             </div>
-            <button class="icon-btn danger-hover" id="logoutBtn" title="Выйти"></button>
+            <button class="icon-btn danger-hover" id="logoutBtn" title="Выйти" aria-label="Выйти"></button>
         </div>
     </header>
 
@@ -270,21 +274,21 @@ header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sti
 
     <div class="search-wrap">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4-4"/></svg>
-        <input type="text" id="searchInput" placeholder="Поиск...">
+        <input type="search" id="searchInput" placeholder="Поиск..." aria-label="Поиск">
     </div>
 
     <div id="listContainer"></div>
 </div>
 
-<button class="fab hidden" id="fabAdd"></button>
+<button class="fab hidden" id="fabAdd" aria-label="Добавить"></button>
 
 <!-- BOTTOM SHEET (форма) -->
-<div class="sheet-overlay" id="sheetOverlay">
+<div class="sheet-overlay" id="sheetOverlay" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
     <div class="sheet">
         <div class="sheet-handle"></div>
         <div class="sheet-header">
             <h2 id="sheetTitle"></h2>
-            <button class="icon-btn" id="sheetClose"></button>
+            <button class="icon-btn" id="sheetClose" aria-label="Закрыть"></button>
         </div>
         <div class="sheet-body" id="sheetBody"></div>
         <div class="sheet-footer">
@@ -295,10 +299,10 @@ header { padding: calc(18px + env(safe-area-inset-top)) 20px 14px; position: sti
 </div>
 
 <!-- ПОДТВЕРЖДЕНИЕ УДАЛЕНИЯ -->
-<div class="confirm-overlay" id="confirmOverlay">
+<div class="confirm-overlay" id="confirmOverlay" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmText">
     <div class="confirm-card">
         <div class="confirm-icon" id="confirmIcon"></div>
-        <h3>Удалить?</h3>
+        <h3 id="confirmTitle">Удалить?</h3>
         <p id="confirmText"></p>
         <div class="confirm-actions">
             <button class="btn-ghost" id="confirmCancel">Отмена</button>
@@ -329,7 +333,17 @@ const ICON = {
 };
 
 // ==================== СОСТОЯНИЕ ====================
-let authToken = localStorage.getItem('admin_token') || '';
+function readToken() {
+    let t = '';
+    try { t = localStorage.getItem('admin_token') || ''; } catch {}
+    if (!t) return '';
+    try {
+        const payload = JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/')));
+        if (!payload.exp || payload.exp * 1000 < Date.now() + 60000) { localStorage.removeItem('admin_token'); return ''; }
+    } catch { return ''; }
+    return t;
+}
+let authToken = readToken();
 let currentTab = 'oysters';
 let oystersData = [], categoriesData = [], itemsData = [];
 let searchQuery = '';
@@ -408,6 +422,7 @@ document.getElementById('confirmIcon').innerHTML = ICON.warn;
 let pwVisible = false;
 document.getElementById('togglePassword').addEventListener('click', () => {
     pwVisible = !pwVisible;
+    document.getElementById('togglePassword').setAttribute('aria-label', pwVisible ? 'Скрыть пароль' : 'Показать пароль');
     const input = document.getElementById('passwordInput');
     input.type = pwVisible ? 'text' : 'password';
     document.getElementById('togglePassword').innerHTML = pwVisible ? ICON.eyeOff : ICON.eye;
@@ -422,8 +437,8 @@ async function doLogin() {
     btn.disabled = true;
     try {
         const res = await fetch('/api/auth', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({ password }) });
-        const data = await res.json();
-        if (data.token) {
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.token) {
             authToken = data.token;
             localStorage.setItem('admin_token', authToken);
             showApp();
@@ -505,48 +520,53 @@ async function loadItems(rerender = true) {
 }
 
 // ==================== РЕНДЕР СПИСКА ====================
+function matches(...values) {
+    if (!searchQuery) return true;
+    return values.some(v => {
+        if (v && typeof v === 'object') return Object.values(v).some(x => String(x || '').toLowerCase().includes(searchQuery));
+        return String(v || '').toLowerCase().includes(searchQuery);
+    });
+}
+
 function renderList() {
     const container = document.getElementById('listContainer');
     let data, cardsHtml;
 
     if (currentTab === 'oysters') {
-        data = oystersData.filter(o => !searchQuery || (o.name||'').toLowerCase().includes(searchQuery));
+        data = oystersData.filter(o => matches(o.name, o.badge, o.id));
         if (!data.length) return renderEmpty(container, oystersData.length ? 'Ничего не найдено' : 'Пока нет устриц. Добавьте первую.');
         cardsHtml = data.map(o => {
             const unavailable = o.available === false;
             return `
             <div class="item-card ${unavailable ? 'unavailable' : ''}">
-                <div class="item-thumb">${o.image_url ? `<img src="${escapeHtml(o.image_url)}">` : ICON.oyster}</div>
+                <div class="item-thumb">${o.image_url ? `<img src="${escapeHtml(o.image_url)}" alt="" loading="lazy">` : ICON.oyster}</div>
                 <div class="item-info">
                     <div class="item-name">${escapeHtml(o.name)}</div>
-                    <div class="item-sub">${escapeHtml(o.badge||'')} · ${o.price ?? 0} MDL${unavailable ? ' · <span class="tag-unavailable">Нет в наличии</span>' : ''}</div>
+                    <div class="item-sub">${escapeHtml(o.badge||'')} · ${escapeHtml(o.price ?? 0)} MDL${unavailable ? ' · <span class="tag-unavailable">Нет в наличии</span>' : ''}</div>
                 </div>
                 <div class="item-actions">
-                    <button class="icon-btn" onclick="openEditModal('oysters','${o.id}')">${ICON.edit}</button>
-                    <button class="icon-btn danger-hover" onclick="askDelete('oysters','${o.id}','${escapeHtml(o.name)}')">${ICON.trash}</button>
+                    <button class="icon-btn" data-action="edit" data-type="oysters" data-id="${escapeHtml(o.id)}" aria-label="Редактировать «${escapeHtml(o.name)}»">${ICON.edit}</button>
+                    <button class="icon-btn danger-hover" data-action="delete" data-type="oysters" data-id="${escapeHtml(o.id)}" aria-label="Удалить «${escapeHtml(o.name)}»">${ICON.trash}</button>
                 </div>
             </div>`;
         }).join('');
     } else if (currentTab === 'categories') {
-        data = categoriesData.filter(c => !searchQuery || (c.label?.ru||c.id||'').toLowerCase().includes(searchQuery));
+        data = categoriesData.filter(c => matches(c.label, c.id));
         if (!data.length) return renderEmpty(container, categoriesData.length ? 'Ничего не найдено' : 'Пока нет категорий. Добавьте первую.');
         cardsHtml = data.map(c => `
             <div class="item-card">
                 <div class="item-thumb">${ICON.plate}</div>
                 <div class="item-info">
                     <div class="item-name">${escapeHtml(c.label?.ru || c.id)}</div>
-                    <div class="item-sub">${c.sort_order ? 'Порядок: ' + c.sort_order : c.id}</div>
+                    <div class="item-sub">${escapeHtml(c.id)} · ${itemsData.filter(i => i.category_id === c.id).length} блюд${c.sort_order ? ' · порядок ' + escapeHtml(c.sort_order) : ''}</div>
                 </div>
                 <div class="item-actions">
-                    <button class="icon-btn" onclick="openEditModal('categories','${c.id}')">${ICON.edit}</button>
-                    <button class="icon-btn danger-hover" onclick="askDelete('categories','${c.id}','${escapeHtml(c.label?.ru || c.id)}')">${ICON.trash}</button>
+                    <button class="icon-btn" data-action="edit" data-type="categories" data-id="${escapeHtml(c.id)}" aria-label="Редактировать «${escapeHtml(c.label?.ru || c.id)}»">${ICON.edit}</button>
+                    <button class="icon-btn danger-hover" data-action="delete" data-type="categories" data-id="${escapeHtml(c.id)}" aria-label="Удалить «${escapeHtml(c.label?.ru || c.id)}»">${ICON.trash}</button>
                 </div>
             </div>`).join('');
     } else {
-        data = itemsData.filter(i => {
-            const n = (i.name && typeof i.name === 'object') ? (i.name.ru||'') : (i.name||'');
-            return !searchQuery || n.toLowerCase().includes(searchQuery);
-        });
+        data = itemsData.filter(i => matches(i.name, i.id));
         if (!data.length) return renderEmpty(container, itemsData.length ? 'Ничего не найдено' : 'Пока нет блюд. Добавьте первое.');
         cardsHtml = data.map(item => {
             const name = (item.name && typeof item.name === 'object') ? (item.name.ru || item.name.en || '') : (item.name || '');
@@ -554,14 +574,14 @@ function renderList() {
             const unavailable = item.available === false;
             return `
             <div class="item-card ${unavailable ? 'unavailable' : ''}">
-                <div class="item-thumb">${item.image_url ? `<img src="${escapeHtml(item.image_url)}">` : ICON.plate}</div>
+                <div class="item-thumb">${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" loading="lazy">` : ICON.plate}</div>
                 <div class="item-info">
                     <div class="item-name">${escapeHtml(name)}</div>
-                    <div class="item-sub">${escapeHtml(cat?.label?.ru || item.category_id || '')} · ${item.price ?? 0} MDL${unavailable ? ' · <span class="tag-unavailable">Нет в наличии</span>' : ''}</div>
+                    <div class="item-sub">${escapeHtml(cat?.label?.ru || item.category_id || '')} · ${escapeHtml(item.price ?? 0)} MDL${unavailable ? ' · <span class="tag-unavailable">Нет в наличии</span>' : ''}</div>
                 </div>
                 <div class="item-actions">
-                    <button class="icon-btn" onclick="openEditModal('items','${item.id}')">${ICON.edit}</button>
-                    <button class="icon-btn danger-hover" onclick="askDelete('items','${item.id}','${escapeHtml(name)}')">${ICON.trash}</button>
+                    <button class="icon-btn" data-action="edit" data-type="items" data-id="${escapeHtml(item.id)}" aria-label="Редактировать «${escapeHtml(name)}»">${ICON.edit}</button>
+                    <button class="icon-btn danger-hover" data-action="delete" data-type="items" data-id="${escapeHtml(item.id)}" aria-label="Удалить «${escapeHtml(name)}»">${ICON.trash}</button>
                 </div>
             </div>`;
         }).join('');
@@ -569,6 +589,14 @@ function renderList() {
 
     container.innerHTML = `<div class="list">${cardsHtml}</div>`;
 }
+
+document.getElementById('listContainer').addEventListener('click', e => {
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    const { action, type, id } = btn.dataset;
+    if (action === 'edit') openEditModal(type, id);
+    if (action === 'delete') askDelete(type, id);
+});
 
 function renderEmpty(container, message) {
     container.innerHTML = `<div class="empty-state">${ICON.fish}<p>${escapeHtml(message)}</p></div>`;
@@ -585,16 +613,33 @@ document.getElementById('fabAdd').addEventListener('click', () => {
 });
 
 // ==================== BOTTOM SHEET (ФОРМА) ====================
+let formDirty = false;
+let sheetOpener = null;
 function openSheet(title) {
+    sheetOpener = document.activeElement;
+    formDirty = false;
     document.getElementById('sheetTitle').textContent = title;
     document.getElementById('sheetOverlay').classList.add('active');
+    document.documentElement.style.overflow = 'hidden';
+    setTimeout(() => { document.getElementById('sheetBody').scrollTop = 0; const f = document.querySelector('#sheetBody input:not([readonly]):not([type=hidden]):not([type=file])'); if (f && window.matchMedia('(pointer:fine)').matches) f.focus(); }, 50);
 }
-function closeSheet() {
+function closeSheet(force = false) {
+    if (force !== true && formDirty && !confirm('Закрыть без сохранения? Изменения будут потеряны.')) return;
+    formDirty = false;
     document.getElementById('sheetOverlay').classList.remove('active');
+    document.documentElement.style.overflow = '';
+    if (sheetOpener && document.contains(sheetOpener)) sheetOpener.focus();
 }
-document.getElementById('sheetClose').addEventListener('click', closeSheet);
-document.getElementById('sheetCancel').addEventListener('click', closeSheet);
+document.getElementById('sheetBody').addEventListener('input', () => { formDirty = true; });
+document.getElementById('sheetBody').addEventListener('change', () => { formDirty = true; });
+document.getElementById('sheetClose').addEventListener('click', () => closeSheet());
+document.getElementById('sheetCancel').addEventListener('click', () => closeSheet());
 document.getElementById('sheetOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeSheet(); });
+document.addEventListener('keydown', e => {
+    if (e.key !== 'Escape') return;
+    if (document.getElementById('confirmOverlay').classList.contains('active')) { document.getElementById('confirmCancel').click(); return; }
+    if (document.getElementById('sheetOverlay').classList.contains('active')) closeSheet();
+});
 
 function setFormLang(lang) {
     formLang = lang;
@@ -847,12 +892,12 @@ function imageUploaderHtml(imageUrl) {
     return `
         <div class="image-uploader">
             <div class="image-preview-box ${imageUrl ? 'has-img' : ''}" id="imagePreviewBox">
-                ${imageUrl ? `<img src="${escapeHtml(imageUrl)}">` : ICON.camera}
-                <button type="button" class="remove-img" id="removeImageBtn">${ICON.close}</button>
+                ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : ICON.camera}
+                <button type="button" class="remove-img" id="removeImageBtn" aria-label="Убрать фото">${ICON.close}</button>
             </div>
             <div class="image-uploader-actions">
                 <label class="upload-btn">${ICON.camera} <span id="uploadBtnLabel">${imageUrl ? 'Заменить фото' : 'Загрузить фото'}</span>
-                    <input type="file" accept="image/*" id="imageFileInput">
+                    <input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif,image/avif" id="imageFileInput">
                 </label>
                 <div class="upload-status hidden" id="uploadStatus"></div>
             </div>
@@ -870,31 +915,35 @@ function bindImageUploaders() {
         const file = e.target.files[0];
         if (!file) return;
         const status = document.getElementById('uploadStatus');
-        const MAX = 5 * 1024 * 1024;
-        if (file.size > MAX) {
+        if (!/^image\//.test(file.type)) {
             status.className = 'upload-status error';
-            status.textContent = 'Файл слишком большой (макс. 5 МБ)';
+            status.textContent = 'Выберите файл изображения';
+            fileInput.value = '';
+            return;
+        }
+        if (file.size > 25 * 1024 * 1024) {
+            status.className = 'upload-status error';
+            status.textContent = 'Файл слишком большой (макс. 25 МБ)';
             fileInput.value = '';
             return;
         }
         status.className = 'upload-status loading';
-        status.innerHTML = `${ICON.spinner} Загрузка...`;
+        status.innerHTML = `${ICON.spinner} Обработка и загрузка...`;
 
-        const reader = new FileReader();
-        reader.onload = async () => {
+        {
             try {
-                const base64 = reader.result.split(',')[1];
-                const fileName = `${Date.now()}_${file.name}`.replace(/[^a-zA-Z0-9._-]/g, '_');
+                const base64 = await compressImage(file);
                 const res = await apiFetch('/api/upload-image', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ fileName, fileBase64: base64, contentType: file.type })
+                    body: JSON.stringify({ fileBase64: base64 })
                 });
                 const data = await res.json();
                 if (data.url) {
+                    formDirty = true;
                     document.getElementById('f_image_url').value = data.url;
                     const box = document.getElementById('imagePreviewBox');
                     box.classList.add('has-img');
-                    box.innerHTML = `<img src="${data.url}"><button type="button" class="remove-img" id="removeImageBtn">${ICON.close}</button>`;
+                    box.innerHTML = `<img src="${escapeHtml(data.url)}" alt=""><button type="button" class="remove-img" id="removeImageBtn" aria-label="Убрать фото">${ICON.close}</button>`;
                     document.getElementById('uploadBtnLabel').textContent = 'Заменить фото';
                     document.getElementById('removeImageBtn').addEventListener('click', clearImage);
                     status.className = 'upload-status hidden';
@@ -905,15 +954,47 @@ function bindImageUploaders() {
             } catch {
                 status.className = 'upload-status error';
                 status.textContent = 'Ошибка загрузки изображения';
+            } finally {
+                fileInput.value = '';
             }
-        };
-        reader.readAsDataURL(file);
+        }
     });
 
     if (removeBtn) removeBtn.addEventListener('click', clearImage);
 }
 
+// Уменьшаем фото до 1600px по длинной стороне и перекодируем в WebP/JPEG.
+// Телефонные фото по 5–10 МБ превращаются в ~200–400 КБ: сайт грузится быстрее,
+// а запрос гарантированно укладывается в лимит Vercel.
+async function compressImage(file, maxSide = 1600) {
+    let bitmap;
+    try {
+        bitmap = await createImageBitmap(file, { imageOrientation: 'from-image' });
+    } catch {
+        bitmap = await new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => reject(new Error('decode'));
+            img.src = URL.createObjectURL(file);
+        });
+    }
+    const w = bitmap.width, h = bitmap.height;
+    const scale = Math.min(1, maxSide / Math.max(w, h));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(w * scale);
+    canvas.height = Math.round(h * scale);
+    canvas.getContext('2d').drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+    const toBlob = type => new Promise(r => canvas.toBlob(r, type, 0.82));
+    let blob = await toBlob('image/webp');
+    if (!blob || blob.type !== 'image/webp') blob = await toBlob('image/jpeg');
+    const buf = new Uint8Array(await blob.arrayBuffer());
+    let bin = '';
+    for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode.apply(null, buf.subarray(i, i + 0x8000));
+    return btoa(bin);
+}
+
 function clearImage() {
+    formDirty = true;
     document.getElementById('f_image_url').value = '';
     const box = document.getElementById('imagePreviewBox');
     box.classList.remove('has-img');
@@ -928,6 +1009,14 @@ document.getElementById('sheetSave').addEventListener('click', async () => {
     const idValue = idInput.value.trim();
     if (!idValue) { toast('Заполните поле ID', 'error'); setFormLang('ru'); return; }
     if (!/^[a-zA-Z0-9_-]+$/.test(idValue)) { toast('ID: только латиница, цифры, - и _', 'error'); return; }
+
+    const required = { oysters: ['f_name', 'Укажите название'], categories: ['f_label_ru', 'Укажите название (RU)'], items: ['f_name_ru', 'Укажите название (RU)'] }[editingType];
+    if (required && !document.getElementById(required[0])?.value.trim()) {
+        toast(required[1], 'error');
+        if (editingType !== 'oysters') setFormLang('ru');
+        document.getElementById(required[0])?.focus();
+        return;
+    }
 
     const btn = document.getElementById('sheetSave');
     btn.disabled = true;
@@ -991,7 +1080,7 @@ document.getElementById('sheetSave').addEventListener('click', async () => {
             await loadItems();
             toast(editingId ? 'Блюдо обновлено' : 'Блюдо добавлено');
         }
-        closeSheet();
+        closeSheet(true);
         renderList();
     } catch {
         // ошибка уже показана тостом
@@ -1001,10 +1090,20 @@ document.getElementById('sheetSave').addEventListener('click', async () => {
 });
 
 // ==================== УДАЛЕНИЕ ====================
-function askDelete(type, id, name) {
+function askDelete(type, id) {
+    const src = type === 'oysters' ? oystersData : type === 'categories' ? categoriesData : itemsData;
+    const rec = src.find(x => String(x.id) === String(id));
+    if (!rec) return;
+    const name = type === 'oysters' ? rec.name : type === 'categories' ? (rec.label?.ru || rec.id) : (loc(rec.name, 'ru') || rec.id);
     deleteAction = { type, id };
-    document.getElementById('confirmText').textContent = `«${name}» будет удалено без возможности восстановления.`;
+    let text = `«${name}» будет удалено без возможности восстановления.`;
+    if (type === 'categories') {
+        const n = itemsData.filter(i => i.category_id === id).length;
+        if (n) text += ` В категории ${n} блюд(а) — они перестанут отображаться в меню, пока вы не перенесёте их в другую категорию.`;
+    }
+    document.getElementById('confirmText').textContent = text;
     document.getElementById('confirmOverlay').classList.add('active');
+    document.getElementById('confirmCancel').focus();
 }
 window.askDelete = askDelete;
 
@@ -1018,6 +1117,8 @@ document.getElementById('confirmOverlay').addEventListener('click', e => {
 document.getElementById('confirmOk').addEventListener('click', async () => {
     if (!deleteAction) return;
     const { type, id } = deleteAction;
+    const okBtn = document.getElementById('confirmOk');
+    okBtn.disabled = true;
     const endpoint = type === 'oysters' ? '/api/oysters' : type === 'categories' ? '/api/food-categories' : '/api/food-items';
     try {
         await apiFetch(`${endpoint}?id=${encodeURIComponent(id)}`, { method: 'DELETE' });
@@ -1031,6 +1132,7 @@ document.getElementById('confirmOk').addEventListener('click', async () => {
     } finally {
         document.getElementById('confirmOverlay').classList.remove('active');
         deleteAction = null;
+        okBtn.disabled = false;
     }
 });
 </script>

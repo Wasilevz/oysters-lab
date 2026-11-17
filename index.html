@@ -3,435 +3,554 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#060a10">
+    <meta name="theme-color" content="#070b11">
+    <meta name="color-scheme" content="dark">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>Oyster's LAB — Гастрономический Гид</title>
-    <meta name="description" content="Гастрономический гид по устрицам и винам Oyster's LAB.">
+    <meta name="apple-mobile-web-app-title" content="Oyster's LAB">
+    <title>Oyster's LAB — Гастрономический гид</title>
+    <meta name="description" content="Меню ресторана Oyster's LAB: устрицы со всего мира, морепродукты и авторские блюда. Вкусовые профили, происхождение и интересные факты.">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Oyster's LAB — Гастрономический гид">
+    <meta property="og:description" content="Устрицы, морепродукты и авторские блюда. Меню на русском, румынском и английском.">
+    <meta property="og:site_name" content="Oyster's LAB">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23070b11'/%3E%3Cpath d='M32 13c-11 0-19 8.5-19 19 0 9 7 17 19 19 12-2 19-10 19-19 0-10.5-8-19-19-19z' fill='none' stroke='%23d4b062' stroke-width='3'/%3E%3Cpath d='M22 34c3-5 7-7 10-7s7 2 10 7' fill='none' stroke='%23d4b062' stroke-width='3' stroke-linecap='round'/%3E%3Ccircle cx='32' cy='36' r='3.5' fill='%23e8cc8a'/%3E%3C/svg%3E">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://lgtgzazoqzenedgzbzmf.supabase.co" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap');
-
         :root {
-            --bg:        #060a10;
-            --bg-card:   #0c1118;
-            --surface:   #111820;
-            --surface-2: #171f2a;
+            --bg:        #070b11;
+            --bg-card:   #0d131b;
+            --surface:   #121a24;
+            --surface-2: #18212d;
+            --line:      rgba(255,255,255,0.06);
+            --line-2:    rgba(255,255,255,0.10);
             --gold:      #d4b062;
             --gold-light:#e8cc8a;
-            --gold-dim:  rgba(212,176,98,0.08);
-            --gold-line: rgba(212,176,98,0.18);
-            --text:      #f0ece4;
-            --text-sec:  #c8c0b4;
-            --muted:     #7a8fa3;
-            --faint:     #1a222e;
-            --header-brand: #6ba39f;
-            --body-text: #b8c4d0;
+            --gold-dim:  rgba(212,176,98,0.09);
+            --gold-line: rgba(212,176,98,0.24);
+            --sea:       #6ba39f;
+            --text:      #f2eee6;
+            --text-sec:  #cfc8bc;
+            --body-text: #b9c3cd;
+            --muted:     #8494a5;
+            --danger:    #e8907f;
             --radius:    20px;
             --radius-sm: 14px;
             --radius-xs: 10px;
-            --danger:    #e0847a;
             --fs-xs:     0.75rem;
             --fs-sm:     0.875rem;
             --fs-base:   1rem;
-            --fs-md:     1.25rem;
-            --fs-lg:     1.563rem;
-            --fs-xl:     clamp(2.25rem, 8vw, 3.15rem);
+            --fs-md:     1.125rem;
+            --fs-lg:     1.625rem;
+            --fs-xl:     clamp(2.4rem, 9vw, 3.25rem);
             --tap-min:   44px;
             --shell-w:   480px;
+            --gutter:    16px;
+            --ease:      cubic-bezier(0.22,1,0.36,1);
+            --serif:     'Cormorant Garamond', 'Times New Roman', serif;
+            --sans:      'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
         }
 
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { scroll-behavior: smooth; background: var(--bg) !important; height: 100%; }
-        select, input, textarea, button { font-family: inherit; color-scheme: dark; }
-        select option { background: var(--bg-card); color: var(--text); }
-
+        html { background: var(--bg); -webkit-text-size-adjust: 100%; }
         body {
-            background: var(--bg) !important;
+            background: var(--bg);
             color: var(--text);
-            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: var(--sans);
             font-size: var(--fs-base);
-            display: flex;
-            justify-content: center;
+            line-height: 1.5;
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
-            line-height: 1.5;
+            -webkit-tap-highlight-color: transparent;
         }
+        button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+        img { display: block; max-width: 100%; }
 
         .skip-link {
-            position: absolute; top: -60px; left: 12px; z-index: 1000;
+            position: absolute; top: -80px; left: 12px; z-index: 1000;
             background: var(--gold); color: #0c0f14; font-weight: 700;
             padding: 12px 18px; border-radius: var(--radius-xs); text-decoration: none;
-            transition: top 0.2s ease;
+            transition: top .2s ease;
         }
         .skip-link:focus { top: 12px; }
-
         :focus { outline: none; }
-        :focus-visible {
-            outline: 2px solid var(--gold-light);
-            outline-offset: 2px;
-            border-radius: 6px;
-        }
+        :focus-visible { outline: 2px solid var(--gold-light); outline-offset: 2px; border-radius: 8px; }
+        .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-        @media (prefers-reduced-motion: reduce) {
-            *, *::before, *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-        }
-
+        /* ─── SHELL ─── */
         .shell {
-            width: 100%;
-            max-width: var(--shell-w);
-            min-height: 100vh;
-            min-height: 100dvh;
-            position: relative;
-            overflow-x: clip;
+            width: 100%; max-width: var(--shell-w); margin: 0 auto;
+            min-height: 100vh; min-height: 100dvh;
+            position: relative; background: var(--bg);
             padding-bottom: env(safe-area-inset-bottom);
-            background: var(--bg);
+        }
+        .glow {
+            position: fixed; inset: 0 0 auto 0; height: 60vh; pointer-events: none; z-index: 0;
+            background:
+                radial-gradient(60% 50% at 50% 0%, rgba(212,176,98,0.07), transparent 70%),
+                radial-gradient(40% 40% at 90% 10%, rgba(107,163,159,0.06), transparent 70%);
         }
 
-        .shell::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 50%;
-            transform: translateX(-50%);
-            width: var(--shell-w); height: 100vh;
-            background: radial-gradient(ellipse at 50% 0%, rgba(212,176,98,0.03) 0%, transparent 60%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* ─── HEADER ─── */
+        /* ─── HEADER ───
+           Строка с логотипом уезжает при прокрутке (sticky с отрицательным top),
+           а переключатель разделов остаётся. Значение --header-collapse считается в JS. */
         header {
-            padding: calc(22px + env(safe-area-inset-top)) 20px 16px;
-            border-bottom: 1px solid var(--faint);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: rgba(6,10,16,0.92);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            will-change: transform;
-            transform: translateZ(0);
+            position: sticky; top: calc(-1 * var(--header-collapse, 0px)); z-index: 100;
+            padding: calc(14px + env(safe-area-inset-top)) var(--gutter) 10px;
+            background: rgba(7,11,17,0.95);
+            backdrop-filter: saturate(140%) blur(16px);
+            -webkit-backdrop-filter: saturate(140%) blur(16px);
         }
-
-        .header-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
-        .brand { display: flex; flex-direction: column; }
+        .header-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .brand { display: flex; align-items: center; gap: 11px; min-width: 0; text-decoration: none; color: inherit; }
+        .brand-mark {
+            width: 40px; height: 40px; flex-shrink: 0; border-radius: 12px;
+            display: grid; place-items: center; color: var(--gold);
+            background: linear-gradient(145deg, rgba(212,176,98,0.16), rgba(212,176,98,0.04));
+            border: 1px solid var(--gold-line);
+        }
+        .brand-text { min-width: 0; }
         .brand h1 {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: var(--fs-lg);
-            font-weight: 600;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            color: var(--text);
+            font-family: var(--serif); font-size: 1.3rem; font-weight: 600; line-height: 1;
+            letter-spacing: 0.1em; text-transform: uppercase; white-space: nowrap;
         }
         .brand p {
-            font-size: var(--fs-xs);
-            color: var(--header-brand);
-            letter-spacing: 2.5px;
-            text-transform: uppercase;
-            margin-top: 2px;
+            font-size: 0.625rem; color: var(--sea); letter-spacing: 0.22em;
+            text-transform: uppercase; margin-top: 5px; white-space: nowrap;
         }
 
-        .lang-switch { display: inline-flex; gap: 3px; background: var(--surface); padding: 4px; border-radius: 24px; border: 1px solid var(--faint); }
+        .lang-switch { display: inline-flex; flex-shrink: 0; background: var(--surface); padding: 3px; border-radius: 999px; border: 1px solid var(--line); }
         .lang-btn {
-            background: transparent; border: 1px solid transparent;
-            color: var(--muted);
-            font-size: var(--fs-xs); font-weight: 700;
-            cursor: pointer; width: var(--tap-min); height: var(--tap-min); border-radius: 22px;
-            display: flex; align-items: center; justify-content: center;
-            text-transform: uppercase; transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
+            color: var(--muted); font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.04em;
+            min-width: 36px; height: 36px; border-radius: 999px; padding: 0 6px;
+            transition: color .2s, background .2s;
         }
-        .lang-btn:hover:not(.active) { color: var(--text); }
-        .lang-btn.active { background: var(--gold-dim); color: var(--gold); border-color: var(--gold-line); }
+        .lang-btn:hover:not([aria-pressed="true"]) { color: var(--text); }
+        .lang-btn[aria-pressed="true"] { background: var(--gold-dim); color: var(--gold-light); box-shadow: inset 0 0 0 1px var(--gold-line); }
 
-        /* ─── NAV TABS ─── */
-        .main-nav { display: flex; gap: 8px; }
+        /* Сегментированный переключатель разделов */
+        .main-nav {
+            position: relative; display: grid; grid-template-columns: 1fr 1fr;
+            background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 4px;
+        }
+        .nav-indicator {
+            position: absolute; top: 4px; bottom: 4px; left: 4px; width: calc(50% - 4px);
+            border-radius: 10px; background: var(--gold-dim); box-shadow: inset 0 0 0 1px var(--gold-line);
+            transition: transform .35s var(--ease);
+        }
+        .main-nav[data-active="oysters"] .nav-indicator { transform: translateX(100%); }
         .nav-btn {
-            flex: 1; background: var(--surface); border: 1px solid var(--faint);
-            color: var(--muted); font-size: var(--fs-sm); font-weight: 600;
-            padding: 13px 8px; min-height: var(--tap-min); border-radius: var(--radius-sm); cursor: pointer;
-            transition: all 0.25s ease; display: flex; align-items: center;
-            justify-content: center; gap: 7px; letter-spacing: 0.02em;
+            position: relative; z-index: 1; min-height: 40px;
+            color: var(--muted); font-size: var(--fs-sm); font-weight: 600; letter-spacing: 0.02em;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            border-radius: 10px; transition: color .25s;
         }
-        .nav-btn:hover { border-color: var(--gold-line); color: var(--text); }
-        .nav-btn.active, .nav-btn[aria-current="page"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
-        .nav-icon { font-size: var(--fs-base); display: inline-flex; }
+        .nav-btn:hover { color: var(--text); }
+        .nav-btn[aria-current="page"] { color: var(--gold-light); }
+        .nav-icon { display: inline-flex; }
 
-        /* ─── OYSTER / FOOD TABS ─── */
+        /* ─── TAB BARS ─── */
         .tabs-wrapper {
-            position: sticky;
-            top: var(--header-h, 118px);
-            z-index: 90;
-            background: rgba(6,10,16,0.92);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border-bottom: 1px solid var(--faint);
-            transform: translateZ(0);
+            position: sticky; top: var(--tabs-top, 64px); z-index: 90;
+            background: rgba(7,11,17,0.95);
+            backdrop-filter: saturate(140%) blur(16px);
+            -webkit-backdrop-filter: saturate(140%) blur(16px);
+            border-bottom: 1px solid var(--line);
         }
-        .tabs-wrapper::after {
-            content: ''; position: absolute; right: 0; top: 0; bottom: 1px; width: 44px;
-            background: linear-gradient(90deg, transparent, var(--bg)); pointer-events: none;
+        .tabs-wrapper::before, .tabs-wrapper::after {
+            content: ''; position: absolute; top: 0; bottom: 0; width: 28px; pointer-events: none; z-index: 1;
+            opacity: 0; transition: opacity .2s;
         }
-        .tabs { display: flex; overflow-x: auto; padding: 12px 20px; gap: 8px; scroll-behavior: smooth; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch; }
+        .tabs-wrapper::before { left: 0; background: linear-gradient(270deg, transparent, var(--bg)); }
+        .tabs-wrapper::after  { right: 0; background: linear-gradient(90deg, transparent, var(--bg)); }
+        .tabs-wrapper.fade-l::before, .tabs-wrapper.fade-r::after { opacity: 1; }
+        .tabs {
+            display: flex; overflow-x: auto; gap: 8px; padding: 8px var(--gutter) 10px;
+            scroll-snap-type: x proximity; scrollbar-width: none; -webkit-overflow-scrolling: touch;
+        }
         .tabs::-webkit-scrollbar { display: none; }
         .tab {
-            background: var(--surface); color: var(--muted); border: 1px solid var(--faint);
-            padding: 10px 20px; min-height: var(--tap-min); border-radius: 20px; white-space: nowrap; font-size: var(--fs-sm);
-            font-weight: 600; cursor: pointer; transition: all 0.25s ease; flex-shrink: 0;
-            user-select: none; letter-spacing: 0.02em; scroll-snap-align: center;
+            flex-shrink: 0; white-space: nowrap; scroll-snap-align: center;
+            min-height: 40px; padding: 0 16px; border-radius: 999px;
+            background: var(--surface); color: var(--muted); border: 1px solid var(--line);
+            font-size: var(--fs-sm); font-weight: 600; letter-spacing: 0.01em;
+            display: inline-flex; align-items: center; gap: 7px;
+            transition: color .2s, background .2s, border-color .2s;
         }
-        .tab:hover { border-color: var(--gold-line); color: var(--text); }
-        .tab[aria-selected="true"], .tab[aria-current="true"] { background: var(--gold-dim); color: var(--gold-light); border-color: var(--gold-line); }
+        .tab:hover { color: var(--text); border-color: var(--line-2); }
+        .tab[aria-selected="true"], .tab[aria-current="true"] { background: var(--gold); color: #14100a; border-color: var(--gold); }
+        .tab.unavailable-tab:not([aria-selected="true"]) { opacity: .55; }
+        .tab-count { font-size: 0.6875rem; font-weight: 700; opacity: .6; font-variant-numeric: tabular-nums; }
 
-        /* ─── CARDS ─── */
-        .card { display: none; padding: 0 20px 80px; animation: slideUp 0.4s cubic-bezier(0.22,1,0.36,1) forwards; }
-        .card.active { display: block; }
-        .card .info-block { position: relative; z-index: 1; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        main { position: relative; z-index: 1; }
 
-        .hero { text-align: center; padding: 28px 0 20px; position: relative; z-index: 1; }
-        .badge {
-            display: inline-block; background: linear-gradient(135deg, rgba(212,176,98,0.12), rgba(212,176,98,0.06));
-            color: var(--gold-light); border: 1px solid rgba(212,176,98,0.25);
-            padding: 7px 18px; border-radius: 20px; font-size: var(--fs-xs); font-weight: 700;
-            text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 16px;
-        }
-        .oyster-name {
-            font-family: 'Cormorant Garamond', serif; font-size: var(--fs-xl); font-weight: 600;
-            letter-spacing: 1px; line-height: 1.1; margin-bottom: 16px; color: var(--text);
-        }
+        /* ─── OYSTER CARD ─── */
+        .card { display: none; padding: 0 var(--gutter) 24px; }
+        .card.active { display: block; animation: rise .45s var(--ease) both; }
+        @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+        .hero { text-align: center; padding: 22px 0 18px; }
         .oyster-photo {
-            width: 100%; aspect-ratio: 16 / 10; border-radius: var(--radius);
-            background: linear-gradient(135deg, var(--surface), var(--surface-2));
-            border: 1px solid var(--faint); overflow: hidden; margin-bottom: 18px;
-            display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.75;
+            position: relative; width: 100%; aspect-ratio: 4 / 3; border-radius: var(--radius);
+            overflow: hidden; margin-bottom: 20px; background: var(--surface);
+            box-shadow: 0 20px 50px -20px rgba(0,0,0,0.7);
         }
         .oyster-photo img { width: 100%; height: 100%; object-fit: cover; }
-        .price-tag {
-            display: inline-flex; align-items: baseline; gap: 6px; margin-bottom: 14px;
-            background: var(--gold-dim); padding: 10px 24px; border-radius: 24px; border: 1px solid var(--gold-line);
+        .oyster-photo::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(180deg, rgba(7,11,17,0) 55%, rgba(7,11,17,0.55));
         }
-        .price-amount { font-size: var(--fs-lg); font-weight: 800; color: var(--gold-light); }
-        .price-unit { font-size: var(--fs-sm); color: var(--muted); font-weight: 500; }
-        .terroir { font-size: var(--fs-sm); color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 8px; letter-spacing: 0.02em; }
-        .terroir-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); opacity: 0.5; }
+        .oyster-photo.is-unavailable img { filter: grayscale(.6) brightness(.7); }
+        .photo-badges { position: absolute; left: 12px; right: 12px; top: 12px; display: flex; gap: 8px; flex-wrap: wrap; z-index: 1; }
+        .badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            background: rgba(7,11,17,0.72); color: var(--gold-light);
+            border: 1px solid var(--gold-line);
+            padding: 6px 12px; border-radius: 999px; font-size: 0.6875rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.12em;
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        }
+        .badge.danger { color: var(--danger); border-color: rgba(232,144,127,0.35); }
+        .hero > .badge-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
 
-        .info-block { background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 20px; margin-bottom: 14px; }
+        .oyster-name {
+            font-family: var(--serif); font-size: var(--fs-xl); font-weight: 600;
+            letter-spacing: 0.01em; line-height: 1.02; margin-bottom: 10px; text-wrap: balance;
+        }
+        .terroir { font-size: var(--fs-sm); color: var(--muted); display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 18px; text-wrap: balance; }
+        .terroir-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--sea); }
+        .price-tag { display: inline-flex; align-items: baseline; gap: 8px; }
+        .price-amount, .dish-price, .sheet-price { font-variant-numeric: lining-nums tabular-nums; }
+        .price-amount { font-family: var(--serif); font-size: 2rem; font-weight: 700; color: var(--gold-light); line-height: 1; }
+        .price-cur { font-size: var(--fs-sm); color: var(--gold); font-weight: 700; letter-spacing: 0.08em; }
+        .price-unit { font-size: var(--fs-sm); color: var(--muted); }
+
+        .info-block { background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; margin-bottom: 12px; }
         .block-label {
-            font-size: var(--fs-xs); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
-            color: var(--gold); margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+            font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--gold); margin-bottom: 16px; display: flex; align-items: center; gap: 10px;
         }
         .block-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold-line), transparent); }
 
-        .taste-row { margin-bottom: 18px; }
-        .taste-meta { display: flex; justify-content: space-between; font-size: var(--fs-base); margin-bottom: 8px; }
-        .taste-label { font-weight: 600; color: var(--text-sec); }
-        .taste-score { color: var(--gold-light); font-weight: 700; font-variant-numeric: tabular-nums; }
-        .bar-track { height: 7px; background: rgba(255,255,255,0.04); border-radius: 4px; overflow: hidden; }
-        .bar-fill { height: 100%; background: linear-gradient(90deg, rgba(212,176,98,0.4), var(--gold)); border-radius: 4px; width: 0%; transition: width 0.8s cubic-bezier(0.22,1,0.36,1); }
-        .scale-hint { display: flex; justify-content: space-between; font-size: var(--fs-xs); font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 8px; }
+        /* Вкусовой профиль: шкала из 10 делений */
+        .taste-grid { display: grid; gap: 14px; }
+        .taste-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; }
+        .taste-label { font-size: var(--fs-sm); font-weight: 600; color: var(--text-sec); }
+        .taste-score { font-size: var(--fs-sm); color: var(--gold-light); font-weight: 700; font-variant-numeric: tabular-nums; }
+        .taste-score small { color: var(--muted); font-weight: 500; }
+        .meter { display: grid; grid-template-columns: repeat(10, 1fr); gap: 3px; }
+        .meter i { height: 6px; border-radius: 2px; background: rgba(255,255,255,0.06); transition: background .4s var(--ease); }
+        .card.active .meter i.on { background: linear-gradient(90deg, rgba(212,176,98,0.65), var(--gold)); }
+        .card.active .meter i.on:nth-child(1) { transition-delay: .05s } .card.active .meter i.on:nth-child(2) { transition-delay: .08s }
+        .card.active .meter i.on:nth-child(3) { transition-delay: .11s } .card.active .meter i.on:nth-child(4) { transition-delay: .14s }
+        .card.active .meter i.on:nth-child(5) { transition-delay: .17s } .card.active .meter i.on:nth-child(6) { transition-delay: .20s }
+        .card.active .meter i.on:nth-child(7) { transition-delay: .23s } .card.active .meter i.on:nth-child(8) { transition-delay: .26s }
+        .card.active .meter i.on:nth-child(9) { transition-delay: .29s } .card.active .meter i.on:nth-child(10){ transition-delay: .32s }
+        .card:not(.bars-ready) .meter i.on { background: rgba(255,255,255,0.06); }
+        .scale-hint { display: flex; justify-content: space-between; font-size: 0.6875rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 14px; }
 
-        .desc { font-size: var(--fs-md); line-height: 1.75; color: var(--body-text); margin-bottom: 18px; font-weight: 400; letter-spacing: 0.01em; padding: 6px 0; }
-        .desc strong { color: var(--text); font-weight: 700; }
+        .desc { font-size: var(--fs-md); line-height: 1.75; color: var(--body-text); margin: 22px 4px 24px; }
+        .desc strong, .origin-text strong, .fact-text strong { color: var(--text); font-weight: 600; }
+        .desc::first-letter { font-family: var(--serif); font-size: 3.1em; float: left; line-height: .9; margin: 4px 8px 0 0; color: var(--gold-light); font-weight: 600; }
 
-        .origin-map-line { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--faint); }
-        .origin-flag { font-size: 28px; flex-shrink: 0; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--surface-2); border-radius: 12px; }
-        .origin-place { font-size: var(--fs-base); font-weight: 700; color: var(--text); line-height: 1.3; }
-        .origin-region { font-size: var(--fs-sm); color: var(--muted); margin-top: 3px; letter-spacing: 0.02em; }
-        .origin-text { font-size: var(--fs-base); line-height: 1.75; color: var(--body-text); font-weight: 400; }
-        .origin-text strong { color: var(--text); font-weight: 600; }
+        .origin-map-line { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+        .origin-flag { font-size: 26px; flex-shrink: 0; width: 46px; height: 46px; display: grid; place-items: center; background: var(--surface-2); border-radius: 12px; }
+        .origin-place { font-size: var(--fs-base); font-weight: 700; line-height: 1.3; }
+        .origin-region { font-size: var(--fs-sm); color: var(--muted); margin-top: 2px; }
+        .origin-text { font-size: var(--fs-base); line-height: 1.75; color: var(--body-text); }
 
-        .facts-list { display: flex; flex-direction: column; gap: 10px; }
-        .fact-item { display: flex; gap: 12px; align-items: flex-start; background: var(--surface-2); border: 1px solid rgba(255,255,255,0.03); border-radius: var(--radius-xs); padding: 14px 16px; }
-        .fact-num { width: 26px; height: 26px; border-radius: 50%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-light); font-size: var(--fs-xs); font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 2px; }
+        .facts-list { display: flex; flex-direction: column; gap: 14px; counter-reset: fact; }
+        .fact-item { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; }
+        .fact-num { font-family: var(--serif); font-size: 1.5rem; font-weight: 600; color: var(--gold); line-height: 1.1; font-variant-numeric: lining-nums; }
         .fact-text { font-size: var(--fs-base); line-height: 1.65; color: var(--body-text); }
-        .fact-text strong { color: var(--text); font-weight: 600; }
+        .fact-item + .fact-item { padding-top: 14px; border-top: 1px solid var(--line); }
 
-        /* ─── НЕТ В НАЛИЧИИ ─── */
-        .unavailable-strip {
-            background: rgba(224,132,122,0.12); color: var(--danger);
-            border: 1px solid rgba(224,132,122,0.28);
-            font-size: var(--fs-xs); font-weight: 700; text-transform: uppercase;
-            letter-spacing: 0.08em; text-align: center; padding: 7px 10px;
-            border-radius: 10px; margin-bottom: 12px;
+        .oyster-pager { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+        .pager-btn {
+            display: flex; flex-direction: column; gap: 2px; text-align: left;
+            padding: 12px 14px; min-height: 60px; border-radius: var(--radius-sm);
+            background: var(--surface); border: 1px solid var(--line); transition: border-color .2s;
         }
-        .tab.unavailable-tab { opacity: 0.5; }
-        .oyster-photo.is-unavailable { opacity: 0.45; filter: grayscale(0.5); }
-        .dish-card.is-unavailable { opacity: 0.55; }
-        .dish-card.is-unavailable .dish-thumb img { filter: grayscale(0.6); }
+        .pager-btn.next { text-align: right; align-items: flex-end; }
+        .pager-btn:hover { border-color: var(--gold-line); }
+        .pager-dir { font-size: 0.6875rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; font-weight: 700; }
+        .pager-name { font-weight: 600; font-size: var(--fs-sm); color: var(--text); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
 
         /* ─── FOOD MENU ─── */
-        .section-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-lg); font-weight: 600; padding: 24px 20px 12px; color: var(--text); letter-spacing: 0.5px; }
-        .section-subtitle { font-size: var(--fs-sm); color: var(--muted); padding: 0 20px 14px; margin-top: -8px; line-height: 1.5; }
-        .dish-grid { padding: 0 20px; display: flex; flex-direction: column; gap: 12px; }
-        #food-cards-container { padding-bottom: 80px; }
-        .dish-card { background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 18px; transition: border-color 0.25s ease; cursor: pointer; }
-        .dish-card:hover { border-color: var(--gold-line); }
-        .dish-card-inner { display: flex; gap: 16px; align-items: flex-start; }
-        .dish-thumb { width: 108px; height: 108px; flex-shrink: 0; position: relative; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.7; cursor: pointer; }
-        .dish-badge {
-            position: absolute; top: -6px; left: -6px; z-index: 1;
-            background: var(--gold); color: #0c0f14; font-size: 0.625rem; font-weight: 800;
-            text-transform: uppercase; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.35); pointer-events: none; white-space: nowrap;
+        .food-category-section { padding-top: 6px; scroll-margin-top: 140px; }
+        .section-head { padding: 26px var(--gutter) 14px; }
+        .section-eyebrow { display: flex; align-items: center; gap: 10px; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+        .section-eyebrow::after { content: ''; flex: 1; height: 1px; background: linear-gradient(90deg, var(--gold-line), transparent); }
+        .section-title { font-family: var(--serif); font-size: 2rem; font-weight: 600; line-height: 1.05; letter-spacing: 0.005em; }
+        .section-subtitle { font-size: var(--fs-sm); color: var(--muted); margin-top: 6px; line-height: 1.55; max-width: 52ch; }
+
+        .dish-grid { padding: 0 var(--gutter); display: grid; gap: 10px; }
+        .dish-card {
+            position: relative; display: flex; gap: 14px; align-items: flex-start; width: 100%; text-align: left;
+            background: var(--bg-card); border: 1px solid var(--line); border-radius: var(--radius);
+            padding: 12px; transition: border-color .2s, transform .2s var(--ease), background .2s;
         }
+        .dish-card:hover { border-color: var(--gold-line); background: #0f161f; }
+        .dish-card:active { transform: scale(0.99); }
+        .dish-card.animate-in { animation: rise .45s var(--ease) both; }
+        .dish-thumb {
+            width: 96px; height: 96px; flex-shrink: 0; position: relative; overflow: hidden;
+            border-radius: var(--radius-sm); background: radial-gradient(120% 120% at 30% 20%, var(--surface-2), var(--surface));
+            display: grid; place-items: center; color: rgba(212,176,98,0.45);
+        }
+        .dish-thumb img { width: 100%; height: 100%; object-fit: cover; }
         .dish-thumb svg { width: 30px; height: 30px; }
-        .dish-thumb:hover, .dish-thumb:active { border-color: var(--gold); opacity: 0.95; }
-        .dish-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
-        .dish-content { flex: 1; min-width: 0; }
-        .dish-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 8px; }
-        .dish-name { font-size: var(--fs-base); font-weight: 700; color: var(--text); line-height: 1.35; flex: 1; min-width: 0; }
-        .dish-price-chip { font-size: var(--fs-xs); font-weight: 700; padding: 5px 12px; border-radius: 8px; text-transform: uppercase; letter-spacing: 0.06em; flex-shrink: 0; margin-left: 8px; background: rgba(255,235,160,0.10); color: var(--gold-light); white-space: nowrap; }
-        .dish-weight { font-size: var(--fs-sm); color: var(--muted); margin-bottom: 10px; letter-spacing: 0.02em; }
-        .dish-desc { font-size: var(--fs-sm); color: var(--body-text); line-height: 1.65; font-weight: 400; }
+        .dish-badge {
+            position: absolute; left: 6px; top: 6px; z-index: 1;
+            background: var(--gold); color: #14100a; font-size: 0.625rem; font-weight: 800;
+            text-transform: uppercase; letter-spacing: 0.05em; padding: 3px 7px; border-radius: 6px;
+            max-width: calc(100% - 12px); overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+        }
+        .dish-content { flex: 1; min-width: 0; padding: 2px 2px 0 0; }
+        .dish-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+        .dish-name { font-size: var(--fs-base); font-weight: 600; line-height: 1.3; text-wrap: pretty; }
+        .dish-price { font-family: var(--serif); font-size: 1.25rem; font-weight: 700; color: var(--gold-light); line-height: 1.1; white-space: nowrap; flex-shrink: 0; }
+        .dish-price small { font-family: var(--sans); font-size: 0.625rem; font-weight: 700; color: var(--gold); letter-spacing: 0.08em; margin-left: 3px; }
+        .dish-meta { display: flex; gap: 8px; align-items: center; margin-top: 4px; font-size: var(--fs-xs); color: var(--muted); }
+        .dish-meta .pill { padding: 2px 8px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); }
+        .dish-meta .pill.danger { color: var(--danger); border-color: rgba(232,144,127,0.3); background: rgba(232,144,127,0.08); }
+        .dish-desc {
+            margin-top: 6px; font-size: var(--fs-sm); color: var(--body-text); line-height: 1.55;
+            display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+        }
+        .dish-card.is-unavailable .dish-thumb img { filter: grayscale(.7) brightness(.7); }
+        .dish-card.is-unavailable .dish-name, .dish-card.is-unavailable .dish-price { opacity: .55; }
 
-        /* photo lightbox */
-        .photo-lightbox { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(6,10,16,0.94); z-index: 300; display: none; justify-content: center; align-items: center; backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); padding: 20px; }
-        .photo-lightbox.active { display: flex; }
-        .photo-lightbox-panel { width: 100%; max-width: 400px; background: var(--bg-card); border: 1px solid var(--faint); border-radius: var(--radius); padding: 20px; position: relative; animation: slideUp 0.3s cubic-bezier(0.22,1,0.36,1) forwards; }
-        .photo-lightbox-close { position: absolute; top: 16px; right: 16px; background: var(--surface); border: 1px solid var(--faint); color: var(--muted); width: var(--tap-min); height: var(--tap-min); border-radius: var(--radius-xs); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; transition: all 0.2s ease; z-index: 2; }
-        .photo-lightbox-close:hover { border-color: var(--gold-line); color: var(--text); }
-        .photo-lightbox-image { width: 100%; aspect-ratio: 1 / 1; border-radius: var(--radius-sm); background: linear-gradient(135deg, var(--surface), var(--surface-2)); border: 1px dashed var(--gold-line); display: flex; align-items: center; justify-content: center; color: var(--gold); opacity: 0.75; margin-bottom: 18px; overflow: hidden; }
-        .photo-lightbox-image svg { width: 88px; height: 88px; }
-        .photo-lightbox-image img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--radius-sm); }
-        .photo-lightbox-name { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-lg); font-weight: 600; color: var(--text); text-align: center; margin-bottom: 6px; }
-        .photo-lightbox-price { font-size: var(--fs-md); color: var(--gold-light); font-weight: 800; text-align: center; margin-bottom: 12px; }
-        .photo-lightbox-desc { font-size: var(--fs-sm); color: var(--body-text); line-height: 1.65; text-align: center; }
+        /* ─── DISH SHEET ─── */
+        .sheet-backdrop {
+            position: fixed; inset: 0; z-index: 300; display: none; align-items: flex-end; justify-content: center;
+            background: rgba(4,7,11,0.72); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+        }
+        .sheet-backdrop.active { display: flex; animation: fade .25s ease both; }
+        @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+        .sheet {
+            position: relative; width: 100%; max-width: var(--shell-w); max-height: 92dvh; overflow-y: auto;
+            background: var(--bg-card); border: 1px solid var(--line); border-bottom: 0;
+            border-radius: 24px 24px 0 0; padding-bottom: calc(22px + env(safe-area-inset-bottom));
+            animation: sheetUp .38s var(--ease) both; overscroll-behavior: contain;
+        }
+        @keyframes sheetUp { from { transform: translateY(40px); opacity: .4; } to { transform: none; opacity: 1; } }
+        .sheet-media { position: relative; aspect-ratio: 4 / 3; background: radial-gradient(120% 120% at 30% 20%, var(--surface-2), var(--surface)); display: grid; place-items: center; color: rgba(212,176,98,0.4); }
+        .sheet-media img { width: 100%; height: 100%; object-fit: cover; }
+        .sheet-media svg { width: 72px; height: 72px; }
+        .sheet-media::after { content: ''; position: absolute; inset: auto 0 0 0; height: 40%; background: linear-gradient(180deg, transparent, var(--bg-card)); pointer-events: none; }
+        .sheet-grabber { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 40px; height: 4px; border-radius: 2px; background: rgba(255,255,255,0.35); z-index: 2; }
+        .sheet-close {
+            position: absolute; top: 14px; right: 14px; z-index: 3;
+            width: var(--tap-min); height: var(--tap-min); border-radius: 50%;
+            display: grid; place-items: center; color: var(--text);
+            background: rgba(7,11,17,0.7); border: 1px solid var(--line-2);
+            backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+        }
+        .sheet-close:hover { border-color: var(--gold-line); }
+        .sheet-content { padding: 4px 22px 0; position: relative; }
+        .sheet-badges { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+        .sheet-name { font-family: var(--serif); font-size: 2rem; font-weight: 600; line-height: 1.05; margin-bottom: 10px; text-wrap: balance; }
+        .sheet-price-row { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid var(--line); }
+        .sheet-price { font-family: var(--serif); font-size: 1.75rem; font-weight: 700; color: var(--gold-light); line-height: 1; }
+        .sheet-price small { font-family: var(--sans); font-size: var(--fs-xs); color: var(--gold); font-weight: 700; letter-spacing: .08em; margin-left: 4px; }
+        .sheet-weight { font-size: var(--fs-sm); color: var(--muted); }
+        .sheet-desc { font-size: var(--fs-base); color: var(--body-text); line-height: 1.7; }
 
-        /* ─── SKELETON LOADING STATE ─── */
-        .skeleton { background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 37%, var(--surface) 63%); background-size: 400px 100%; animation: shimmer 1.4s ease infinite; border-radius: var(--radius-sm); }
-        @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
-        .skeleton-wrap { padding: 0 20px; }
+        /* ─── STATES ─── */
+        .skeleton { background: linear-gradient(90deg, var(--surface) 25%, var(--surface-2) 37%, var(--surface) 63%); background-size: 400% 100%; animation: shimmer 1.4s ease infinite; border-radius: var(--radius-sm); }
+        @keyframes shimmer { 0% { background-position: 100% 0; } 100% { background-position: 0 0; } }
+        .skeleton-wrap { padding: 20px var(--gutter); display: grid; gap: 10px; }
+        .skel-row { display: flex; gap: 14px; padding: 12px; border-radius: var(--radius); border: 1px solid var(--line); background: var(--bg-card); }
+        .skel-row .skeleton:first-child { width: 96px; height: 96px; flex-shrink: 0; }
+        .skel-lines { flex: 1; display: grid; gap: 8px; align-content: start; padding-top: 4px; }
+        .skel-lines .skeleton { height: 12px; border-radius: 6px; }
 
-        /* ─── ERROR / EMPTY STATES ─── */
         .state-block { text-align: center; padding: 64px 28px; }
-        .state-icon { color: var(--gold); opacity: 0.6; margin-bottom: 16px; display: flex; justify-content: center; }
-        .state-title { font-family: 'Cormorant Garamond', serif; font-size: var(--fs-md); font-weight: 600; color: var(--text); margin-bottom: 8px; }
+        .state-icon { color: var(--gold); opacity: .6; margin-bottom: 16px; display: flex; justify-content: center; }
+        .state-title { font-family: var(--serif); font-size: 1.5rem; font-weight: 600; margin-bottom: 8px; }
         .state-text { font-size: var(--fs-sm); color: var(--muted); line-height: 1.6; margin-bottom: 22px; }
-        .action-btn { width: 100%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-light); font-size: var(--fs-sm); font-weight: 700; padding: 14px; min-height: var(--tap-min); border-radius: var(--radius-sm); cursor: pointer; transition: all 0.2s ease; text-transform: uppercase; letter-spacing: 0.08em; }
-        .action-btn:hover { background: var(--gold-line); color: var(--text); }
-        .state-block .action-btn { max-width: 220px; margin: 0 auto; }
+        .action-btn {
+            display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+            min-width: 180px; min-height: var(--tap-min); padding: 0 22px; border-radius: 999px;
+            background: var(--gold); color: #14100a; font-size: var(--fs-sm); font-weight: 700; letter-spacing: 0.04em;
+            transition: background .2s;
+        }
+        .action-btn:hover { background: var(--gold-light); }
+
+        /* ─── FOOTER ─── */
+        .site-footer { position: relative; z-index: 1; padding: 36px var(--gutter) calc(48px + env(safe-area-inset-bottom)); text-align: center; color: var(--muted); font-size: var(--fs-xs); }
+        .footer-mark { color: var(--gold); opacity: .7; display: flex; justify-content: center; margin-bottom: 10px; }
+        .footer-brand { font-family: var(--serif); font-size: 1.25rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-sec); margin-bottom: 4px; }
+        .footer-note { margin-top: 10px; line-height: 1.6; }
+
+        /* ─── BACK TO TOP ─── */
+        .to-top {
+            position: fixed; z-index: 120; bottom: calc(18px + env(safe-area-inset-bottom));
+            right: max(16px, calc((100vw - var(--shell-w)) / 2 + 16px));
+            width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center;
+            background: rgba(18,26,36,0.9); color: var(--gold-light); border: 1px solid var(--gold-line);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.45);
+            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+            opacity: 0; transform: translateY(12px) scale(.9); pointer-events: none;
+            transition: opacity .25s, transform .3s var(--ease);
+        }
+        .to-top.show { opacity: 1; transform: none; pointer-events: auto; }
 
         /* ─── RESPONSIVE ─── */
+        @media (max-width: 374px) {
+            .brand-mark { display: none; }
+        }
         @media (min-width: 481px) {
             body { padding: 20px 0; }
-            /* ИСПРАВЛЕНО: было overflow: hidden — он превращает .shell в
-               scroll-контейнер и ломает position: sticky у шапки и табов.
-               overflow: clip так же скругляет углы, но sticky не трогает. */
-            .shell { border-radius: 28px; border: 1px solid var(--faint); overflow: clip; box-shadow: 0 20px 80px rgba(0,0,0,0.4); }
-            header { border-radius: 28px 28px 0 0; }
+            .shell { border-radius: 28px; border: 1px solid var(--line); overflow: clip; box-shadow: 0 30px 100px rgba(0,0,0,0.5); }
+            .sheet-backdrop { align-items: center; padding: 24px; }
+            .sheet { max-width: 460px; border-radius: 24px; border-bottom: 1px solid var(--line); padding-bottom: 24px; }
+            .sheet-grabber { display: none; }
         }
-
         @media (min-width: 700px) {
-            :root { --shell-w: 720px; }
+            :root { --shell-w: 760px; --gutter: 24px; }
             .tabs { flex-wrap: wrap; overflow-x: visible; scroll-snap-type: none; }
-            .tabs-wrapper::after { display: none; }
-            .card { max-width: 620px; margin: 0 auto; }
-            .dish-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); align-items: start; }
+            .tabs-wrapper::before, .tabs-wrapper::after { display: none; }
+            .card { max-width: 640px; margin: 0 auto; }
+            .taste-grid { grid-template-columns: 1fr 1fr; column-gap: 24px; }
+            .dish-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .dish-thumb { width: 104px; height: 104px; }
+            .section-title { font-size: 2.25rem; }
         }
-
         @media (min-width: 1040px) {
-            :root { --shell-w: 960px; }
+            :root { --shell-w: 980px; }
+            .dish-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
         }
 
-        ::-webkit-scrollbar { width: 0; height: 0; }
-
-        @keyframes slideUpFood { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-        .dish-card.animate-in { animation: slideUpFood 0.4s cubic-bezier(0.22, 1, 0.36, 1) both; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0s !important; scroll-behavior: auto !important; }
+        }
     </style>
 </head>
 <body>
 <a class="skip-link" href="#main-content" data-t="skip_link">Перейти к содержимому</a>
+<div class="glow" aria-hidden="true"></div>
 <div class="shell">
 
-    <header>
+    <header id="siteHeader">
         <div class="header-top">
-            <div class="brand">
-                <h1>Oyster's LAB</h1>
-                <p>from the seabed</p>
-            </div>
-            <div class="lang-switch" role="group" aria-label="Язык / Language">
-                <button class="lang-btn active" data-lang="ru" aria-pressed="true">RU</button>
-                <button class="lang-btn" data-lang="ro" aria-pressed="false">RO</button>
-                <button class="lang-btn" data-lang="en" aria-pressed="false">EN</button>
+            <a class="brand" href="#" id="brandLink" aria-label="Oyster's LAB">
+                <span class="brand-mark" id="brandMark" aria-hidden="true"></span>
+                <span class="brand-text">
+                    <h1>Oyster's LAB</h1>
+                    <p>from the seabed</p>
+                </span>
+            </a>
+            <div class="lang-switch" role="group" aria-label="Язык / Limba / Language">
+                <button class="lang-btn" data-lang="ru" aria-pressed="true" lang="ru">RU</button>
+                <button class="lang-btn" data-lang="ro" aria-pressed="false" lang="ro">RO</button>
+                <button class="lang-btn" data-lang="en" aria-pressed="false" lang="en">EN</button>
             </div>
         </div>
-        <nav class="main-nav" aria-label="Разделы">
-            <button class="nav-btn" data-section="oysters"><span class="nav-icon" id="navIconOysters" aria-hidden="true"></span> <span data-t="nav_oysters">Устрицы</span></button>
-            <button class="nav-btn active" data-section="food" aria-current="page"><span class="nav-icon" id="navIconFood" aria-hidden="true"></span> <span data-t="nav_food">Меню</span></button>
+        <nav class="main-nav" id="mainNav" data-active="food" aria-label="Разделы" data-t-aria="sections">
+            <span class="nav-indicator" aria-hidden="true"></span>
+            <button class="nav-btn" data-section="food" aria-current="page"><span class="nav-icon" id="navIconFood" aria-hidden="true"></span><span data-t="nav_food">Меню</span></button>
+            <button class="nav-btn" data-section="oysters"><span class="nav-icon" id="navIconOysters" aria-hidden="true"></span><span data-t="nav_oysters">Устрицы</span></button>
         </nav>
     </header>
 
-    <main id="main-content">
-        <div id="section-oysters" style="display:none;">
-            <div class="tabs-wrapper">
-                <div class="tabs" id="tabs" role="tablist" aria-label="Список устриц"></div>
-            </div>
-            <div id="cards-container"></div>
-        </div>
-
+    <main id="main-content" tabindex="-1">
         <div id="section-food">
             <div class="tabs-wrapper">
                 <div class="tabs" id="food-tabs" role="group" aria-label="Категории меню"></div>
             </div>
             <div id="food-cards-container"></div>
         </div>
+
+        <div id="section-oysters" hidden>
+            <div class="tabs-wrapper">
+                <div class="tabs" id="tabs" role="tablist" aria-label="Устрицы"></div>
+            </div>
+            <div id="cards-container"></div>
+        </div>
     </main>
 
+    <footer class="site-footer">
+        <div class="footer-mark" id="footerMark" aria-hidden="true"></div>
+        <div class="footer-brand">Oyster's LAB</div>
+        <div>from the seabed</div>
+        <p class="footer-note" data-t="prices_note">Цены указаны в молдавских леях (MDL).</p>
+    </footer>
 </div>
 
-<div class="photo-lightbox" id="photoLightbox" role="dialog" aria-modal="true" aria-labelledby="photoLightboxName">
-    <div class="photo-lightbox-panel">
-        <button class="photo-lightbox-close" id="photoLightboxClose" aria-label="Закрыть"></button>
-        <div class="photo-lightbox-image" id="photoLightboxImage"></div>
-        <div class="photo-lightbox-name" id="photoLightboxName"></div>
-        <div class="photo-lightbox-price" id="photoLightboxPrice"></div>
-        <div class="photo-lightbox-desc" id="photoLightboxDesc"></div>
+<button class="to-top" id="toTop" type="button" aria-label="Наверх" data-t-aria="back_top"></button>
+
+<div class="sheet-backdrop" id="dishSheet" role="dialog" aria-modal="true" aria-labelledby="sheetName" hidden>
+    <div class="sheet" role="document">
+        <span class="sheet-grabber" aria-hidden="true"></span>
+        <button class="sheet-close" id="sheetClose" type="button" aria-label="Закрыть" data-t-aria="close"></button>
+        <div class="sheet-media" id="sheetMedia"></div>
+        <div class="sheet-content">
+            <div class="sheet-badges" id="sheetBadges"></div>
+            <h2 class="sheet-name" id="sheetName"></h2>
+            <div class="sheet-price-row">
+                <span class="sheet-price" id="sheetPrice"></span>
+                <span class="sheet-weight" id="sheetWeight"></span>
+            </div>
+            <p class="sheet-desc" id="sheetDesc"></p>
+        </div>
     </div>
 </div>
 
 <script>
+'use strict';
 // ==================== UI TEXTS ====================
 const UI = {
     ru: {
-        taste: 'Вкусовой профиль', origin: 'Происхождение',
-        facts: 'Интересные факты', low: '− слабо', high: 'интенсивно +', unit: '/ шт.',
+        taste: 'Вкусовой профиль', origin: 'Происхождение', facts: 'Интересные факты',
+        low: '− мягко', high: 'интенсивно +', unit: 'за шт.', of10: 'из 10',
         sal: 'Солёность', iod: 'Йодистость', sw: 'Сладость', meat: 'Мясистость',
-        nav_oysters: 'Устрицы', nav_food: 'Меню',
+        nav_oysters: 'Устрицы', nav_food: 'Меню', sections: 'Разделы',
+        menu_categories: 'Категории меню', oysters_list: 'Устрицы',
         skip_link: 'Перейти к содержимому',
         loading: 'Загружаем меню…',
-        error_title: 'Не удалось загрузить данные',
+        error_title: 'Не удалось загрузить меню',
         error_text: 'Проверьте соединение с интернетом и попробуйте ещё раз.',
         retry: 'Повторить',
         empty_category_title: 'Пока пусто',
         empty_category_text: 'В этой категории скоро появятся блюда.',
-        view_photo: 'Смотреть фото',
-        unavailable: 'Временно недоступно',
+        view_dish: 'Подробнее',
+        unavailable: 'Нет в наличии',
+        prev: 'Назад', next: 'Далее', back_top: 'Наверх', close: 'Закрыть',
+        prices_note: 'Цены указаны в молдавских леях (MDL).',
+        title: 'Oyster\'s LAB — Гастрономический гид',
     },
     ro: {
-        taste: 'Profil Gustativ', origin: 'Origine',
-        facts: 'Fapte Interesante', low: '− slab', high: 'intens +', unit: '/ buc.',
+        taste: 'Profil gustativ', origin: 'Origine', facts: 'Fapte interesante',
+        low: '− fin', high: 'intens +', unit: 'per buc.', of10: 'din 10',
         sal: 'Salinitate', iod: 'Iod', sw: 'Dulceață', meat: 'Cărnozitate',
-        nav_oysters: 'Stridii', nav_food: 'Meniu',
+        nav_oysters: 'Stridii', nav_food: 'Meniu', sections: 'Secțiuni',
+        menu_categories: 'Categorii meniu', oysters_list: 'Stridii',
         skip_link: 'Sari la conținut',
         loading: 'Se încarcă meniul…',
-        error_title: 'Datele nu au putut fi încărcate',
+        error_title: 'Meniul nu a putut fi încărcat',
         error_text: 'Verificați conexiunea la internet și încercați din nou.',
         retry: 'Reîncearcă',
         empty_category_title: 'Momentan gol',
         empty_category_text: 'Preparatele din această categorie vor apărea în curând.',
-        view_photo: 'Vezi foto',
-        unavailable: 'Temporar indisponibil',
+        view_dish: 'Detalii',
+        unavailable: 'Indisponibil',
+        prev: 'Înapoi', next: 'Înainte', back_top: 'Sus', close: 'Închide',
+        prices_note: 'Prețurile sunt indicate în lei moldovenești (MDL).',
+        title: 'Oyster\'s LAB — Ghid gastronomic',
     },
     en: {
-        taste: 'Taste Profile', origin: 'Origin',
-        facts: 'Interesting Facts', low: '− mild', high: 'intense +', unit: '/ pc.',
+        taste: 'Taste profile', origin: 'Origin', facts: 'Interesting facts',
+        low: '− mild', high: 'intense +', unit: 'per pc.', of10: 'of 10',
         sal: 'Salinity', iod: 'Iodine', sw: 'Sweetness', meat: 'Meatiness',
-        nav_oysters: 'Oysters', nav_food: 'Menu',
+        nav_oysters: 'Oysters', nav_food: 'Menu', sections: 'Sections',
+        menu_categories: 'Menu categories', oysters_list: 'Oysters',
         skip_link: 'Skip to content',
         loading: 'Loading the menu…',
         error_title: 'Couldn\'t load the menu',
@@ -439,293 +558,401 @@ const UI = {
         retry: 'Retry',
         empty_category_title: 'Nothing here yet',
         empty_category_text: 'Dishes in this category are coming soon.',
-        view_photo: 'View photo',
-        unavailable: 'Temporarily unavailable',
+        view_dish: 'Details',
+        unavailable: 'Unavailable',
+        prev: 'Previous', next: 'Next', back_top: 'Back to top', close: 'Close',
+        prices_note: 'Prices are in Moldovan lei (MDL).',
+        title: 'Oyster\'s LAB — Gastronomic Guide',
     }
 };
+const LANGS = ['ru', 'ro', 'en'];
 
 // ==================== ICONS ====================
 const ICONS = {
-    oyster: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M8 14c0-2.2 1.8-4 4-4s4 1.8 4 4"/><path d="M10 10c0-1.1.9-2 2-2s2 .9 2 2"/></svg>',
-    menu: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>',
-    close: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
-    plate: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4.5"/><path d="M3 9h18M3 15h18"/></svg>',
+    logo: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5C7.6 3.5 4 6.8 4 11.2c0 4 3 7.6 8 9.3 5-1.7 8-5.3 8-9.3 0-4.4-3.6-7.7-8-7.7z"/><path d="M7.5 12.5c1.3-2 2.9-3 4.5-3s3.2 1 4.5 3"/><circle cx="12" cy="13.6" r="1.6" fill="currentColor" stroke="none"/></svg>',
+    oyster: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5C7.6 3.5 4 6.8 4 11.2c0 4 3 7.6 8 9.3 5-1.7 8-5.3 8-9.3 0-4.4-3.6-7.7-8-7.7z"/><path d="M7.5 12.5c1.3-2 2.9-3 4.5-3s3.2 1 4.5 3"/></svg>',
+    menu: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M5 16a7 7 0 0114 0z"/><path d="M12 6v3"/><circle cx="12" cy="5" r="1"/></svg>',
+    close: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>',
+    up: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>',
+    plate: '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/></svg>',
     warning: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>',
-    tray: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7"/><path d="M9 3h6l1 5H8l1-5z"/></svg>'
+    tray: '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19h16"/><path d="M5 16a7 7 0 0114 0z"/><path d="M12 6v3"/></svg>',
+    refresh: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>'
 };
 
-// ==================== ГЛОБАЛЬНЫЕ ПЕРЕМЕННЫЕ ====================
-let currentLang = 'ru';
+// ==================== STATE ====================
+const SUPABASE_URL = 'https://lgtgzazoqzenedgzbzmf.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxndGd6YXpvcXplbmVkZ3piem1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTYyMjksImV4cCI6MjEwNDI3MjIyOX0.9eH14E5PbaM2PTkW9o7m2f9pCzFYdVF0NXVxZ-X57AQ';
+const CACHE_KEY = 'ol_menu_cache_v1';
+const LANG_KEY = 'ol_lang';
+
+let currentLang = detectLang();
 let currentSection = 'food';
+let currentOysterId = null;
 let currentFoodCategory = null;
 let isProgrammaticFoodScroll = false;
 let programmaticFoodScrollTimeout = null;
-let foodScrollSpyAttached = false;
-let foodScrollTicking = false;
+let scrollTicking = false;
 let lastFocusedEl = null;
+let lastDataSignature = '';
 
 let OYSTERS = [];
 let FOOD_CATEGORIES = [];
 
-const SUPABASE_URL = 'https://lgtgzazoqzenedgzbzmf.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxndGd6YXpvcXplbmVkZ3piem1mIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg2OTYyMjksImV4cCI6MjEwNDI3MjIyOX0.9eH14E5PbaM2PTkW9o7m2f9pCzFYdVF0NXVxZ-X57AQ';
+// ==================== HELPERS ====================
+const $ = id => document.getElementById(id);
 
+function storageGet(key) { try { return localStorage.getItem(key); } catch { return null; } }
+function storageSet(key, val) { try { localStorage.setItem(key, val); } catch { /* приватный режим */ } }
+
+function detectLang() {
+    const saved = storageGet(LANG_KEY);
+    if (LANGS.includes(saved)) return saved;
+    const nav = (navigator.languages || [navigator.language || '']).map(l => String(l).slice(0, 2).toLowerCase());
+    for (const l of nav) { if (LANGS.includes(l)) return l; }
+    return 'ru';
+}
+
+// Всё, что приходит из базы, экранируем перед вставкой в HTML.
+function esc(str) {
+    if (str === null || str === undefined) return '';
+    return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+// Для длинных текстов разрешаем только безопасное форматирование: <strong>, <b>, <em>, <i>, <br>.
+function rich(str) {
+    return esc(str).replace(/&lt;(\/?)(strong|b|em|i|br)\s*\/?&gt;/gi, (m, slash, tag) => `<${slash}${tag.toLowerCase()}>`);
+}
+function safeUrl(url) {
+    if (!url || typeof url !== 'string') return '';
+    try {
+        const u = new URL(url, location.href);
+        return (u.protocol === 'https:' || u.protocol === 'http:') ? u.href : '';
+    } catch { return ''; }
+}
 function loc(value, lang) {
     if (value == null) return '';
     if (typeof value === 'object') return value[lang] || value.ru || value.en || value.ro || '';
     return value;
 }
-
-function updateHeaderHeightVar() {
-    const header = document.querySelector('header');
-    if (header) document.documentElement.style.setProperty('--header-h', header.offsetHeight + 'px');
+function formatPrice(price) {
+    const n = Number(price);
+    if (!Number.isFinite(n)) return '—';
+    return new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 2 }).format(n).replace(/ /g, ' ');
+}
+function headerVisibleHeight() {
+    const header = $('siteHeader');
+    const collapse = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--header-collapse')) || 0;
+    return header.offsetHeight - collapse;
 }
 
-// ==================== LOADING / ERROR / EMPTY STATES ====================
+// Высоты липкой шапки: какая часть уезжает и где «прилипают» табы.
+function updateStickyMetrics() {
+    const header = $('siteHeader');
+    const nav = $('mainNav');
+    if (!header || !nav) return;
+    const safeTop = parseFloat(getComputedStyle(header).paddingTop) - 14;
+    const collapse = Math.max(0, nav.offsetTop - 10 - Math.max(0, safeTop));
+    const root = document.documentElement.style;
+    root.setProperty('--header-collapse', collapse + 'px');
+    root.setProperty('--tabs-top', (header.offsetHeight - collapse) + 'px');
+}
+
+// ==================== LOADING / ERROR STATES ====================
 function renderSkeleton() {
     const t = UI[currentLang];
-    const skeletonHtml = `
-        <div class="skeleton-wrap" role="status" aria-label="${t.loading}">
-            <div class="skeleton" style="height:26px;width:55%;margin:24px auto 16px;border-radius:16px;"></div>
-            <div class="skeleton" style="height:44px;width:45%;margin:0 auto 24px;border-radius:24px;"></div>
-            <div class="skeleton" style="height:180px;margin-bottom:14px;"></div>
-            <div class="skeleton" style="height:140px;margin-bottom:14px;"></div>
-            <div class="skeleton" style="height:100px;"></div>
-        </div>`;
-    document.getElementById('tabs').innerHTML = '';
-    document.getElementById('cards-container').innerHTML = skeletonHtml;
-    document.getElementById('food-tabs').innerHTML = '';
-    document.getElementById('food-cards-container').innerHTML = skeletonHtml;
+    const row = `<div class="skel-row"><div class="skeleton"></div><div class="skel-lines"><div class="skeleton" style="width:70%"></div><div class="skeleton" style="width:35%"></div><div class="skeleton" style="width:90%"></div><div class="skeleton" style="width:60%"></div></div></div>`;
+    const html = `<div class="skeleton-wrap" role="status" aria-live="polite"><span class="sr-only">${esc(t.loading)}</span>
+        <div class="skeleton" style="height:14px;width:30%;border-radius:6px;margin:6px 0 4px"></div>
+        <div class="skeleton" style="height:30px;width:55%;border-radius:8px;margin-bottom:10px"></div>
+        ${row.repeat(4)}</div>`;
+    $('tabs').innerHTML = '';
+    $('cards-container').innerHTML = html;
+    $('food-tabs').innerHTML = '';
+    $('food-cards-container').innerHTML = html;
 }
 
-function renderErrorState(onRetry) {
+function renderErrorState() {
     const t = UI[currentLang];
-    const errorHtml = `
+    const html = `
         <div class="state-block" role="alert">
             <div class="state-icon">${ICONS.warning}</div>
-            <div class="state-title">${t.error_title}</div>
-            <p class="state-text">${t.error_text}</p>
-            <button class="action-btn retry-btn">${t.retry}</button>
+            <h2 class="state-title">${esc(t.error_title)}</h2>
+            <p class="state-text">${esc(t.error_text)}</p>
+            <button class="action-btn retry-btn" type="button">${ICONS.refresh}<span>${esc(t.retry)}</span></button>
         </div>`;
-    document.getElementById('cards-container').innerHTML = errorHtml;
-    document.getElementById('food-cards-container').innerHTML = errorHtml;
-    document.querySelectorAll('.retry-btn').forEach(btn => btn.addEventListener('click', onRetry));
+    $('cards-container').innerHTML = html;
+    $('food-cards-container').innerHTML = html;
+    document.querySelectorAll('.retry-btn').forEach(btn => btn.addEventListener('click', () => loadData({ force: true })));
 }
 
-// ==================== ЗАГРУЗКА ДАННЫХ ====================
-async function loadData() {
-    renderSkeleton();
-    try {
-        const headers = { 'apikey': SUPABASE_ANON_KEY, 'Authorization': `Bearer ${SUPABASE_ANON_KEY}` };
+function emptyState() {
+    const t = UI[currentLang];
+    return `<div class="state-block">
+        <div class="state-icon">${ICONS.tray}</div>
+        <h2 class="state-title">${esc(t.empty_category_title)}</h2>
+        <p class="state-text">${esc(t.empty_category_text)}</p>
+    </div>`;
+}
 
-        const [oystersRes, catRes, itemsRes] = await Promise.all([
-            fetch(`${SUPABASE_URL}/rest/v1/oysters?select=*`, { headers }),
-            fetch(`${SUPABASE_URL}/rest/v1/food_categories?select=*&order=sort_order.asc`, { headers }),
-            fetch(`${SUPABASE_URL}/rest/v1/food_items?select=*&order=sort_order.asc`, { headers })
-        ]);
-        if (!oystersRes.ok || !catRes.ok || !itemsRes.ok) throw new Error('Ошибка загрузки данных');
-
-        const [oystersRaw, categoriesRaw, itemsRaw] = await Promise.all([
-            oystersRes.json(), catRes.json(), itemsRes.json()
-        ]);
-
-        OYSTERS = oystersRaw.map(o => ({ ...o, desc: o.description }));
-
-        FOOD_CATEGORIES = categoriesRaw.map(cat => ({
-            key: cat.id,
-            label: cat.label,
-            subtitle: cat.subtitle,
-            items: itemsRaw.filter(item => item.category_id === cat.id).map(item => ({ ...item, desc: item.description }))
-        }));
-
-        if (!currentFoodCategory && FOOD_CATEGORIES.length) currentFoodCategory = FOOD_CATEGORIES[0].key;
-
-        renderTabs();
-        renderCards();
-        renderFoodTabs();
-        renderFoodCards();
-        if (currentSection === 'oysters') {
-            handleHash();
-        } else {
-            scrollActiveFoodTabIntoView();
-        }
-
-    } catch (error) {
-        console.error('Не удалось загрузить данные:', error);
-        renderErrorState(loadData);
+// ==================== DATA ====================
+function applyData(oystersRaw, categoriesRaw, itemsRaw) {
+    OYSTERS = (oystersRaw || []).map(o => ({ ...o, desc: o.description }));
+    FOOD_CATEGORIES = (categoriesRaw || []).map(cat => ({
+        key: String(cat.id),
+        label: cat.label,
+        subtitle: cat.subtitle,
+        items: (itemsRaw || [])
+            .filter(item => item.category_id === cat.id)
+            .map(item => ({ ...item, desc: item.description }))
+    }));
+    if (!FOOD_CATEGORIES.some(c => c.key === String(currentFoodCategory))) {
+        currentFoodCategory = FOOD_CATEGORIES.length ? FOOD_CATEGORIES[0].key : null;
     }
 }
 
-// ==================== ФУНКЦИИ РЕНДЕРИНГА ====================
+function renderAll() {
+    renderTabs();
+    renderCards();
+    renderFoodTabs();
+    renderFoodCards();
+    if (currentSection === 'oysters') showOyster(pickOysterId(), { replaceHash: false });
+    else scrollActiveFoodTabIntoView();
+}
+
+async function fetchJson(path, signal) {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+        headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` },
+        signal
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status} for ${path}`);
+    return res.json();
+}
+
+// Стратегия stale-while-revalidate: показываем меню из кэша мгновенно,
+// а свежие данные подтягиваем в фоне и перерисовываем только если что-то изменилось.
+async function loadData({ force = false } = {}) {
+    let hadCache = false;
+    if (!force) {
+        try {
+            const cached = JSON.parse(storageGet(CACHE_KEY) || 'null');
+            if (cached && cached.oysters && cached.categories && cached.items) {
+                applyData(cached.oysters, cached.categories, cached.items);
+                lastDataSignature = cached.sig || '';
+                renderAll();
+                hadCache = true;
+            }
+        } catch { /* битый кэш — игнорируем */ }
+    }
+    if (!hadCache) renderSkeleton();
+
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 15000);
+    try {
+        const [oysters, categories, items] = await Promise.all([
+            fetchJson('oysters?select=*', ctrl.signal),
+            fetchJson('food_categories?select=*&order=sort_order.asc', ctrl.signal),
+            fetchJson('food_items?select=*&order=sort_order.asc', ctrl.signal)
+        ]);
+        const raw = JSON.stringify([oysters, categories, items]);
+        const newSig = raw.length + ':' + hash(raw);
+        storageSet(CACHE_KEY, JSON.stringify({ sig: newSig, oysters, categories, items, t: Date.now() }));
+        if (!hadCache || newSig !== lastDataSignature) {
+            applyData(oysters, categories, items);
+            renderAll();
+        }
+        lastDataSignature = newSig;
+    } catch (error) {
+        console.error('Не удалось загрузить данные:', error);
+        if (!hadCache) renderErrorState();
+    } finally {
+        clearTimeout(timer);
+    }
+}
+
+function hash(str) {
+    let h = 5381;
+    for (let i = 0; i < str.length; i++) h = ((h << 5) + h + str.charCodeAt(i)) | 0;
+    return (h >>> 0).toString(36);
+}
+
+// ==================== OYSTERS ====================
 function renderTabs() {
-    const tabsEl = document.getElementById('tabs');
+    const t = UI[currentLang];
+    const tabsEl = $('tabs');
+    tabsEl.setAttribute('aria-label', t.oysters_list);
     tabsEl.innerHTML = OYSTERS.map(o => `
-        <button class="tab ${o.available === false ? 'unavailable-tab' : ''}" data-target="${o.id}" role="tab" id="tab-${o.id}" aria-selected="false" aria-controls="card-${o.id}">${o.name}</button>
+        <button class="tab ${o.available === false ? 'unavailable-tab' : ''}" type="button" role="tab"
+            id="tab-${esc(o.id)}" data-target="${esc(o.id)}" aria-selected="false" aria-controls="card-${esc(o.id)}" tabindex="-1">${esc(o.name)}</button>
     `).join('');
 }
 
 function renderCards() {
     const t = UI[currentLang];
-    const TASTE_LABELS = [
-        { key: 'sal',  name: t.sal },
-        { key: 'iod',  name: t.iod },
-        { key: 'sw',   name: t.sw },
-        { key: 'meat', name: t.meat }
-    ];
-    const container = document.getElementById('cards-container');
+    const TASTE = [['sal', t.sal], ['iod', t.iod], ['sw', t.sw], ['meat', t.meat]];
+    const container = $('cards-container');
 
-    if (!OYSTERS.length) {
-        container.innerHTML = `
-            <div class="state-block">
-                <div class="state-icon">${ICONS.tray}</div>
-                <div class="state-title">${t.empty_category_title}</div>
-                <p class="state-text">${t.empty_category_text}</p>
-            </div>`;
-        return;
-    }
+    if (!OYSTERS.length) { container.innerHTML = emptyState(); return; }
 
-    container.innerHTML = OYSTERS.map((o) => {
+    container.innerHTML = OYSTERS.map((o, idx) => {
+        const unavailable = o.available === false;
         const desc = loc(o.desc, currentLang);
         const terroir = loc(o.terroir, currentLang);
         const originPlace = loc(o.origin?.place, currentLang);
         const originRegion = loc(o.origin?.region, currentLang);
         const originText = loc(o.origin?.text, currentLang);
-        const facts = o.facts?.[currentLang] || o.facts?.ru || o.facts?.en || o.facts?.ro || [];
+        const facts = (o.facts?.[currentLang] || o.facts?.ru || o.facts?.en || o.facts?.ro || []).filter(f => f && String(f).trim());
+        const img = safeUrl(o.image_url);
+        const prev = OYSTERS[(idx - 1 + OYSTERS.length) % OYSTERS.length];
+        const next = OYSTERS[(idx + 1) % OYSTERS.length];
+        const badges = `${o.badge ? `<span class="badge">${esc(o.badge)}</span>` : ''}${unavailable ? `<span class="badge danger">${esc(t.unavailable)}</span>` : ''}`;
+        const hasOrigin = originPlace || originRegion || originText;
+
         return `
-        <div id="card-${o.id}" class="card" role="tabpanel" aria-labelledby="tab-${o.id}" tabindex="0">
+        <article id="card-${esc(o.id)}" class="card" role="tabpanel" aria-labelledby="tab-${esc(o.id)}" tabindex="-1">
             <div class="hero">
-                <span class="badge">${o.badge}</span>
-                ${o.available === false ? `<div class="unavailable-strip">${t.unavailable}</div>` : ''}
-                <h2 class="oyster-name">${o.name}</h2>
-                ${o.image_url ? `<div class="oyster-photo ${o.available === false ? 'is-unavailable' : ''}"><img src="${o.image_url}" alt="${o.name}" loading="lazy"></div>` : ''}
+                ${img
+                    ? `<div class="oyster-photo ${unavailable ? 'is-unavailable' : ''}">
+                           ${badges ? `<div class="photo-badges">${badges}</div>` : ''}
+                           <img src="${esc(img)}" alt="${esc(o.name)}" loading="lazy" decoding="async">
+                       </div>`
+                    : (badges ? `<div class="badge-row">${badges}</div>` : '')}
+                <h2 class="oyster-name">${esc(o.name)}</h2>
+                ${terroir ? `<p class="terroir"><span class="terroir-dot" aria-hidden="true"></span>${esc(terroir)}</p>` : ''}
                 <div class="price-tag">
-                    <span class="price-amount">${o.price} MDL</span>
-                    <span class="price-unit">${t.unit}</span>
+                    <span class="price-amount">${formatPrice(o.price)}</span>
+                    <span class="price-cur">MDL</span>
+                    <span class="price-unit">${esc(t.unit)}</span>
                 </div>
-                <p class="terroir">
-                    <span class="terroir-dot" aria-hidden="true"></span>
-                    ${terroir}
-                </p>
             </div>
 
-            <div class="info-block">
-                <div class="block-label">${t.taste}</div>
-                ${TASTE_LABELS.map(lb => `
-                    <div class="taste-row" style="margin-bottom:10px">
-                        <div class="taste-meta" style="font-size:var(--fs-sm)">
-                            <span class="taste-label">${lb.name}</span>
-                            <span class="taste-score">${o[lb.key]}/10</span>
+            <section class="info-block" aria-label="${esc(t.taste)}">
+                <div class="block-label">${esc(t.taste)}</div>
+                <div class="taste-grid">
+                ${TASTE.map(([key, name]) => {
+                    const v = Math.max(0, Math.min(10, Math.round(Number(o[key]) || 0)));
+                    return `
+                    <div class="taste-row">
+                        <div class="taste-meta">
+                            <span class="taste-label">${esc(name)}</span>
+                            <span class="taste-score">${v}<small>/10</small></span>
                         </div>
-                        <div class="bar-track" style="height:4px" role="img" aria-label="${lb.name}: ${o[lb.key]} из 10">
-                            <div class="bar-fill" data-val="${o[lb.key] * 10}"></div>
+                        <div class="meter" role="meter" aria-valuemin="0" aria-valuemax="10" aria-valuenow="${v}" aria-label="${esc(name)}: ${v} ${esc(t.of10)}">
+                            ${Array.from({ length: 10 }, (_, i) => `<i class="${i < v ? 'on' : ''}"></i>`).join('')}
                         </div>
-                    </div>
-                `).join('')}
-                <div class="scale-hint" aria-hidden="true"><span>${t.low}</span><span>${t.high}</span></div>
-            </div>
+                    </div>`;
+                }).join('')}
+                </div>
+                <div class="scale-hint" aria-hidden="true"><span>${esc(t.low)}</span><span>${esc(t.high)}</span></div>
+            </section>
 
-            <p class="desc">${desc}</p>
+            ${desc ? `<p class="desc">${rich(desc)}</p>` : ''}
 
-            <div class="info-block">
-                <div class="block-label">${t.origin}</div>
+            ${hasOrigin ? `
+            <section class="info-block" aria-label="${esc(t.origin)}">
+                <div class="block-label">${esc(t.origin)}</div>
                 <div class="origin-map-line">
-                    <span class="origin-flag" aria-hidden="true">${o.origin?.flag || ''}</span>
+                    <span class="origin-flag" aria-hidden="true">${esc(o.origin?.flag || '🌊')}</span>
                     <div>
-                        <div class="origin-place">${originPlace}</div>
-                        <div class="origin-region">${originRegion}</div>
+                        <div class="origin-place">${esc(originPlace)}</div>
+                        ${originRegion ? `<div class="origin-region">${esc(originRegion)}</div>` : ''}
                     </div>
                 </div>
-                <p class="origin-text">${originText}</p>
-            </div>
+                ${originText ? `<p class="origin-text">${rich(originText)}</p>` : ''}
+            </section>` : ''}
 
-            <div class="info-block">
-                <div class="block-label">${t.facts}</div>
-                <div class="facts-list">
+            ${facts.length ? `
+            <section class="info-block" aria-label="${esc(t.facts)}">
+                <div class="block-label">${esc(t.facts)}</div>
+                <ol class="facts-list" role="list">
                     ${facts.map((f, fi) => `
-                        <div class="fact-item">
-                            <div class="fact-num" aria-hidden="true">${fi + 1}</div>
-                            <p class="fact-text">${f}</p>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        </div>
-    `;
+                        <li class="fact-item">
+                            <span class="fact-num" aria-hidden="true">${String(fi + 1).padStart(2, '0')}</span>
+                            <p class="fact-text">${rich(f)}</p>
+                        </li>`).join('')}
+                </ol>
+            </section>` : ''}
+
+            ${OYSTERS.length > 1 ? `
+            <nav class="oyster-pager" aria-label="${esc(t.oysters_list)}">
+                <button class="pager-btn prev" type="button" data-goto="${esc(prev.id)}">
+                    <span class="pager-dir">← ${esc(t.prev)}</span><span class="pager-name">${esc(prev.name)}</span>
+                </button>
+                <button class="pager-btn next" type="button" data-goto="${esc(next.id)}">
+                    <span class="pager-dir">${esc(t.next)} →</span><span class="pager-name">${esc(next.name)}</span>
+                </button>
+            </nav>` : ''}
+        </article>`;
     }).join('');
 }
 
-function activateBars(cardEl) {
-    requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-            cardEl.querySelectorAll('.bar-fill').forEach(b => {
-                b.style.width = b.getAttribute('data-val') + '%';
-            });
-        });
-    });
+function pickOysterId() {
+    const hash = decodeURIComponent(location.hash.replace('#', ''));
+    if (OYSTERS.some(o => String(o.id) === hash)) return hash;
+    if (OYSTERS.some(o => String(o.id) === String(currentOysterId))) return currentOysterId;
+    return OYSTERS[0]?.id ?? null;
 }
 
-function showOyster(id) {
-    document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
-    document.querySelectorAll('#tabs .tab').forEach(t => t.setAttribute('aria-selected', 'false'));
-    const card = document.getElementById('card-' + id);
-    const tab  = document.querySelector(`#tabs .tab[data-target="${id}"]`);
+function showOyster(id, { replaceHash = true, focusTab = false } = {}) {
+    if (id == null) return;
+    const card = $('card-' + id);
+    const tab = document.querySelector(`#tabs .tab[data-target="${CSS.escape(String(id))}"]`);
     if (!card || !tab) return;
+    currentOysterId = String(id);
+    document.querySelectorAll('#cards-container .card').forEach(c => c.classList.remove('active', 'bars-ready'));
+    document.querySelectorAll('#tabs .tab').forEach(t => { t.setAttribute('aria-selected', 'false'); t.tabIndex = -1; });
     card.classList.add('active');
     tab.setAttribute('aria-selected', 'true');
-    scrollTabIntoView(document.getElementById('tabs'), tab);
-    activateBars(card);
+    tab.tabIndex = 0;
+    if (focusTab) tab.focus({ preventScroll: true });
+    scrollTabIntoView($('tabs'), tab);
+    requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('bars-ready')));
+    if (replaceHash && location.hash !== '#' + id) history.replaceState(null, '', '#' + encodeURIComponent(id));
 }
 
+// ==================== FOOD ====================
 function renderFoodTabs() {
-    const tabsEl = document.getElementById('food-tabs');
+    const t = UI[currentLang];
+    const tabsEl = $('food-tabs');
+    tabsEl.setAttribute('aria-label', t.menu_categories);
     tabsEl.innerHTML = FOOD_CATEGORIES.map(c => `
-        <button class="tab" data-cat="${c.key}" id="food-tab-${c.key}" aria-current="${String(c.key) === String(currentFoodCategory) ? 'true' : 'false'}" aria-controls="food-panel-${c.key}">${loc(c.label, currentLang)}</button>
+        <button class="tab" type="button" data-cat="${esc(c.key)}" aria-controls="food-panel-${esc(c.key)}"
+            aria-current="${c.key === String(currentFoodCategory) ? 'true' : 'false'}">${esc(loc(c.label, currentLang))}<span class="tab-count">${c.items.length}</span></button>
     `).join('');
+    updateTabFades($('food-tabs'));
 }
 
-// Лёгкое переключение подсветки активной вкладки без пересоздания DOM.
 function updateFoodTabsSelection() {
     document.querySelectorAll('#food-tabs .tab').forEach(btn => {
-        btn.setAttribute('aria-current', String(btn.dataset.cat) === String(currentFoodCategory) ? 'true' : 'false');
+        btn.setAttribute('aria-current', btn.dataset.cat === String(currentFoodCategory) ? 'true' : 'false');
     });
 }
 
-// ИСПРАВЛЕНО: центрирует вкладку ТОЛЬКО внутри самой полосы табов.
-// Раньше использовался tab.scrollIntoView(), который заодно двигал скролл
-// всего окна (плавно, посреди пользовательской прокрутки) и из-за этого
-// сбивал скролл вверх, "залипая" на нижней категории.
+// Центрирует вкладку только внутри полосы табов (без прокрутки окна).
 function scrollTabIntoView(bar, tab) {
-    if (!bar || !tab) return;
-    // Если табы переносятся на несколько строк (планшет/десктоп) — горизонтальный
-    // скролл не нужен.
-    if (bar.scrollWidth <= bar.clientWidth) return;
+    if (!bar || !tab || bar.scrollWidth <= bar.clientWidth) return;
     const b = bar.getBoundingClientRect();
     const t = tab.getBoundingClientRect();
     const left = bar.scrollLeft + (t.left - b.left) - (bar.clientWidth - t.width) / 2;
     bar.scrollTo({ left, behavior: 'smooth' });
 }
-
 function scrollActiveFoodTabIntoView() {
-    const bar = document.getElementById('food-tabs');
-    const tab = bar && bar.querySelector('.tab[aria-current="true"]');
-    scrollTabIntoView(bar, tab);
+    const bar = $('food-tabs');
+    scrollTabIntoView(bar, bar && bar.querySelector('.tab[aria-current="true"]'));
+}
+function updateTabFades(bar) {
+    const wrap = bar && bar.parentElement;
+    if (!wrap) return;
+    const max = bar.scrollWidth - bar.clientWidth;
+    wrap.classList.toggle('fade-l', bar.scrollLeft > 4);
+    wrap.classList.toggle('fade-r', max > 4 && bar.scrollLeft < max - 4);
 }
 
 function renderFoodCards() {
     const t = UI[currentLang];
-    const container = document.getElementById('food-cards-container');
+    const container = $('food-cards-container');
+    if (!FOOD_CATEGORIES.length) { container.innerHTML = emptyState(); return; }
 
-    if (!FOOD_CATEGORIES.length) {
-        container.innerHTML = `
-            <div class="state-block">
-                <div class="state-icon">${ICONS.tray}</div>
-                <div class="state-title">${t.empty_category_title}</div>
-                <p class="state-text">${t.empty_category_text}</p>
-            </div>`;
-        return;
-    }
-
-    container.innerHTML = FOOD_CATEGORIES.map(cat => {
+    container.innerHTML = FOOD_CATEGORIES.map((cat, ci) => {
         const label = loc(cat.label, currentLang);
         const subtitle = loc(cat.subtitle, currentLang);
         const itemsHtml = cat.items.length
@@ -733,57 +960,57 @@ function renderFoodCards() {
                 const name = loc(item.name, currentLang);
                 const desc = loc(item.desc, currentLang);
                 const unavailable = item.available === false;
-                const delay = Math.min(idx * 0.05, 0.3).toFixed(2);
+                const img = safeUrl(item.image_url);
+                const badge = loc(item.badge, currentLang);
+                const delay = Math.min(idx * 0.04, 0.24).toFixed(2);
                 return `
-                <div class="dish-card animate-in ${unavailable ? 'is-unavailable' : ''}" data-id="${item.id}" style="animation-delay: ${delay}s">
-                    ${unavailable ? `<div class="unavailable-strip">${t.unavailable}</div>` : ''}
-                    <div class="dish-card-inner">
-                        <div class="dish-thumb" data-id="${item.id}" role="button" tabindex="0" aria-label="${t.view_photo}: ${name}">
-                            ${item.badge && !unavailable ? `<span class="dish-badge">${loc(item.badge, currentLang)}</span>` : ''}
-                            ${item.image_url ? `<img src="${item.image_url}" alt="${name}" loading="lazy">` : ICONS.plate}
-                        </div>
-                        <div class="dish-content">
-                            <div class="dish-top">
-                                <div class="dish-name">${name}</div>
-                                <div class="dish-price-chip">${item.price} MDL</div>
-                            </div>
-                            ${item.weight ? `<div class="dish-weight">${item.weight}</div>` : ''}
-                            <div class="dish-desc">${desc}</div>
-                        </div>
-                    </div>
-                </div>
-            `;
-              }).join('')
-            : `
-                <div class="state-block" style="padding:32px 16px;">
+                <button type="button" class="dish-card animate-in ${unavailable ? 'is-unavailable' : ''}" data-id="${esc(item.id)}" style="animation-delay:${delay}s"
+                    aria-label="${esc(name)}, ${formatPrice(item.price)} MDL${unavailable ? ', ' + esc(t.unavailable) : ''}. ${esc(t.view_dish)}">
+                    <span class="dish-thumb" aria-hidden="true">
+                        ${badge && !unavailable ? `<span class="dish-badge">${esc(badge)}</span>` : ''}
+                        ${img ? `<img src="${esc(img)}" alt="" loading="lazy" decoding="async">` : ICONS.plate}
+                    </span>
+                    <span class="dish-content" aria-hidden="true">
+                        <span class="dish-top">
+                            <span class="dish-name">${esc(name)}</span>
+                            <span class="dish-price">${formatPrice(item.price)}<small>MDL</small></span>
+                        </span>
+                        ${(item.weight || unavailable) ? `<span class="dish-meta">
+                            ${item.weight ? `<span class="pill">${esc(item.weight)}</span>` : ''}
+                            ${unavailable ? `<span class="pill danger">${esc(t.unavailable)}</span>` : ''}
+                        </span>` : ''}
+                        ${desc ? `<span class="dish-desc">${esc(desc).replace(/&lt;\/?(strong|b|em|i)&gt;/gi, '')}</span>` : ''}
+                    </span>
+                </button>`;
+            }).join('')
+            : `<div class="state-block" style="padding:28px 16px;">
                     <div class="state-icon">${ICONS.tray}</div>
-                    <div class="state-title">${t.empty_category_title}</div>
-                    <p class="state-text">${t.empty_category_text}</p>
-                </div>`;
+                    <p class="state-text" style="margin:0">${esc(t.empty_category_text)}</p>
+               </div>`;
 
         return `
-            <section class="food-category-section" role="region" id="food-panel-${cat.key}" data-cat-key="${cat.key}" aria-labelledby="food-heading-${cat.key}">
-                <h2 class="section-title" id="food-heading-${cat.key}">${label}</h2>
-                ${subtitle ? `<p class="section-subtitle">${subtitle}</p>` : ''}
+            <section class="food-category-section" id="food-panel-${esc(cat.key)}" data-cat-key="${esc(cat.key)}" aria-labelledby="food-heading-${esc(cat.key)}">
+                <div class="section-head">
+                    <div class="section-eyebrow" aria-hidden="true">${String(ci + 1).padStart(2, '0')}</div>
+                    <h2 class="section-title" id="food-heading-${esc(cat.key)}">${esc(label)}</h2>
+                    ${subtitle ? `<p class="section-subtitle">${esc(subtitle)}</p>` : ''}
+                </div>
                 <div class="dish-grid">${itemsHtml}</div>
             </section>`;
     }).join('');
 
-    setupFoodScrollSpy();
+    updateFoodCategoryFromScroll();
 }
 
 function scrollToFoodCategory(key, behavior = 'smooth') {
-    const target = document.getElementById('food-panel-' + key);
+    const target = $('food-panel-' + key);
     if (!target) return;
-    const header = document.querySelector('header');
     const tabsWrapper = document.querySelector('#section-food .tabs-wrapper');
-    const offset = (header ? header.offsetHeight : 0) + (tabsWrapper ? tabsWrapper.offsetHeight : 0);
-    const top = target.getBoundingClientRect().top + window.pageYOffset - offset - 4;
+    const offset = headerVisibleHeight() + (tabsWrapper ? tabsWrapper.offsetHeight : 0);
+    const top = Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset + 4);
     isProgrammaticFoodScroll = true;
     clearTimeout(programmaticFoodScrollTimeout);
     window.scrollTo({ top, behavior });
-    // Запасной таймер на случай, если скролла не произошло (уже на месте):
-    // тогда событий scroll не будет и onFoodScroll флаг не снимет.
     programmaticFoodScrollTimeout = setTimeout(() => {
         isProgrammaticFoodScroll = false;
         updateFoodCategoryFromScroll();
@@ -791,184 +1018,247 @@ function scrollToFoodCategory(key, behavior = 'smooth') {
 }
 
 function updateFoodCategoryFromScroll() {
-    foodScrollTicking = false;
     if (isProgrammaticFoodScroll || currentSection !== 'food') return;
     const sections = document.querySelectorAll('.food-category-section');
     if (!sections.length) return;
-    const header = document.querySelector('header');
     const tabsWrapper = document.querySelector('#section-food .tabs-wrapper');
-    const triggerLine = (header ? header.offsetHeight : 0) + (tabsWrapper ? tabsWrapper.offsetHeight : 0) + 8;
+    const triggerLine = (tabsWrapper ? tabsWrapper.getBoundingClientRect().bottom : 0) + 24;
     let activeKey = sections[0].dataset.catKey;
-    sections.forEach(sec => {
-        if (sec.getBoundingClientRect().top <= triggerLine) activeKey = sec.dataset.catKey;
-    });
-    if (activeKey && String(activeKey) !== String(currentFoodCategory)) {
+    // Долистали до конца страницы — активна последняя категория.
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+        activeKey = sections[sections.length - 1].dataset.catKey;
+    } else {
+        sections.forEach(sec => { if (sec.getBoundingClientRect().top <= triggerLine) activeKey = sec.dataset.catKey; });
+    }
+    if (activeKey && activeKey !== String(currentFoodCategory)) {
         currentFoodCategory = activeKey;
         updateFoodTabsSelection();
         scrollActiveFoodTabIntoView();
     }
 }
 
-// ИСПРАВЛЕНО: во время программного скролла (клик по табу) флаг теперь
-// снимается, когда скролл реально остановился (150 мс без событий scroll),
-// а не по фиксированному таймеру 700 мс, который мог сработать раньше конца
-// плавной прокрутки.
-function onFoodScroll() {
-    if (isProgrammaticFoodScroll) {
-        clearTimeout(programmaticFoodScrollTimeout);
-        programmaticFoodScrollTimeout = setTimeout(() => {
-            isProgrammaticFoodScroll = false;
-            updateFoodCategoryFromScroll();
-        }, 150);
-        return;
-    }
-    if (foodScrollTicking) return;
-    foodScrollTicking = true;
-    requestAnimationFrame(updateFoodCategoryFromScroll);
+function onScroll() {
+    if (scrollTicking) return;
+    scrollTicking = true;
+    requestAnimationFrame(() => {
+        scrollTicking = false;
+        $('toTop').classList.toggle('show', window.scrollY > 700);
+        if (isProgrammaticFoodScroll) {
+            clearTimeout(programmaticFoodScrollTimeout);
+            programmaticFoodScrollTimeout = setTimeout(() => {
+                isProgrammaticFoodScroll = false;
+                updateFoodCategoryFromScroll();
+            }, 150);
+            return;
+        }
+        updateFoodCategoryFromScroll();
+    });
 }
 
-function setupFoodScrollSpy() {
-    if (!foodScrollSpyAttached) {
-        window.addEventListener('scroll', onFoodScroll, { passive: true });
-        foodScrollSpyAttached = true;
+// ==================== DISH SHEET ====================
+function findItem(id) {
+    for (const cat of FOOD_CATEGORIES) {
+        const item = cat.items.find(i => String(i.id) === String(id));
+        if (item) return item;
     }
-    updateFoodCategoryFromScroll();
+    return null;
 }
 
-function openPhotoLightbox(item, triggerEl) {
+function openDishSheet(item, triggerEl) {
+    const t = UI[currentLang];
     lastFocusedEl = triggerEl || document.activeElement;
     const name = loc(item.name, currentLang);
-    const desc = loc(item.desc, currentLang);
-    const imgContainer = document.getElementById('photoLightboxImage');
-    imgContainer.innerHTML = item.image_url
-        ? `<img src="${item.image_url}" alt="${name}">`
-        : ICONS.plate;
-    document.getElementById('photoLightboxName').textContent = name;
-    const t = UI[currentLang];
-    document.getElementById('photoLightboxPrice').innerHTML = (item.available === false ? `<span style="color:var(--danger)">${t.unavailable} · </span>` : '') + item.price + ' MDL' + (item.weight ? ' · ' + item.weight : '');
-    document.getElementById('photoLightboxDesc').textContent = desc;
-    document.getElementById('photoLightbox').classList.add('active');
-    document.addEventListener('keydown', handleOverlayKeydown);
-    document.getElementById('photoLightboxClose').focus();
+    const img = safeUrl(item.image_url);
+    const badge = loc(item.badge, currentLang);
+    $('sheetMedia').innerHTML = img ? `<img src="${esc(img)}" alt="${esc(name)}">` : ICONS.plate;
+    $('sheetBadges').innerHTML =
+        (badge && item.available !== false ? `<span class="badge">${esc(badge)}</span>` : '') +
+        (item.available === false ? `<span class="badge danger">${esc(t.unavailable)}</span>` : '');
+    $('sheetName').textContent = name;
+    $('sheetPrice').innerHTML = `${formatPrice(item.price)}<small>MDL</small>`;
+    $('sheetWeight').textContent = item.weight || '';
+    $('sheetDesc').innerHTML = rich(loc(item.desc, currentLang));
+
+    const sheet = $('dishSheet');
+    sheet.hidden = false;
+    sheet.classList.add('active');
+    sheet.querySelector('.sheet').scrollTop = 0;
+    document.documentElement.style.overflow = 'hidden';
+    document.addEventListener('keydown', handleSheetKeydown);
+    $('sheetClose').focus({ preventScroll: true });
 }
 
-function closePhotoLightbox() {
-    document.getElementById('photoLightbox').classList.remove('active');
-    document.removeEventListener('keydown', handleOverlayKeydown);
-    if (lastFocusedEl) lastFocusedEl.focus();
+function closeDishSheet() {
+    const sheet = $('dishSheet');
+    if (!sheet.classList.contains('active')) return;
+    sheet.classList.remove('active');
+    sheet.hidden = true;
+    document.documentElement.style.overflow = '';
+    document.removeEventListener('keydown', handleSheetKeydown);
+    if (lastFocusedEl && document.contains(lastFocusedEl)) lastFocusedEl.focus({ preventScroll: true });
 }
 
-function handleOverlayKeydown(e) {
-    const activeOverlay = document.querySelector('.photo-lightbox.active');
-    if (!activeOverlay) return;
-    if (e.key === 'Escape') {
-        closePhotoLightbox();
-        return;
-    }
+function handleSheetKeydown(e) {
+    if (e.key === 'Escape') { closeDishSheet(); return; }
     if (e.key !== 'Tab') return;
-    const focusable = Array.from(activeOverlay.querySelectorAll('button, [href], select, input, [tabindex]:not([tabindex="-1"])'))
-        .filter(el => el.offsetParent !== null);
+    const sheet = $('dishSheet');
+    const focusable = Array.from(sheet.querySelectorAll('button, [href], [tabindex]:not([tabindex="-1"])')).filter(el => el.offsetParent !== null);
     if (!focusable.length) return;
     const first = focusable[0], last = focusable[focusable.length - 1];
     if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
     else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
 }
 
-function handleHash() {
-    const hash = window.location.hash.replace('#', '').toLowerCase();
-    const valid = OYSTERS.find(o => o.id === hash);
-    if (OYSTERS.length) showOyster(valid ? hash : OYSTERS[0].id);
+// Свайп вниз закрывает шторку (только на мобильном, когда контент прокручен в начало).
+function setupSheetSwipe() {
+    const panel = document.querySelector('#dishSheet .sheet');
+    let startY = null, dy = 0;
+    panel.addEventListener('touchstart', e => {
+        startY = panel.scrollTop <= 0 ? e.touches[0].clientY : null; dy = 0;
+    }, { passive: true });
+    panel.addEventListener('touchmove', e => {
+        if (startY === null) return;
+        dy = Math.max(0, e.touches[0].clientY - startY);
+        panel.style.transform = dy ? `translateY(${dy}px)` : '';
+    }, { passive: true });
+    panel.addEventListener('touchend', () => {
+        if (startY === null) return;
+        panel.style.transition = 'transform .25s ease';
+        if (dy > 110) closeDishSheet();
+        panel.style.transform = '';
+        setTimeout(() => { panel.style.transition = ''; }, 260);
+        startY = null;
+    });
 }
 
-function switchSection(section) {
+// ==================== SECTIONS / LANGUAGE ====================
+function switchSection(section, { scroll = true } = {}) {
+    const changed = section !== currentSection;
     currentSection = section;
+    $('mainNav').dataset.active = section;
     document.querySelectorAll('.nav-btn').forEach(btn => {
-        const isActive = btn.dataset.section === section;
-        btn.classList.toggle('active', isActive);
-        if (isActive) btn.setAttribute('aria-current', 'page'); else btn.removeAttribute('aria-current');
+        if (btn.dataset.section === section) btn.setAttribute('aria-current', 'page');
+        else btn.removeAttribute('aria-current');
     });
-    document.getElementById('section-oysters').style.display = section === 'oysters' ? '' : 'none';
-    document.getElementById('section-food').style.display = section === 'food' ? '' : 'none';
-    if (section === 'oysters') handleHash();
-    if (section === 'food') { renderFoodTabs(); renderFoodCards(); scrollActiveFoodTabIntoView(); }
+    $('section-oysters').hidden = section !== 'oysters';
+    $('section-food').hidden = section !== 'food';
+    if (section === 'oysters') {
+        showOyster(pickOysterId());
+    } else if (location.hash) {
+        history.replaceState(null, '', location.pathname + location.search);
+    }
+    if (changed && scroll && window.scrollY > 0) window.scrollTo({ top: 0, behavior: 'auto' });
+    if (section === 'food') { updateFoodCategoryFromScroll(); scrollActiveFoodTabIntoView(); }
 }
 
 function setLanguage(lang) {
+    if (!UI[lang]) return;
     currentLang = lang;
+    storageSet(LANG_KEY, lang);
+    const t = UI[lang];
     document.documentElement.lang = lang;
-    document.querySelectorAll('.lang-btn').forEach(btn => {
-        const isActive = btn.dataset.lang === lang;
-        btn.classList.toggle('active', isActive);
-        btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
-    });
-    document.querySelectorAll('[data-t]').forEach(el => {
-        const key = el.getAttribute('data-t');
-        if (UI[lang][key]) el.textContent = UI[lang][key];
-    });
-    renderTabs();
-    renderCards();
-    switchSection(currentSection);
-    updateHeaderHeightVar();
+    document.title = t.title;
+    document.querySelectorAll('.lang-btn').forEach(btn => btn.setAttribute('aria-pressed', btn.dataset.lang === lang ? 'true' : 'false'));
+    document.querySelectorAll('[data-t]').forEach(el => { const k = el.dataset.t; if (t[k]) el.textContent = t[k]; });
+    document.querySelectorAll('[data-t-aria]').forEach(el => { const k = el.dataset.tAria; if (t[k]) el.setAttribute('aria-label', t[k]); });
+    if (OYSTERS.length || FOOD_CATEGORIES.length) {
+        const y = window.scrollY;
+        renderAll();
+        window.scrollTo(0, y);
+    }
+    updateStickyMetrics();
 }
 
-// ==================== ИНИЦИАЛИЗАЦИЯ ====================
+// ==================== INIT ====================
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('navIconOysters').innerHTML = ICONS.oyster;
-    document.getElementById('navIconFood').innerHTML = ICONS.menu;
+    $('navIconOysters').innerHTML = ICONS.oyster;
+    $('navIconFood').innerHTML = ICONS.menu;
+    $('brandMark').innerHTML = ICONS.logo;
+    $('footerMark').innerHTML = ICONS.logo;
+    $('sheetClose').innerHTML = ICONS.close;
+    $('toTop').innerHTML = ICONS.up;
 
-    updateHeaderHeightVar();
-    window.addEventListener('resize', updateHeaderHeightVar);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateHeaderHeightVar);
+    setLanguage(currentLang);
+    updateStickyMetrics();
+    window.addEventListener('resize', () => { updateStickyMetrics(); updateTabFades($('food-tabs')); updateTabFades($('tabs')); });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(updateStickyMetrics);
+    window.addEventListener('scroll', onScroll, { passive: true });
 
     document.querySelectorAll('.lang-btn').forEach(btn => btn.addEventListener('click', () => setLanguage(btn.dataset.lang)));
     document.querySelectorAll('.nav-btn').forEach(btn => btn.addEventListener('click', () => switchSection(btn.dataset.section)));
+    $('brandLink').addEventListener('click', e => { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+    $('toTop').addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
-    document.getElementById('tabs').addEventListener('click', e => {
+    // Устрицы: клики, стрелки на клавиатуре (паттерн tablist), листалка внизу карточки.
+    $('tabs').addEventListener('click', e => {
         const btn = e.target.closest('.tab');
-        if (btn) {
-            showOyster(btn.dataset.target);
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+        if (btn) showOyster(btn.dataset.target);
     });
-
-    document.getElementById('food-tabs').addEventListener('click', e => {
-        const btn = e.target.closest('.tab');
-        if (btn) {
-            currentFoodCategory = btn.dataset.cat;
-            updateFoodTabsSelection();
-            scrollActiveFoodTabIntoView();
-            scrollToFoodCategory(btn.dataset.cat);
-        }
-    });
-
-    document.getElementById('photoLightboxClose').innerHTML = ICONS.close;
-    document.getElementById('photoLightboxClose').addEventListener('click', closePhotoLightbox);
-    document.getElementById('photoLightbox').addEventListener('click', e => { if (e.target === e.currentTarget) closePhotoLightbox(); });
-
-    const openThumb = (el) => {
-        let item = null;
-        for (const cat of FOOD_CATEGORIES) {
-            item = cat.items.find(i => String(i.id) === String(el.dataset.id));
-            if (item) break;
-        }
-        if (item) openPhotoLightbox(item, el);
-    };
-    document.getElementById('food-cards-container').addEventListener('click', e => {
-        const card = e.target.closest('.dish-card');
-        if (card) openThumb(card);
-    });
-    document.getElementById('food-cards-container').addEventListener('keydown', e => {
-        if (e.key !== 'Enter' && e.key !== ' ') return;
-        const thumb = e.target.closest('.dish-thumb');
-        if (!thumb) return;
+    $('tabs').addEventListener('keydown', e => {
+        const tabs = Array.from(document.querySelectorAll('#tabs .tab'));
+        const i = tabs.indexOf(document.activeElement);
+        if (i < 0) return;
+        let n = null;
+        if (e.key === 'ArrowRight') n = (i + 1) % tabs.length;
+        if (e.key === 'ArrowLeft') n = (i - 1 + tabs.length) % tabs.length;
+        if (e.key === 'Home') n = 0;
+        if (e.key === 'End') n = tabs.length - 1;
+        if (n === null) return;
         e.preventDefault();
-        openThumb(thumb);
+        showOyster(tabs[n].dataset.target, { focusTab: true });
+    });
+    $('tabs').addEventListener('scroll', () => updateTabFades($('tabs')), { passive: true });
+    $('cards-container').addEventListener('click', e => {
+        const btn = e.target.closest('[data-goto]');
+        if (!btn) return;
+        showOyster(btn.dataset.goto);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
+    $('food-tabs').addEventListener('click', e => {
+        const btn = e.target.closest('.tab');
+        if (!btn) return;
+        currentFoodCategory = btn.dataset.cat;
+        updateFoodTabsSelection();
+        scrollActiveFoodTabIntoView();
+        scrollToFoodCategory(btn.dataset.cat);
+    });
+    $('food-tabs').addEventListener('scroll', () => updateTabFades($('food-tabs')), { passive: true });
+
+    $('food-cards-container').addEventListener('click', e => {
+        const card = e.target.closest('.dish-card');
+        if (!card) return;
+        const item = findItem(card.dataset.id);
+        if (item) openDishSheet(item, card);
+    });
+
+    $('sheetClose').addEventListener('click', closeDishSheet);
+    $('dishSheet').addEventListener('click', e => { if (e.target === e.currentTarget) closeDishSheet(); });
+    setupSheetSwipe();
+
+    // Битая картинка → аккуратная заглушка вместо «разбитой» иконки браузера.
+    document.addEventListener('error', e => {
+        const img = e.target;
+        if (!(img instanceof HTMLImageElement)) return;
+        const holder = img.closest('.dish-thumb, .sheet-media');
+        if (holder) { img.remove(); holder.insertAdjacentHTML('beforeend', ICONS.plate); }
+        const photo = img.closest('.oyster-photo');
+        if (photo) photo.remove();
+    }, true);
+
+    // Ссылка вида /#gillardeau сразу открывает нужную устрицу.
+    if (location.hash.length > 1 && location.hash !== '#main-content') currentSection = 'oysters';
+    switchSection(currentSection, { scroll: false });
     loadData();
 });
 
-window.addEventListener('hashchange', handleHash);
+window.addEventListener('hashchange', () => {
+    const id = decodeURIComponent(location.hash.replace('#', ''));
+    if (OYSTERS.some(o => String(o.id) === id)) {
+        if (currentSection !== 'oysters') switchSection('oysters');
+        else showOyster(id, { replaceHash: false });
+    }
+});
 </script>
 </body>
 </html>
