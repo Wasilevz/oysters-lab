@@ -194,19 +194,7 @@
         .card.active { display: block; animation: rise .45s var(--ease) both; }
         @keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
 
-        .hero { text-align: center; padding: 22px 0 18px; }
-        .oyster-photo {
-            position: relative; width: 100%; aspect-ratio: 4 / 3; border-radius: var(--radius);
-            overflow: hidden; margin-bottom: 20px; background: var(--surface);
-            box-shadow: 0 20px 50px -20px rgba(0,0,0,0.7);
-        }
-        .oyster-photo img { width: 100%; height: 100%; object-fit: cover; }
-        .oyster-photo::after {
-            content: ''; position: absolute; inset: 0;
-            background: linear-gradient(180deg, rgba(7,11,17,0) 55%, rgba(7,11,17,0.55));
-        }
-        .oyster-photo.is-unavailable img { filter: grayscale(.6) brightness(.7); }
-        .photo-badges { position: absolute; left: 12px; right: 12px; top: 12px; display: flex; gap: 8px; flex-wrap: wrap; z-index: 1; }
+        .hero { text-align: center; padding: 34px 0 22px; }
         .badge {
             display: inline-flex; align-items: center; gap: 6px;
             background: rgba(7,11,17,0.72); color: var(--gold-light);
@@ -801,7 +789,6 @@ function renderCards() {
         const originRegion = loc(o.origin?.region, currentLang);
         const originText = loc(o.origin?.text, currentLang);
         const facts = (o.facts?.[currentLang] || o.facts?.ru || o.facts?.en || o.facts?.ro || []).filter(f => f && String(f).trim());
-        const img = safeUrl(o.image_url);
         const prev = OYSTERS[(idx - 1 + OYSTERS.length) % OYSTERS.length];
         const next = OYSTERS[(idx + 1) % OYSTERS.length];
         const badges = `${o.badge ? `<span class="badge">${esc(o.badge)}</span>` : ''}${unavailable ? `<span class="badge danger">${esc(t.unavailable)}</span>` : ''}`;
@@ -810,12 +797,7 @@ function renderCards() {
         return `
         <article id="card-${esc(o.id)}" class="card" role="tabpanel" aria-labelledby="tab-${esc(o.id)}" tabindex="-1">
             <div class="hero">
-                ${img
-                    ? `<div class="oyster-photo ${unavailable ? 'is-unavailable' : ''}">
-                           ${badges ? `<div class="photo-badges">${badges}</div>` : ''}
-                           <img src="${esc(img)}" alt="${esc(o.name)}" loading="lazy" decoding="async">
-                       </div>`
-                    : (badges ? `<div class="badge-row">${badges}</div>` : '')}
+                ${badges ? `<div class="badge-row">${badges}</div>` : ''}
                 <h2 class="oyster-name">${esc(o.name)}</h2>
                 ${terroir ? `<p class="terroir"><span class="terroir-dot" aria-hidden="true"></span>${esc(terroir)}</p>` : ''}
                 <div class="price-tag">
@@ -1242,8 +1224,6 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!(img instanceof HTMLImageElement)) return;
         const holder = img.closest('.dish-thumb, .sheet-media');
         if (holder) { img.remove(); holder.insertAdjacentHTML('beforeend', ICONS.plate); }
-        const photo = img.closest('.oyster-photo');
-        if (photo) photo.remove();
     }, true);
 
     // Ссылка вида /#gillardeau сразу открывает нужную устрицу.
