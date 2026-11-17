@@ -375,6 +375,16 @@ function escapeHtml(str) {
     if (str === null || str === undefined) return '';
     return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
 }
+// Миниатюры в админке тоже через оптимизатор Vercel (экономия трафика Supabase).
+function thumb(url) {
+    if (!url || !/^https?:$/.test(location.protocol) || !/\.supabase\.co\//.test(url)) return url;
+    return `/_vercel/image?url=${encodeURIComponent(url)}&w=256&q=70`;
+}
+document.addEventListener('error', e => {
+    const img = e.target;
+    if (img instanceof HTMLImageElement && img.dataset.orig) { const o = img.dataset.orig; delete img.dataset.orig; img.src = o; }
+}, true);
+
 function loc(value, lang) {
     if (value == null) return '';
     if (typeof value === 'object') return value[lang] || value.ru || '';
@@ -539,7 +549,7 @@ function renderList() {
             const unavailable = o.available === false;
             return `
             <div class="item-card ${unavailable ? 'unavailable' : ''}">
-                <div class="item-thumb">${o.image_url ? `<img src="${escapeHtml(o.image_url)}" alt="" loading="lazy">` : ICON.oyster}</div>
+                <div class="item-thumb">${o.image_url ? `<img src="${escapeHtml(thumb(o.image_url))}" data-orig="${escapeHtml(o.image_url)}" alt="" loading="lazy">` : ICON.oyster}</div>
                 <div class="item-info">
                     <div class="item-name">${escapeHtml(o.name)}</div>
                     <div class="item-sub">${escapeHtml(o.badge||'')} · ${escapeHtml(o.price ?? 0)} MDL${unavailable ? ' · <span class="tag-unavailable">Нет в наличии</span>' : ''}</div>
@@ -574,7 +584,7 @@ function renderList() {
             const unavailable = item.available === false;
             return `
             <div class="item-card ${unavailable ? 'unavailable' : ''}">
-                <div class="item-thumb">${item.image_url ? `<img src="${escapeHtml(item.image_url)}" alt="" loading="lazy">` : ICON.plate}</div>
+                <div class="item-thumb">${item.image_url ? `<img src="${escapeHtml(thumb(item.image_url))}" data-orig="${escapeHtml(item.image_url)}" alt="" loading="lazy">` : ICON.plate}</div>
                 <div class="item-info">
                     <div class="item-name">${escapeHtml(name)}</div>
                     <div class="item-sub">${escapeHtml(cat?.label?.ru || item.category_id || '')} · ${escapeHtml(item.price ?? 0)} MDL${unavailable ? ' · <span class="tag-unavailable">Нет в наличии</span>' : ''}</div>
@@ -892,7 +902,7 @@ function imageUploaderHtml(imageUrl) {
     return `
         <div class="image-uploader">
             <div class="image-preview-box ${imageUrl ? 'has-img' : ''}" id="imagePreviewBox">
-                ${imageUrl ? `<img src="${escapeHtml(imageUrl)}" alt="">` : ICON.camera}
+                ${imageUrl ? `<img src="${escapeHtml(thumb(imageUrl))}" data-orig="${escapeHtml(imageUrl)}" alt="">` : ICON.camera}
                 <button type="button" class="remove-img" id="removeImageBtn" aria-label="Убрать фото">${ICON.close}</button>
             </div>
             <div class="image-uploader-actions">

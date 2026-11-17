@@ -617,6 +617,21 @@ function safeUrl(url) {
         return (u.protocol === 'https:' || u.protocol === 'http:') ? u.href : '';
     } catch { return ''; }
 }
+// Фото из Supabase отдаём через оптимизатор Vercel: он ужимает картинку до нужной
+// ширины и кэширует её у себя. Это экономит трафик Supabase (лимит 5 ГБ/мес на Free)
+// и в разы ускоряет загрузку меню. Если оптимизатор недоступен — откат на оригинал.
+const IMG_HOST = new URL(SUPABASE_URL).host;
+const CAN_OPTIMIZE = /^https?:$/.test(location.protocol) && !/^(localhost|127\.)/.test(location.hostname);
+function imgSrc(url, width) {
+    if (!url || !CAN_OPTIMIZE) return url;
+    try { if (new URL(url).host !== IMG_HOST) return url; } catch { return url; }
+    return `/_vercel/image?url=${encodeURIComponent(url)}&w=${width}&q=70`;
+}
+function imgTag(url, width, alt) {
+    const opt = imgSrc(url, width);
+    return `<img src="${esc(opt)}"${opt !== url ? ` data-orig="${esc(url)}"` : ''} alt="${esc(alt)}" loading="lazy" decoding="async">`;
+}
+
 function loc(value, lang) {
     if (value == null) return '';
     if (typeof value === 'object') return value[lang] || value.ru || value.en || value.ro || '';
@@ -950,7 +965,7 @@ function renderFoodCards() {
                     aria-label="${esc(name)}, ${formatPrice(item.price)} MDL${unavailable ? ', ' + esc(t.unavailable) : ''}. ${esc(t.view_dish)}">
                     <span class="dish-thumb" aria-hidden="true">
                         ${badge && !unavailable ? `<span class="dish-badge">${esc(badge)}</span>` : ''}
-                        ${img ? `<img src="${esc(img)}" alt="" loading="lazy" decoding="async">` : ICONS.plate}
+                        ${img ? imgTag(img, 256, '') : ICONS.plate}
                     </span>
                     <span class="dish-content" aria-hidden="true">
                         <span class="dish-top">
@@ -1052,7 +1067,7 @@ function openDishSheet(item, triggerEl) {
     const name = loc(item.name, currentLang);
     const img = safeUrl(item.image_url);
     const badge = loc(item.badge, currentLang);
-    $('sheetMedia').innerHTML = img ? `<img src="${esc(img)}" alt="${esc(name)}">` : ICONS.plate;
+    $('sheetMedia').innerHTML = img ? imgTag(img, 1080, name).replace(' loading="lazy"', '') : ICONS.plate;
     $('sheetBadges').innerHTML =
         (badge && item.available !== false ? `<span class="badge">${esc(badge)}</span>` : '') +
         (item.available === false ? `<span class="badge danger">${esc(t.unavailable)}</span>` : '');
@@ -1222,6 +1237,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('error', e => {
         const img = e.target;
         if (!(img instanceof HTMLImageElement)) return;
+        if (img.dataset.orig) { const o = img.dataset.orig; delete img.dataset.orig; img.src = o; return; }
         const holder = img.closest('.dish-thumb, .sheet-media');
         if (holder) { img.remove(); holder.insertAdjacentHTML('beforeend', ICONS.plate); }
     }, true);
