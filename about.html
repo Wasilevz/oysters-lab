@@ -50,6 +50,10 @@
             --ok: #7fcf9a; --danger: #e8907f;
             --radius: 22px; --radius-sm: 14px;
             --gutter: 20px; --wrap: 1080px;
+            --sec-y: 72px;      /* расстояние между секциями */
+            --head-gap: 24px;   /* от заголовка секции до контента */
+            --card-pad: 20px;   /* внутренний отступ карточек */
+            --stack: 12px;      /* зазор между карточками */
             --ease: cubic-bezier(0.22,1,0.36,1);
             --serif: 'Cormorant Garamond', 'Times New Roman', serif;
             --sans: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -92,7 +96,7 @@
         .btn svg { flex-shrink: 0; }
 
         /* ─── HERO ─── */
-        .hero { position: relative; overflow: hidden; padding: 36px 0 30px; }
+        .hero { position: relative; overflow: hidden; padding: 28px 0 0; }
         .hero::before { content: ''; position: absolute; inset: -20% -10% auto; height: 120%; pointer-events: none;
             background: radial-gradient(50% 50% at 30% 20%, rgba(212,176,98,0.10), transparent 70%), radial-gradient(40% 40% at 85% 30%, rgba(107,163,159,0.10), transparent 70%); }
         .hero-grid { position: relative; display: grid; gap: 28px; }
@@ -100,12 +104,11 @@
         .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
         .status.open .status-dot { background: var(--ok); box-shadow: 0 0 0 4px rgba(127,207,154,0.15); }
         .status.closed .status-dot { background: var(--danger); }
-        .eyebrow { font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--sea); margin: 22px 0 10px; }
-        .hero h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(2.6rem, 11vw, 4.6rem); line-height: .98; letter-spacing: -.005em; text-wrap: balance; }
+        .hero h1 { font-family: var(--serif); font-weight: 600; font-size: clamp(2.6rem, 11vw, 4.6rem); line-height: .98; letter-spacing: -.005em; text-wrap: balance; margin-top: 18px; }
         .hero h1 em { font-style: italic; color: var(--gold-light); }
-        .hero-lead { font-size: 1.08rem; color: var(--body-text); margin: 18px 0 26px; max-width: 34ch; }
+        .hero-lead { font-size: 1.06rem; color: var(--body-text); margin: 16px 0 24px; max-width: 36ch; text-wrap: pretty; }
         .hero-ctas { display: flex; flex-wrap: wrap; gap: 10px; }
-        .hero-ctas .btn { flex: 1 1 160px; }
+        .hero-ctas .btn { flex: 1 1 150px; }
         .hero-media { position: relative; }
 
         /* Фото-слоты: пока нет фото — декоративная заглушка */
@@ -118,7 +121,9 @@
                 repeating-linear-gradient(135deg, rgba(255,255,255,0.018) 0 2px, transparent 2px 14px),
                 linear-gradient(160deg, var(--surface-2), var(--bg-card)); }
         .photo.placeholder svg { width: 34%; max-width: 140px; height: auto; opacity: .8; }
-        .hero-photo { aspect-ratio: 4 / 5; }
+        .hero-photo { aspect-ratio: 4 / 3; }
+        .hero-media { margin-top: 4px; }
+        @media (max-width: 759px) { .hero-media:not(.has-photo) { display: none; } }
         .hero-badge { position: absolute; left: 14px; bottom: 14px; right: 14px; display: flex; gap: 10px; align-items: center;
             padding: 12px 14px; border-radius: 16px; background: rgba(7,11,17,0.78); border: 1px solid var(--line-2);
             backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
@@ -127,43 +132,51 @@
         .hero-badge .ico { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--gold-dim); color: var(--gold); flex-shrink: 0; }
 
         /* ─── QUICK FACTS ─── */
-        .facts { display: grid; gap: 10px; margin: 6px 0 0; }
-        .fact { display: flex; gap: 14px; align-items: center; padding: 16px; border-radius: var(--radius-sm); background: var(--bg-card); border: 1px solid var(--line); text-decoration: none; transition: border-color .2s; }
-        a.fact:hover { border-color: var(--gold-line); }
-        .fact .ico { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; background: var(--gold-dim); color: var(--gold); flex-shrink: 0; }
+        .facts { display: grid; margin-top: 28px; border-radius: var(--radius); background: var(--bg-card); border: 1px solid var(--line); overflow: hidden; }
+        .fact { display: flex; gap: 14px; align-items: center; padding: 14px var(--card-pad); text-decoration: none; transition: background .2s; min-height: 68px; }
+        .fact + .fact { border-top: 1px solid var(--line); }
+        a.fact:hover { background: rgba(255,255,255,0.02); }
+        .fact .ico { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; background: var(--gold-dim); color: var(--gold); flex-shrink: 0; }
+        .nw { white-space: nowrap; }
+        .fact .chev { margin-left: auto; color: var(--muted); flex-shrink: 0; }
         .fact small { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 2px; }
         .fact b { font-weight: 600; font-size: 1rem; }
 
         /* ─── SECTIONS ─── */
-        section.block { padding: 56px 0 8px; scroll-margin-top: 70px; }
-        .sec-head { margin-bottom: 24px; }
+        section.block { padding-top: var(--sec-y); scroll-margin-top: 64px; }
+        .sec-head { margin-bottom: var(--head-gap); }
         .sec-eyebrow { display: flex; align-items: center; gap: 10px; font-size: .72rem; font-weight: 700; letter-spacing: .2em; text-transform: uppercase; color: var(--gold); margin-bottom: 8px; }
         .sec-eyebrow::after { content: ''; flex: 1; max-width: 120px; height: 1px; background: linear-gradient(90deg, var(--gold-line), transparent); }
-        .sec-title { font-family: var(--serif); font-weight: 600; font-size: clamp(2rem, 7vw, 2.9rem); line-height: 1.02; text-wrap: balance; }
+        .sec-title { font-family: var(--serif); font-weight: 600; font-size: clamp(2rem, 7.5vw, 2.9rem); line-height: 1.04; text-wrap: balance; max-width: 22ch; }
         .sec-lead { color: var(--body-text); margin-top: 10px; max-width: 56ch; font-size: 1.02rem; }
 
         /* Что у нас есть */
-        .offer-grid { display: grid; gap: 12px; }
-        .offer { position: relative; padding: 22px; border-radius: var(--radius); background: var(--bg-card); border: 1px solid var(--line); overflow: hidden; }
-        .offer .ico { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; background: var(--gold-dim); color: var(--gold); margin-bottom: 16px; }
-        .offer h3 { font-family: var(--serif); font-size: 1.6rem; font-weight: 600; line-height: 1.1; margin-bottom: 8px; }
-        .offer p { color: var(--body-text); font-size: .98rem; }
+        .offer-grid { display: grid; gap: var(--stack); }
+        .offer { position: relative; display: grid; grid-template-columns: 44px 1fr; column-gap: 14px; align-items: start; align-content: start;
+            padding: var(--card-pad); border-radius: var(--radius); background: var(--bg-card); border: 1px solid var(--line); overflow: hidden; }
+        .offer .ico { width: 44px; height: 44px; border-radius: 13px; display: grid; place-items: center; background: var(--gold-dim); color: var(--gold); grid-row: span 2; }
+        .offer h3 { font-family: var(--serif); font-size: 1.45rem; font-weight: 600; line-height: 1.1; margin: 4px 0 6px; }
+        .offer p { color: var(--body-text); font-size: .95rem; line-height: 1.55; }
         .offer.featured { background: linear-gradient(160deg, rgba(212,176,98,0.10), var(--bg-card) 60%); border-color: var(--gold-line); }
-        .offer .num { position: absolute; top: 16px; right: 20px; font-family: var(--serif); font-size: 1.1rem; color: var(--gold); opacity: .6; }
+        .offer .num { display: none; }
 
         /* Доставка */
-        .delivery-card { border-radius: 26px; border: 1px solid var(--gold-line); background: linear-gradient(170deg, rgba(212,176,98,0.08), var(--bg-card) 45%); padding: 24px; display: grid; gap: 24px; }
-        .steps { display: grid; gap: 14px; counter-reset: step; list-style: none; }
-        .step { display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start; }
-        .step-num { width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; font-family: var(--serif); font-size: 1.35rem; font-weight: 700; color: #14100a; background: var(--gold); }
-        .step h4 { font-size: 1.02rem; font-weight: 700; margin: 2px 0 2px; }
-        .step p { color: var(--body-text); font-size: .95rem; }
-        .price-table { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .price-cell { padding: 16px; border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--line); }
-        .price-cell small { display: block; font-size: .78rem; color: var(--muted); margin-bottom: 4px; }
-        .price-cell b { font-family: var(--serif); font-size: 1.9rem; font-weight: 700; color: var(--gold-light); line-height: 1; font-variant-numeric: lining-nums; }
-        .price-cell b span { font-family: var(--sans); font-size: .75rem; color: var(--gold); letter-spacing: .08em; margin-left: 4px; }
-        .price-cell.free b { color: var(--ok); }
+        .delivery-card { border-radius: var(--radius); border: 1px solid var(--gold-line); background: linear-gradient(170deg, rgba(212,176,98,0.08), var(--bg-card) 45%); padding: var(--card-pad); display: grid; gap: 24px; }
+        .steps { display: grid; gap: 0; list-style: none; }
+        .step { position: relative; display: grid; grid-template-columns: 36px 1fr; gap: 14px; align-items: start; padding-bottom: 18px; }
+        .step:last-child { padding-bottom: 0; }
+        .step:not(:last-child)::before { content: ''; position: absolute; left: 17.5px; top: 40px; bottom: 4px; width: 1px; background: linear-gradient(var(--gold-line), transparent); }
+        .step-num { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: .95rem; color: #14100a; background: var(--gold); font-variant-numeric: lining-nums; }
+        .step h4 { font-size: 1rem; font-weight: 700; line-height: 1.3; margin: 7px 0 3px; }
+        .step p { color: var(--body-text); font-size: .93rem; line-height: 1.5; }
+        .price-rows { border-radius: var(--radius-sm); background: var(--surface); border: 1px solid var(--line); overflow: hidden; }
+        .pr { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 14px 16px; }
+        .pr + .pr { border-top: 1px solid var(--line); }
+        .pr span { color: var(--text-sec); font-size: .95rem; }
+        .pr b { font-family: var(--serif); font-size: 1.55rem; font-weight: 700; color: var(--gold-light); line-height: 1; font-variant-numeric: lining-nums; white-space: nowrap; }
+        .pr b small { font-family: var(--sans); font-size: .7rem; color: var(--gold); letter-spacing: .08em; margin-left: 4px; }
+        .pr.free b { color: var(--ok); }
+        .delivery-side { display: grid; gap: 18px; align-content: start; }
         .note-list { list-style: none; display: grid; gap: 10px; }
         .note-list li { display: flex; gap: 10px; align-items: flex-start; color: var(--body-text); font-size: .96rem; }
         .note-list li svg { color: var(--sea); flex-shrink: 0; margin-top: 3px; }
@@ -171,33 +184,39 @@
         .cta-row .btn { flex: 1 1 180px; }
 
         /* Галерея (показывается, только когда есть хотя бы одно фото) */
-        .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+        .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--stack); }
+        .gallery .photo.placeholder { display: none; }
         .gallery .photo { aspect-ratio: 1; }
         .gallery .photo.wide { grid-column: span 2; aspect-ratio: 2 / 1; }
 
         /* Бронь / мероприятия */
-        .split { display: grid; gap: 12px; }
-        .panel { padding: 24px; border-radius: var(--radius); background: var(--bg-card); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 14px; }
-        .panel h3 { font-family: var(--serif); font-size: 1.8rem; font-weight: 600; line-height: 1.05; }
-        .panel p { color: var(--body-text); }
-        .panel .btn { align-self: flex-start; }
-        .panel .photo { aspect-ratio: 16 / 9; }
+        .split { display: grid; gap: var(--stack); }
+        .panel { padding: var(--card-pad); border-radius: var(--radius); background: var(--bg-card); border: 1px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
+        .panel .sec-eyebrow { margin-bottom: -4px; }
+        .panel h3 { font-family: var(--serif); font-size: 1.7rem; font-weight: 600; line-height: 1.08; text-wrap: balance; }
+        .panel p:not(.sec-eyebrow):not(.addr) { color: var(--body-text); font-size: .97rem; text-wrap: pretty; }
+        .panel .btn { margin-top: auto; align-self: stretch; }
+        .panel > p:not(.sec-eyebrow) { margin-bottom: 6px; }
+        .panel .photo { aspect-ratio: 16 / 9; margin: calc(-1 * var(--card-pad)) calc(-1 * var(--card-pad)) 6px; border-radius: var(--radius) var(--radius) 0 0; border: 0; }
+        .panel .photo.placeholder { display: none; }
 
         /* Как нас найти */
-        .find-grid { display: grid; gap: 12px; }
-        .map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--surface); aspect-ratio: 4 / 3; position: relative; }
+        .find-grid { display: grid; gap: var(--stack); }
+        .map { border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--surface); aspect-ratio: 4 / 3; position: relative; order: 2; }
+        .find-grid .panel { order: 1; }
         .map iframe { width: 100%; height: 100%; border: 0; filter: grayscale(.35) invert(.92) hue-rotate(180deg) contrast(.9); }
         .map-fallback { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; color: var(--muted); padding: 20px; }
         .hours { width: 100%; border-collapse: collapse; font-size: .98rem; }
-        .hours td { padding: 11px 0; border-bottom: 1px solid var(--line); }
+        .hours td { padding: 12px 0; border-bottom: 1px solid var(--line); }
+        .hours td:first-child { color: var(--text-sec); }
         .hours td:last-child { text-align: right; font-variant-numeric: tabular-nums; color: var(--text-sec); }
         .hours tr.today td { color: var(--gold-light); font-weight: 700; }
         .hours tr:last-child td { border-bottom: 0; }
-        .addr { font-family: var(--serif); font-size: 1.7rem; font-weight: 600; line-height: 1.1; }
+        .addr { font-family: var(--serif); font-size: 1.65rem; font-weight: 600; line-height: 1.1; text-wrap: balance; }
         .addr small { display: block; font-family: var(--sans); font-size: .9rem; font-weight: 500; color: var(--muted); margin-top: 6px; }
 
         /* Footer */
-        footer { margin-top: 64px; padding: 36px 0 30px; border-top: 1px solid var(--line); text-align: center; color: var(--muted); font-size: .85rem; }
+        footer { margin-top: var(--sec-y); padding: 36px 0 30px; border-top: 1px solid var(--line); text-align: center; color: var(--muted); font-size: .85rem; }
         .foot-brand { font-family: var(--serif); font-size: 1.4rem; letter-spacing: .16em; text-transform: uppercase; color: var(--text-sec); }
         .foot-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 18px; margin: 14px 0; }
         .foot-links a { text-decoration: none; color: var(--text-sec); }
@@ -214,21 +233,32 @@
         .reveal.in { opacity: 1; transform: none; }
 
         @media (min-width: 760px) {
-            :root { --gutter: 32px; }
+            :root { --gutter: 32px; --sec-y: 112px; --head-gap: 36px; --card-pad: 28px; --stack: 16px; }
+            .map { order: 0; }
+            .find-grid .panel { order: 0; }
+            .hero-photo { aspect-ratio: 4 / 5; }
+            .hero-media { margin-top: 0; }
+            .facts { grid-template-columns: repeat(3, 1fr); margin-top: 48px; }
+            .fact + .fact { border-top: 0; border-left: 1px solid var(--line); }
+            .fact .chev { display: none; }
+            .offer { grid-template-columns: 1fr; padding: 28px; }
+            .offer .ico { grid-row: auto; width: 48px; height: 48px; margin-bottom: 18px; }
+            .offer h3 { font-size: 1.6rem; margin-top: 0; }
+            .panel .btn { align-self: flex-start; }
+            .sec-title { max-width: 30ch; }
+            .pr { padding: 16px 18px; }
             body { padding-bottom: 0; }
             .action-bar { display: none; }
             .btn.top-menu-link { display: inline-flex; min-height: 40px; padding: 0 16px; font-size: .85rem; }
-            .hero { padding: 64px 0 40px; }
+            .hero { padding: 72px 0 0; }
             .hero-grid { grid-template-columns: 1.1fr .9fr; align-items: center; gap: 48px; }
-            .facts { grid-template-columns: repeat(3, 1fr); }
             .offer-grid { grid-template-columns: repeat(2, 1fr); }
-            .delivery-card { grid-template-columns: 1.1fr .9fr; padding: 36px; gap: 36px; }
+            .delivery-card { grid-template-columns: 1fr 1fr; padding: 36px; gap: 48px; }
             .gallery { grid-template-columns: repeat(4, 1fr); }
             .gallery .photo.wide { grid-column: span 2; aspect-ratio: auto; }
             .split { grid-template-columns: 1fr 1fr; }
             .find-grid { grid-template-columns: 1.2fr .8fr; }
             .map { aspect-ratio: auto; min-height: 380px; }
-            section.block { padding-top: 88px; }
         }
         @media (prefers-reduced-motion: reduce) {
             html { scroll-behavior: auto; }
@@ -262,7 +292,6 @@
         <div class="wrap hero-grid">
             <div>
                 <span class="status" id="openStatus"><span class="status-dot"></span><span id="openStatusText">Ул. Александру Бернардацци, 64</span></span>
-                <p class="eyebrow" data-t="hero_eyebrow">Кишинёв · открыто ежедневно</p>
                 <h1 data-t="hero_title">Французские <em>устрицы</em> в Кишинёве</h1>
                 <p class="hero-lead" data-t="hero_lead">Самый широкий выбор устриц в городе. Приходите к нам, заказывайте доставку или зовите нас с устрицами на ваш праздник.</p>
                 <div class="hero-ctas">
@@ -280,18 +309,18 @@
         </div>
 
         <div class="wrap">
-            <div class="facts" style="margin-top:28px">
+            <div class="facts">
                 <a class="fact" href="#find">
                     <span class="ico" data-icon="pin" aria-hidden="true"></span>
-                    <span><small data-t="f_addr">Адрес</small><b data-t="addr_short">ул. А. Бернардацци, 64</b></span>
+                    <span><small data-t="f_addr">Адрес</small><b data-t="addr_short">ул. А. Бернардацци, 64</b></span><span class="chev" data-icon="chev" aria-hidden="true"></span>
                 </a>
                 <a class="fact" href="#find">
                     <span class="ico" data-icon="clock" aria-hidden="true"></span>
-                    <span><small data-t="f_hours">Часы работы</small><b data-t="hours_short">Пн–Пт 12–22 · Сб–Вс 11–22</b></span>
+                    <span><small data-t="f_hours">Часы работы</small><b data-t="hours_short"><span class="nw">Пн–Пт 12–22</span> · <span class="nw">Сб–Вс 11–22</span></b></span><span class="chev" data-icon="chev" aria-hidden="true"></span>
                 </a>
                 <a class="fact" href="tel:+37376870870">
                     <span class="ico" data-icon="phone" aria-hidden="true"></span>
-                    <span><small data-t="f_phone">Бронь и доставка</small><b>076 870 870</b></span>
+                    <span><small data-t="f_phone">Бронь и доставка</small><b>076 870 870</b></span><span class="chev" data-icon="chev" aria-hidden="true"></span>
                 </a>
             </div>
         </div>
@@ -302,29 +331,25 @@
         <div class="wrap">
             <div class="sec-head reveal">
                 <p class="sec-eyebrow" data-t="offer_eyebrow">Что у нас есть</p>
-                <h2 class="sec-title" data-t="offer_title">Устрицы — это то, в чём мы разбираемся лучше всех</h2>
+                <h2 class="sec-title" data-t="offer_title">Устрицы&nbsp;— это то, в чём мы разбираемся лучше всех</h2>
             </div>
             <div class="offer-grid">
                 <article class="offer featured reveal">
-                    <span class="num">01</span>
                     <span class="ico" data-icon="oyster" aria-hidden="true"></span>
                     <h3 data-t="o1_t">Устрицы Франции</h3>
                     <p data-t="o1_p">Самый широкий ассортимент в Кишинёве: от нежных Fine de Claire до мясистых Gillardeau. Подскажем, с какой начать, и расскажем о каждой.</p>
                 </article>
                 <article class="offer reveal">
-                    <span class="num">02</span>
                     <span class="ico" data-icon="glass" aria-hidden="true"></span>
                     <h3 data-t="o2_t">Вино и просекко</h3>
                     <p data-t="o2_p">Большая винная карта и просекко, которые подобраны к устрицам и морепродуктам.</p>
                 </article>
                 <article class="offer reveal">
-                    <span class="num">03</span>
                     <span class="ico" data-icon="calendar" aria-hidden="true"></span>
                     <h3 data-t="o3_t">Устрицы на мероприятие</h3>
                     <p data-t="o3_p">Привезём устрицы на ваш праздник вместе с мастером, который откроет их прямо при гостях.</p>
                 </article>
                 <article class="offer reveal">
-                    <span class="num">04</span>
                     <span class="ico" data-icon="shield" aria-hidden="true"></span>
                     <h3 data-t="o4_t">Поставки в рестораны</h3>
                     <p data-t="o4_p">Мы поставляем устрицы в рестораны Кишинёва, поэтому у нас всегда свежий товар и честные цены.</p>
@@ -338,7 +363,7 @@
         <div class="wrap">
             <div class="sec-head reveal">
                 <p class="sec-eyebrow" data-t="del_eyebrow">Доставка по Кишинёву</p>
-                <h2 class="sec-title" data-t="del_title">Устрицы домой — без проблем</h2>
+                <h2 class="sec-title" data-t="del_title">Устрицы домой&nbsp;— без проблем</h2>
                 <p class="sec-lead" data-t="del_lead">Да, устрицы можно заказать на дом. Мы откроем их заранее и привезём на льду — останется только открыть просекко.</p>
             </div>
             <div class="delivery-card reveal">
@@ -349,10 +374,10 @@
                         <li class="step"><span class="step-num">3</span><div><h4 data-t="s3_t">Привезём по всему Кишинёву</h4><p data-t="s3_p">Оплата при получении — лучше наличными.</p></div></li>
                     </ol>
                 </div>
-                <div style="display:grid;gap:18px;align-content:start">
-                    <div class="price-table">
-                        <div class="price-cell"><small data-t="p_below">Заказ до 1000 MDL</small><b>100<span>MDL</span></b></div>
-                        <div class="price-cell free"><small data-t="p_above">Заказ от 1000 MDL</small><b data-t="p_free">Бесплатно</b></div>
+                <div class="delivery-side">
+                    <div class="price-rows">
+                        <div class="pr"><span data-t="p_below">Заказ до 1000 MDL</span><b>100<small>MDL</small></b></div>
+                        <div class="pr free"><span data-t="p_above">Заказ от 1000 MDL</span><b data-t="p_free">Бесплатно</b></div>
                     </div>
                     <ul class="note-list">
                         <li><span data-icon="check" aria-hidden="true"></span><span data-t="n1">Доставляем в любой район Кишинёва</span></li>
@@ -473,6 +498,7 @@ const ICONS = {
     shield: S('<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>'),
     check: S('<path d="M20 6L9 17l-5-5"/>', 16, 2),
     route: S('<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8 19h8.5a3.5 3.5 0 000-7h-9a3.5 3.5 0 010-7H16"/>', 18),
+    chev: S('<path d="M9 6l6 6-6 6"/>', 18, 2),
     instagram: S('<rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r=".8" fill="currentColor" stroke="none"/>', 18)
 };
 const PLACEHOLDER = `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -483,6 +509,7 @@ const PLACEHOLDER = `<svg viewBox="0 0 120 120" fill="none" stroke="currentColor
 // Тексты RU берутся из разметки, RO/EN — здесь.
 const T = {
     ru: {
+        wd: 'Понедельник – пятница', we: 'Суббота – воскресенье',
         open_now: 'Открыто сейчас · до {t}', closed_now: 'Закрыто · откроемся {d} в {t}', today: 'сегодня', tomorrow: 'завтра',
         days: ['Понедельник','Вторник','Среда','Четверг','Пятница','Суббота','Воскресенье'], title: 'Oyster\'s LAB — французские устрицы в Кишинёве · доставка'
     },
@@ -492,13 +519,13 @@ const T = {
         hero_lead: 'Cea mai largă selecție de stridii din oraș. Veniți la noi, comandați livrare sau chemați-ne cu stridii la evenimentul vostru.',
         cta_menu: 'Vezi meniul', cta_delivery: 'Livrare',
         hero_badge_t: 'Furnizor de stridii pentru restaurante', hero_badge_s: 'Prospețime în care au încredere bucătarii din Chișinău',
-        f_addr: 'Adresa', addr_short: 'str. A. Bernardazzi, 64', f_hours: 'Program', hours_short: 'Lu–Vi 12–22 · Sâ–Du 11–22', f_phone: 'Rezervări și livrare',
+        f_addr: 'Adresa', addr_short: 'str. A. Bernardazzi, 64', f_hours: 'Program', hours_short: '<span class="nw">Lu–Vi 12–22</span> · <span class="nw">Sâ–Du 11–22</span>', f_phone: 'Rezervări și livrare',
         offer_eyebrow: 'Ce avem', offer_title: 'Stridiile sunt ceea ce cunoaștem cel mai bine',
         o1_t: 'Stridii din Franța', o1_p: 'Cel mai larg sortiment din Chișinău: de la delicatele Fine de Claire la cărnoasele Gillardeau. Vă ajutăm să alegeți și vă povestim despre fiecare.',
         o2_t: 'Vin și prosecco', o2_p: 'O hartă bogată de vinuri și prosecco, alese pentru stridii și fructe de mare.',
         o3_t: 'Stridii la eveniment', o3_p: 'Aducem stridii la sărbătoarea voastră împreună cu un maestru care le deschide chiar în fața oaspeților.',
         o4_t: 'Livrări către restaurante', o4_p: 'Furnizăm stridii restaurantelor din Chișinău, de aceea avem mereu marfă proaspătă și prețuri corecte.',
-        del_eyebrow: 'Livrare în Chișinău', del_title: 'Stridii acasă — fără probleme',
+        del_eyebrow: 'Livrare în Chișinău', del_title: 'Stridii acasă&nbsp;— fără probleme',
         del_lead: 'Da, stridiile se pot comanda acasă. Le deschidem în prealabil și le aducem pe gheață — rămâne doar să deschideți prosecco.',
         s1_t: 'Sunați-ne sau scrieți-ne', s1_p: 'La 076 870 870 sau pe Instagram — vă ajutăm cu alegerea.',
         s2_t: 'Deschidem și ambalăm', s2_p: 'Stridiile sunt deschise în prealabil și așezate într-un caserol cu gheață. Adăugăm lămâie și sos mignonette.',
@@ -512,6 +539,7 @@ const T = {
         find_eyebrow: 'Cum ne găsiți', find_title: 'Vă așteptăm în centrul Chișinăului', map_loading: 'Harta se încarcă…',
         addr_full: 'str. Alexandru Bernardazzi, 64', addr_city: 'Chișinău, Moldova', cta_route: 'Traseu',
         foot_addr: 'str. Alexandru Bernardazzi, 64, Chișinău', ab_call: 'Sunați', ab_route: 'Traseu',
+        wd: 'Luni – vineri', we: 'Sâmbătă – duminică',
         open_now: 'Deschis acum · până la {t}', closed_now: 'Închis · deschidem {d} la {t}', today: 'azi', tomorrow: 'mâine',
         days: ['Luni','Marți','Miercuri','Joi','Vineri','Sâmbătă','Duminică'], title: 'Oyster\'s LAB — stridii franțuzești în Chișinău · livrare'
     },
@@ -521,13 +549,13 @@ const T = {
         hero_lead: 'The widest selection of oysters in town. Visit us, order delivery, or invite us with oysters to your celebration.',
         cta_menu: 'See the menu', cta_delivery: 'Delivery',
         hero_badge_t: 'Oyster supplier to restaurants', hero_badge_s: 'Freshness trusted by Chișinău chefs',
-        f_addr: 'Address', addr_short: '64 A. Bernardazzi St.', f_hours: 'Opening hours', hours_short: 'Mon–Fri 12–22 · Sat–Sun 11–22', f_phone: 'Bookings & delivery',
+        f_addr: 'Address', addr_short: '64 A. Bernardazzi St.', f_hours: 'Opening hours', hours_short: '<span class="nw">Mon–Fri 12–22</span> · <span class="nw">Sat–Sun 11–22</span>', f_phone: 'Bookings & delivery',
         offer_eyebrow: 'What we offer', offer_title: 'Oysters are what we know best',
         o1_t: 'French oysters', o1_p: 'The widest range in Chișinău: from delicate Fine de Claire to meaty Gillardeau. We\'ll help you choose and tell you about each one.',
         o2_t: 'Wine & prosecco', o2_p: 'A big wine list and prosecco, chosen to go with oysters and seafood.',
         o3_t: 'Oysters for events', o3_p: 'We bring oysters to your celebration together with a shucker who opens them right in front of your guests.',
         o4_t: 'Restaurant supplier', o4_p: 'We supply oysters to Chișinău restaurants, so our stock is always fresh and our prices fair.',
-        del_eyebrow: 'Delivery in Chișinău', del_title: 'Oysters at home — no problem',
+        del_eyebrow: 'Delivery in Chișinău', del_title: 'Oysters at home&nbsp;— no problem',
         del_lead: 'Yes, you can order oysters home. We open them in advance and deliver them on ice — all that\'s left is to pop the prosecco.',
         s1_t: 'Call or message us', s1_p: 'At 076 870 870 or on Instagram — we\'ll help you choose.',
         s2_t: 'We open and pack', s2_p: 'Oysters are opened in advance and packed in a casserole on ice, with lemon and mignonette sauce.',
@@ -541,6 +569,7 @@ const T = {
         find_eyebrow: 'How to find us', find_title: 'In the centre of Chișinău', map_loading: 'Loading map…',
         addr_full: '64 Alexandru Bernardazzi St.', addr_city: 'Chișinău, Moldova', cta_route: 'Get directions',
         foot_addr: '64 Alexandru Bernardazzi St., Chișinău', ab_call: 'Call', ab_route: 'Directions',
+        wd: 'Monday – Friday', we: 'Saturday – Sunday',
         open_now: 'Open now · until {t}', closed_now: 'Closed · opens {d} at {t}', today: 'today', tomorrow: 'tomorrow',
         days: ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'], title: 'Oyster\'s LAB — French oysters in Chișinău · delivery'
     }
@@ -548,6 +577,7 @@ const T = {
 
 // Часы работы: 0 = понедельник. [открытие, закрытие] в минутах.
 const HOURS = [[720, 1320], [720, 1320], [720, 1320], [720, 1320], [720, 1320], [660, 1320], [660, 1320]];
+const HOUR_GROUPS = [{ key: 'wd', days: [0, 1, 2, 3, 4] }, { key: 'we', days: [5, 6] }];
 const fmt = m => `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
 
 let lang = 'ru';
@@ -577,8 +607,10 @@ function renderStatus() {
         el.className = 'status closed'; txt.textContent = t.closed_now.replace('{d}', label).replace('{t}', fmt(HOURS[nextDay][0]));
     }
     const { day: today } = chisinauNow();
-    document.getElementById('hoursTable').innerHTML = HOURS.map(([o2, c2], i) =>
-        `<tr class="${i === today ? 'today' : ''}"><td>${t.days[i]}</td><td>${fmt(o2)}–${fmt(c2)}</td></tr>`).join('');
+    document.getElementById('hoursTable').innerHTML = HOUR_GROUPS.map(g => {
+        const [o2, c2] = HOURS[g.days[0]];
+        return `<tr class="${g.days.includes(today) ? 'today' : ''}"><td>${t[g.key]}</td><td>${fmt(o2)}–${fmt(c2)}</td></tr>`;
+    }).join('');
 }
 
 function setLang(l) {
@@ -632,6 +664,7 @@ async function loadPhotos() {
         el.appendChild(img);
         el.classList.remove('placeholder');
         if (el.closest('#gallery')) galleryHas = true;
+        const hm = el.closest('.hero-media'); if (hm) hm.classList.add('has-photo');
     });
     if (galleryHas) document.getElementById('gallery').hidden = false;
 }
