@@ -94,6 +94,9 @@ export function crudHandler({ table, fields, orderBy, validate }) {
       case 'DELETE': {
         if (!isValidId(id)) return res.status(400).json({ error: 'Missing or invalid id' });
         const { error } = await supabase.from(table).delete().eq('id', id);
+        if (error && error.code === '23503') {
+          return res.status(409).json({ error: 'Нельзя удалить: к записи привязаны другие данные (например, блюда в категории). Сначала перенесите или удалите их.' });
+        }
         if (error) return serverError(res, error, `${table}:delete`);
         return res.status(200).json({ success: true });
       }

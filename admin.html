@@ -1099,7 +1099,7 @@ function askDelete(type, id) {
     let text = `«${name}» будет удалено без возможности восстановления.`;
     if (type === 'categories') {
         const n = itemsData.filter(i => i.category_id === id).length;
-        if (n) text += ` В категории ${n} блюд(а) — они перестанут отображаться в меню, пока вы не перенесёте их в другую категорию.`;
+        if (n) text = `В категории «${name}» ${n} блюд(а). Сначала перенесите их в другую категорию или удалите — иначе удаление не пройдёт.`;
     }
     document.getElementById('confirmText').textContent = text;
     document.getElementById('confirmOverlay').classList.add('active');
